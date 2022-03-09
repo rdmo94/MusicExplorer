@@ -8,3 +8,4 @@ from .models import User
 class UserView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+ 
