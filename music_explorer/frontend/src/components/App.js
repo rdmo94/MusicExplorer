@@ -13,8 +13,8 @@ export default class App extends Component {
     return (
       <BrowserRouter>
         <Routes>
+            <Route path="/"> </Route>
             <Route path="/sean" element={<Sean/>}/>
-            <Route path=""> <p>fsdfasdf</p> </Route>
         </Routes>
       </BrowserRouter>
     );
