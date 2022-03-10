@@ -2,19 +2,25 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Link, Route, Router } from "react-router-dom";
-import Sean from "./Sean";
+import Home from "./Home";
+import Login from "./Login";
+import { useEffect } from "react";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
   }
 
+
+
   render() {
+
+    // let authenticated = isAuthenticated()
+
     return (
       <BrowserRouter>
         <Routes>
-            <Route path="/"> </Route>
-            <Route path="/sean" element={<Sean/>}/>
+            <Route path="" element={<Home/>}> </Route>
         </Routes>
       </BrowserRouter>
     );
