@@ -1,3 +1,4 @@
+from operator import index
 from numpy import NaN
 import spotipy
 import json
@@ -58,23 +59,45 @@ def filterPlaylistsToSoundOf():
 # filterPlaylistsToSoundOf()
 
 def matrixTest():
-    matrix = np.empty([100, 100])
-    for i in range(100):
-        for j in range(100):
-            if i == j:
-                matrix[i][j] = NaN
-            else:
-                matrix[i][j] = 0
+    matrix = {}
+
+
+    # matrix = np.empty([100, 100])
+    # for i in range(100):
+    #     for j in range(100):
+    #         if i == j:
+    #             matrix[i][j] = NaN
+    #         else:
+    #             matrix[i][j] = 0
         
-    
-    # matrix["forest psy"] = {"psycadelic trance": 0, "dark psytrance" : 0}
-    # matrix["psycadelic trance"] = {"forest psy" : 0, "dark psytrance": 0}
-    # matrix["dark psytrance"] = {"forest psy" : 0, "psycadelic trance" : 0}
+    genres = {
+        "pop" : ["country", "country", "country", "k-pop", "modern pop", "modern pop"],
+        "country" : ["pop", "modern pop"],
+        "modern pop" : ["pop", "pop", "pop", "k-pop"],
+        "k-pop" : ["pop", "modern pop"],
+    }
+
+
+    matrix = np.zeros([len(list(genres.keys())),len(list(genres.keys()))])
+
+    print(matrix)
+
+    # matrix["forest psy"] = ["psycadelic trance", "dark psytrance"]
+    # matrix["psycadelic trance"] = ["forest psy", "dark psytrance"]
+    # matrix["dark psytrance"] = ["forest psy", "psycadelic trance" ]
 
     # print(matrix)
 
-    df = pd.DataFrame(data=matrix)
-    df[0][1] += 1
+    df = pd.DataFrame(data=matrix, columns=list(genres.keys()), index=list(genres.keys()))
+    # df[0][1] += 1
     print(df)
+
+    for i in list(genres.keys()):
+        current_genres = genres[i]
+        for g in current_genres:
+            df[i][g] += 1
+
+    print(df)
+        
 
 matrixTest()
