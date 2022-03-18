@@ -1,6 +1,10 @@
+from numpy import NaN
 import spotipy
 import json
+import pandas as pd
+import numpy as np
 from spotipy.oauth2 import SpotifyClientCredentials
+
 
 SPOTIPY_CLIENT_ID = "97246a4390bf4516b9177ae13269fe86"
 SPOTIPY_CLIENT_SECRET = "b0546fc6e15e4db4ab491455c724dd19"
@@ -51,4 +55,26 @@ def filterPlaylistsToSoundOf():
         json.dump(pairs, outfile, ensure_ascii=False)
 
 # fetchPlaylists()
-filterPlaylistsToSoundOf()
+# filterPlaylistsToSoundOf()
+
+def matrixTest():
+    matrix = np.empty([100, 100])
+    for i in range(100):
+        for j in range(100):
+            if i == j:
+                matrix[i][j] = NaN
+            else:
+                matrix[i][j] = 0
+        
+    
+    # matrix["forest psy"] = {"psycadelic trance": 0, "dark psytrance" : 0}
+    # matrix["psycadelic trance"] = {"forest psy" : 0, "dark psytrance": 0}
+    # matrix["dark psytrance"] = {"forest psy" : 0, "psycadelic trance" : 0}
+
+    # print(matrix)
+
+    df = pd.DataFrame(data=matrix)
+    df[0][1] += 1
+    print(df)
+
+matrixTest()
