@@ -5,6 +5,7 @@ import json
 import pandas as pd
 import numpy as np
 from spotipy.oauth2 import SpotifyClientCredentials
+from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files
 
 
 SPOTIPY_CLIENT_ID = "97246a4390bf4516b9177ae13269fe86"
@@ -24,12 +25,12 @@ def fetchPlaylists():
     spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
         client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
 
-    with open('playlists.json', 'w') as outfile:
+    with open('playlists50first.json', 'w') as outfile:
         pairs = {}
 
-        for i in range(130):
+        for i in range(1):
             try:
-                offset = (i+1)*50
+                offset = (i)*50
                 playlists = spotify.user_playlists(
                     "thesoundsofspotify", limit=50, offset=offset)
                 print(f'Fethed with offset {offset} --')
@@ -42,11 +43,11 @@ def fetchPlaylists():
 
 
 def filterPlaylistsToSoundOf():
-    with open('playlists.json') as json_file:
+    with open('playlists50first.json') as json_file:
         data = json.load(json_file)
 
     
-    with open('filteredPlaylists.json', 'w') as outfile:
+    with open('filteredPlaylists50first.json', 'w') as outfile:
         pairs = {}
         for key, value in data.items():
             if "sound of" in key.lower():
@@ -70,12 +71,14 @@ def matrixTest():
     #         else:
     #             matrix[i][j] = 0
         
-    genres = {
-        "pop" : ["country", "country", "country", "k-pop", "modern pop", "modern pop"],
-        "country" : ["pop", "modern pop"],
-        "modern pop" : ["pop", "pop", "pop", "k-pop"],
-        "k-pop" : ["pop", "modern pop"],
-    }
+    # genres = {
+    #     "pop" : ["country", "country", "country", "k-pop", "modern pop", "modern pop"],
+    #     "country" : ["pop", "modern pop"],
+    #     "modern pop" : ["pop", "pop", "pop", "k-pop"],
+    #     "k-pop" : ["pop", "modern pop"],
+    # }
+
+    genres = parse_genre_genres()
 
 
     matrix = np.zeros([len(list(genres.keys())),len(list(genres.keys()))])
@@ -87,17 +90,24 @@ def matrixTest():
     # matrix["dark psytrance"] = ["forest psy", "psycadelic trance" ]
 
     # print(matrix)
-
-    df = pd.DataFrame(data=matrix, columns=list(genres.keys()), index=list(genres.keys()))
+    genre_labels = list(map(str.lower, list(genres.keys())))
+    df = pd.DataFrame(data=matrix, columns=genre_labels, index=genre_labels)
     # df[0][1] += 1
     print(df)
 
     for i in list(genres.keys()):
         current_genres = genres[i]
         for g in current_genres:
-            df[i][g] += 1
-
+            try:
+                df[i.lower()][g] += 1
+            except KeyError as e:
+                print(i)
+                print(g)
+                print(e)
     print(df)
         
 
-matrixTest()
+# matrixTest()
+# fetchPlaylists()
+scrape_genres_to_json_files()
+scrape_artist_genres_to_json_files()
