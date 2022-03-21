@@ -109,7 +109,7 @@ def matrixTest():
                     
                     ## Der findes også noget der hedder df.at - men ved ikke helt, hvad forskellen er.
                     ## Har prøvet at lave vores dataframe med 'indexes' i stedet for strings, men det virker
-                    ## som om, at det ikke forbedre noget...
+                    ## som om, at det ikke forbedre
                 except Exception as e:
                     print(i)
                     print(g)
