@@ -1,11 +1,11 @@
-from operator import index
+from operator import index, indexOf
 from numpy import NaN
 import spotipy
 import json
 import pandas as pd
 import numpy as np
 from spotipy.oauth2 import SpotifyClientCredentials
-from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files
+from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file
 
 
 SPOTIPY_CLIENT_ID = "97246a4390bf4516b9177ae13269fe86"
@@ -46,7 +46,6 @@ def filterPlaylistsToSoundOf():
     with open('playlists50first.json') as json_file:
         data = json.load(json_file)
 
-    
     with open('filteredPlaylists50first.json', 'w') as outfile:
         pairs = {}
         for key, value in data.items():
@@ -59,9 +58,9 @@ def filterPlaylistsToSoundOf():
 # fetchPlaylists()
 # filterPlaylistsToSoundOf()
 
+
 def matrixTest():
     matrix = {}
-
 
     # matrix = np.empty([100, 100])
     # for i in range(100):
@@ -70,7 +69,7 @@ def matrixTest():
     #             matrix[i][j] = NaN
     #         else:
     #             matrix[i][j] = 0
-        
+
     # genres = {
     #     "pop" : ["country", "country", "country", "k-pop", "modern pop", "modern pop"],
     #     "country" : ["pop", "modern pop"],
@@ -80,8 +79,7 @@ def matrixTest():
 
     genres = parse_genre_genres()
 
-
-    matrix = np.zeros([len(list(genres.keys())),len(list(genres.keys()))])
+    matrix = np.zeros([len(list(genres.keys())), len(list(genres.keys()))])
 
     print(matrix)
 
@@ -91,23 +89,52 @@ def matrixTest():
 
     # print(matrix)
     genre_labels = list(map(str.lower, list(genres.keys())))
-    df = pd.DataFrame(data=matrix, columns=genre_labels, index=genre_labels)
+    genreToIndex = {}
+
+    for index in range(len(genre_labels)):
+        genreToIndex[genre_labels[index]] = index
+    indexes = [*range(0, len(genre_labels), 1)]
+    df = pd.DataFrame(data=matrix, columns=indexes, index=indexes)
     # df[0][1] += 1
     print(df)
 
-    for i in list(genres.keys()):
-        current_genres = genres[i]
-        for g in current_genres:
-            try:
-                df[i.lower()][g] += 1
-            except KeyError as e:
-                print(i)
-                print(g)
-                print(e)
-    print(df)
-        
+    try:
+        for i in list(genres.keys()):
+            current_genres = genres[i]
+            
+            for g in current_genres:
+                try:               
+                    ## Den her linje er sygt dårlig for memory - ved ikke hvorfor
+                    df[genreToIndex[i.lower()]][genreToIndex[g]] += 1
+                    
+                    ## Der findes også noget der hedder df.at - men ved ikke helt, hvad forskellen er.
+                    ## Har prøvet at lave vores dataframe med 'indexes' i stedet for strings, men det virker
+                    ## som om, at det ikke forbedre noget...
+                except Exception as e:
+                    print(i)
+                    print(g)
+                    print(e)
 
-# matrixTest()
+    except Exception as e:
+        print("snotskovl")
+    df.to_json("./matrix.json")
+    print("lort")
+
+
+def parse_matrix():
+    genres = parse_genre_genres()
+    genre_labels = list(map(str.lower, list(genres.keys())))
+    genreToIndex = {}
+
+    for index in range(len(genre_labels)):
+        genreToIndex[genre_labels[index]] = index
+    matrix_dict = read_json_file("./matrix.json")
+    df = pd.DataFrame.from_dict(matrix_dict, orient="index")
+    print("snot")
+
+
+# parse_matrix()
+matrixTest()
 # fetchPlaylists()
-scrape_genres_to_json_files()
-scrape_artist_genres_to_json_files()
+# scrape_genres_to_json_files()
+# scrape_artist_genres_to_json_files()

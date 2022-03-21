@@ -56,6 +56,7 @@ def parse_genre_genres() -> dict[str,list[str]]:
 def convert_string_to_unicode(fucked_string:str) -> str:
     import unidecode
     unfucked_string = unidecode.unidecode(fucked_string)
+    unfucked_string = unfucked_string.replace("'","")
     return unfucked_string
 
 
