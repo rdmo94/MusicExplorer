@@ -5,35 +5,73 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import logging
 import sys
-#logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.DEBUG)
-#logging.getLogger().addHandler(logging.StreamHandler())
+logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.DEBUG)
+logging.getLogger().addHandler(logging.StreamHandler())
 
-app1 = ["97246a4390bf4516b9177ae13269fe86","b0546fc6e15e4db4ab491455c724dd19"]
+app1 = ["97246a4390bf4516b9177ae13269fe86", "b0546fc6e15e4db4ab491455c724dd19"]
 app2 = ["70ab3a9f4a844dda8202f7946bd2dba2", "145ff4ea82f648bab973af480e4371b2"]
 app3 = ["0e8f0b0bd124410492a05cb32e00db06", "f2c636adb70449c2a985f04a15026774"]
 
-
-proxy = 'http://lum-customer-c_c304ebd4-zone-static-route_err-block-country-dk-dns-remote:takeoff!@zproxy.lum-superproxy.io:22225'
-
-proxies = {
-    'http': 'http://lum-customer-c_c304ebd4-zone-static-route_err-block-country-dk-dns-remote:takeoff!@zproxy.lum-superproxy.io:22225',
-    'https': 'http://lum-customer-c_c304ebd4-zone-static-route_err-block-country-dk-dns-remote:takeoff!@zproxy.lum-superproxy.io:22225'
-}
-
-os.environ['http_proxy'] = proxy 
-os.environ['HTTP_PROXY'] = proxy
-os.environ['https_proxy'] = proxy
-os.environ['HTTPS_PROXY'] = proxy
-
 spotify:Spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=app2[0], client_secret=app2[1]))
 scraped_genres = []
-
+artists_genres_dict = {}
 
 def main():
+    #read all files
+    all_artist_files = os.listdir(os.path.join("data_handling","data", "artist_genres"))
+    all_artist_genres_dict = {}
+
+    for file in all_artist_files:
+        if "DS_Store" not in file:
+            content = read_json_file(os.path.join("data_handling","data", "artist_genres", file))
+            all_artist_genres_dict.update(content)
+    
+    with open(os.path.join("data_handling", "data", "artists_genres.json"), "w") as new_file:
+        new_file.write(json.dumps(all_artist_genres_dict))
+    
+
+
+def scrape_all_artists_genres():
+     #create list with ALL artists
+    all_artists = get_artists_from_folder(os.path.join("data_handling","data", "genre_artists"))
+
+    #write artists to file
+    with open(os.path.join("data_handling","data", "artists.txt"), "w") as new_file:
+        for g in all_artists:
+            new_file.write(g + "\n")
+
+    #get all current scraped artists
+    already_scraped_artists = os.listdir(os.path.join("data_handling","data", "artist_genres"))
+    already_scraped_artists = [word.replace('.json','') for word in already_scraped_artists]
+
+    for e in already_scraped_artists:
+        logging.debug(str(len(all_artists)))
+        try:
+            all_artists.remove(e)
+        except Exception as e:
+            logging.debug(str(e))
+
+
+    #split list of artists into chunks of 50
+    artist_chunks = split_list(all_artists, 50)
+
+    #scrape genres for all artists and add
+    for g in artist_chunks:
+        chunk_dict = get_multiple_artists_genres(g)
+        for artist_id, genres in chunk_dict.items():
+            write_artist_genres_to_file(artist_id=artist_id, genres=genres)
+        
+
     genre_genres_dict = parse_genre_genres()
     print("brother")
 
-#RDMO use this one
+
+def write_artist_genres_to_file(artist_id:str, genres:list[str]) -> None:
+    with open(os.path.join("data_handling", "data", "artist_genres", artist_id + ".json"), "w") as new_file:
+        artist_to_genres_dict = {}
+        artist_to_genres_dict[artist_id] = genres
+        new_file.write(json.dumps(artist_to_genres_dict))
+
 def parse_genre_genres() -> dict[str,list[str]]: 
     genre_genres_dict = {}
 
@@ -46,7 +84,7 @@ def parse_genre_genres() -> dict[str,list[str]]:
         for genre, genres in data.items():
             genre = convert_string_to_unicode(genre)
             genres = list(map(convert_string_to_unicode, genres)) # remove shit characters from genres
-            while genre.lower() in genres: 
+            while genre.lower() in genres:
                 genres.remove(genre.lower())
             genre_genres_dict[genre] = genres
         file.close()
@@ -117,6 +155,16 @@ def get_genres_from_folder(folder_path:str) -> list[str]:
     
     return genres
 
+def get_artists_from_folder(folder_path:str) -> list[str]:
+    artists = [] 
+    files = os.listdir(folder_path)
+    for f in files:
+        file_content = read_json_file(os.path.join(folder_path,f))
+        artists.extend(list(file_content.values())[0])
+    
+    artists = list(set(artists))
+    return artists
+
 def read_json_file(path:str) -> dict:
      with open(path) as json_dict:
         return json.load(json_dict)
@@ -152,12 +200,12 @@ def get_artist_genres(artist_id:str) -> list[str]:
     return artist_genres
 
 def get_multiple_artists_genres(artist_ids:list[str]) -> list[str]:
-    genres = []
+    artists_genres_dict = {}
     artists = spotify.artists(artists=artist_ids)
     for artist in artists['artists']:
         if artist['genres']:
-            genres.extend(artist['genres'])
-    return genres
+            artists_genres_dict[artist['id']] = artist['genres']
+    return artists_genres_dict
     
 
 
