@@ -251,5 +251,7 @@ psd
 thumb
 sketch
 
+*/matrix.json
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python,react
+data_handling/data/matrix.json

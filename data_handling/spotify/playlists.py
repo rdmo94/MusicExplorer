@@ -1,3 +1,4 @@
+from asyncore import read
 from operator import index, indexOf
 from numpy import NaN
 import spotipy
@@ -5,7 +6,7 @@ import json
 import pandas as pd
 import numpy as np
 from spotipy.oauth2 import SpotifyClientCredentials
-from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file
+from data_handling.spotify.spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file
 
 
 SPOTIPY_CLIENT_ID = "97246a4390bf4516b9177ae13269fe86"
@@ -59,57 +60,36 @@ def filterPlaylistsToSoundOf():
 # filterPlaylistsToSoundOf()
 
 
-def matrixTest():
-    matrix = {}
 
-    # matrix = np.empty([100, 100])
-    # for i in range(100):
-    #     for j in range(100):
-    #         if i == j:
-    #             matrix[i][j] = NaN
-    #         else:
-    #             matrix[i][j] = 0
+def generate_matrix():
+    genre_genres_dict = parse_genre_genres()
 
-    # genres = {
-    #     "pop" : ["country", "country", "country", "k-pop", "modern pop", "modern pop"],
-    #     "country" : ["pop", "modern pop"],
-    #     "modern pop" : ["pop", "pop", "pop", "k-pop"],
-    #     "k-pop" : ["pop", "modern pop"],
-    # }
-
-    genres = parse_genre_genres()
-
-    matrix = np.zeros([len(list(genres.keys())), len(list(genres.keys()))])
-
-    print(matrix)
-
-    # matrix["forest psy"] = ["psycadelic trance", "dark psytrance"]
-    # matrix["psycadelic trance"] = ["forest psy", "dark psytrance"]
-    # matrix["dark psytrance"] = ["forest psy", "psycadelic trance" ]
-
-    # print(matrix)
-    genre_labels = list(map(str.lower, list(genres.keys())))
+    #generating the right size 2d array filled with 0's
+    matrix = np.zeros([len(list(genre_genres_dict.keys())), len(list(genre_genres_dict.keys()))])
+  
+    genre_labels = list(map(str.lower, list(genre_genres_dict.keys())))
     genreToIndex = {}
 
     for index in range(len(genre_labels)):
         genreToIndex[genre_labels[index]] = index
+
+    # with open('genre_to_index.json', 'w') as outfile:
+        
+    #     json.dump(genreToIndex, outfile, ensure_ascii=False)
+
     indexes = [*range(0, len(genre_labels), 1)]
-    df = pd.DataFrame(data=matrix, columns=indexes, index=indexes)
+    # df = pd.DataFrame(data=matrix, columns=indexes, index=indexes)
     # df[0][1] += 1
-    print(df)
+    
 
     try:
-        for i in list(genres.keys()):
-            current_genres = genres[i]
+        for i in list(genre_genres_dict.keys()):
+            current_genres = genre_genres_dict[i]
             
             for g in current_genres:
                 try:               
-                    ## Den her linje er sygt dårlig for memory - ved ikke hvorfor
-                    df[genreToIndex[i.lower()]][genreToIndex[g]] += 1
-                    
-                    ## Der findes også noget der hedder df.at - men ved ikke helt, hvad forskellen er.
-                    ## Har prøvet at lave vores dataframe med 'indexes' i stedet for strings, men det virker
-                    ## som om, at det ikke forbedre
+                    matrix[genreToIndex[i.lower()]][genreToIndex[g]] = matrix[genreToIndex[i.lower()]][genreToIndex[g]] + 1
+                    matrix[genreToIndex[g]][genreToIndex[i.lower()]] = matrix[genreToIndex[g]][genreToIndex[i.lower()]] +1
                 except Exception as e:
                     print(i)
                     print(g)
@@ -117,24 +97,33 @@ def matrixTest():
 
     except Exception as e:
         print("snotskovl")
+
+    df = pd.DataFrame(data=matrix, columns=indexes, index=indexes)
     df.to_json("./matrix.json")
     print("lort")
-
 
 def parse_matrix():
     genres = parse_genre_genres()
     genre_labels = list(map(str.lower, list(genres.keys())))
     genreToIndex = {}
+    indexToGenre = {}
 
     for index in range(len(genre_labels)):
         genreToIndex[genre_labels[index]] = index
+        indexToGenre[index] = genre_labels[index]
+    with open('index_to_genre.json', 'w') as outfile:
+        json.dump(indexToGenre, outfile, ensure_ascii=False)
+
     matrix_dict = read_json_file("./matrix.json")
+    genre_to_index = read_json_file("./genre_to_index.json")
     df = pd.DataFrame.from_dict(matrix_dict, orient="index")
+
+   
     print("snot")
 
 
 # parse_matrix()
-matrixTest()
+generate_matrix()
 # fetchPlaylists()
 # scrape_genres_to_json_files()
 # scrape_artist_genres_to_json_files()
