@@ -38,10 +38,10 @@ def parse_genre_genres() -> dict[str,list[str]]:
     genre_genres_dict = {}
 
     # get all files
-    files = os.listdir("genre_genres/")
+    files = os.listdir("data/genre_genres/")
     for f in files:
         # Opening JSON file
-        file = open("genre_genres/" + f)
+        file = open("data/genre_genres/genre_genres/" + f)
         data = json.load(file)
         for genre, genres in data.items():
             genre = convert_string_to_unicode(genre)

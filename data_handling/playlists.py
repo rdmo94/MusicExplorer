@@ -6,7 +6,7 @@ import json
 import pandas as pd
 import numpy as np
 from spotipy.oauth2 import SpotifyClientCredentials
-from data_handling.spotify.spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file
+from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file
 
 
 SPOTIPY_CLIENT_ID = "97246a4390bf4516b9177ae13269fe86"
