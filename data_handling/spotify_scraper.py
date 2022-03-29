@@ -17,6 +17,45 @@ scraped_genres = []
 artists_genres_dict = {}
 
 def main():
+    genre_sentences = []
+    multi_genre_senteces = []
+    
+    data = read_json_file(os.path.join("data_handling","data", "artists_genres.json"))
+    for artist_id, genres in data.items():
+        sentence = ""
+        for genre in genres:
+            sentence = sentence + " " + genre.replace(" ", "_")
+        sentence = sentence.strip()
+        genre_sentences.append(sentence)
+    
+    distinct_genres = set()
+    genres_from_pairs = set()
+
+    single_genre_counter = 0
+    pairs_counter = 0
+    for sentence in genre_sentences:
+
+        if " " not in sentence:
+            single_genre_counter += 1
+            distinct_genres.add(sentence)
+        else:
+            multi_genre_senteces.append(sentence)
+            genres = sentence.split(" ")
+            for genre in genres:
+                distinct_genres.add(genre)
+                genres_from_pairs.add(genre)
+            n = len(genres)
+            pairs = (n*(n-1)/2)
+            pairs_counter = pairs_counter + pairs
+    
+    with open(os.path.join("data_handling", "data", "artists_genre_sentences.txt"), "w") as new_file:
+        for l in multi_genre_senteces:
+            new_file.write(l + "\n")
+
+    print("lol")
+    
+
+def convert_artist_genres_files_to_one_file():
     #read all files
     all_artist_files = os.listdir(os.path.join("data_handling","data", "artist_genres"))
     all_artist_genres_dict = {}
@@ -28,8 +67,6 @@ def main():
     
     with open(os.path.join("data_handling", "data", "artists_genres.json"), "w") as new_file:
         new_file.write(json.dumps(all_artist_genres_dict))
-    
-
 
 def scrape_all_artists_genres():
      #create list with ALL artists
