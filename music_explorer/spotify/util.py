@@ -1,3 +1,4 @@
+from email import header
 from .models import SpotifyToken
 from django.utils import timezone
 from datetime import timedelta
@@ -11,6 +12,8 @@ def clear_user_token(session_id):
     spotify_token = SpotifyToken.objects.get(user=session_id)
     spotify_token.delete()
 
+def get_current_user(token):
+    return get(BASE_URL, headers={"Authorization" : 'Bearer ' + token, "Accept": "application/json"}).json()
 
 def get_user_tokens(session_id):
     user_tokens = SpotifyToken.objects.filter(user=session_id)
