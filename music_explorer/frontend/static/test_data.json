@@ -1,0 +1,24 @@
+{
+    "nodes": [ 
+        { 
+          "id": "id1",
+          "name": "pop",
+          "val": 1,
+          "fx": -0.5,
+          "fy": 0.6
+        },
+        { 
+          "id": "id2",
+          "name": "rock",
+          "val": 10,
+          "fx": -100,
+          "fy": 0.9
+        }
+    ],
+    "links": [
+        {
+            "source": "id1",
+            "target": "id2"
+        }
+    ]
+}
