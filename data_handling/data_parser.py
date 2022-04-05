@@ -29,9 +29,8 @@ def generate_graph_data_2d():
     graph_data = {}
     graph_data["nodes"] = nodes
     graph_data["links"] = links
-    with open(os.path.join("data_handling/data", "graph_data_1.json"), "w") as f:
+    with open(os.path.join("data_handling/data", "graph_data_2d.json"), "w") as f:
         json.dump(graph_data, f)
-    print("blob")
 
 
 def generate_graph_data_3d():
@@ -62,8 +61,6 @@ def generate_graph_data_3d():
     graph_data = {}
     graph_data["nodes"] = nodes
     graph_data["links"] = links
-    with open(os.path.join("data_handling/data", "graph_data_1.json"), "w") as f:
+    with open(os.path.join("data_handling/data", "graph_data_3d.json"), "w") as f:
         json.dump(graph_data, f)
-    print("blob")
 
-generate_graph_data_3d()

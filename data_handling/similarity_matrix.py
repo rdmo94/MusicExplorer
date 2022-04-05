@@ -61,43 +61,6 @@ def generate_matrix_old():
     dataframe.to_json("./matrix.json")
 
 def get_matrix() -> pd.DataFrame:
-    # genres = parse_genre_genres()
     matrix_dict = read_json_file("./data/matrix.json")
     df = pd.DataFrame.from_dict(matrix_dict, orient="index")
     return df
-
-# matrix = get_matrix()
-# np_matrix = matrix.to_numpy()
-# with open("test.bin", "w") as outfile:
-#     np_matrix.tofile(outfile)
-
-# import struct
-# file = open("test.bin", "rb")
-
-# byte = file.read(16)
-# while byte:
-#     cooccur_data = struct.unpack('iid', byte)
-#     print(cooccur_data)
-#     byte = file.read(16)
-
-# file.close()
-
-# matrix_dict = read_json_file("data/matrix.json")
-# with open("matrix_txt.txt", "w") as outfile:
-#     for key, value in matrix_dict.items():
-#         for keyInner, co_count in value.items():
-#                 if(co_count > 0):
-#                     outfile.write(f"({key}, {keyInner}, {co_count})\n")
-# outfile.close()
-
-# matrix_file = open("matrix_txt.txt", "r")
-# matrix_content = matrix_file.read()
-# lst = matrix_content.split("\n")
-# random.shuffle(lst)
-
-f = open("matrix_txt.txt", 'r')
-mytext = f.read()
-
-with open("matrix.bin", "wb") as outfile:
-    outfile.write(bytearray(mytext, 'utf-8'))
-outfile.close()
