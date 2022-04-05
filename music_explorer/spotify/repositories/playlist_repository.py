@@ -10,11 +10,15 @@ from spotipy import Spotify
 
 class GetUserPlaylists(APIView):
     def get(self, request, format=None):
+        current_user_response = get_current_user(session_id=request.session.session_key)
         user_tokens = get_user_tokens(session_id=request.session.session_key)
-        if user_tokens is None:
+        if current_user_response.ok:
+            user_id = int(current_user_response.json().get("id"))
+            sp = Spotify(auth=user_tokens.access_token)
+            response = sp.user_playlists(user=user_id)
+            return Response({'data': response}, status=status.HTTP_200_OK)
+        else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        user_id = int(get_current_user(user_tokens.access_token).get('id'))
-        sp = Spotify(auth=user_tokens.access_token)
-        response = sp.user_playlists(user=user_id)
         
-        return Response({'data': response}, status=status.HTTP_200_OK)
+       
+        

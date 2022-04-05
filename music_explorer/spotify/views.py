@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
-from .util import update_or_create_user_tokens, is_spotify_authenticated, clear_user_token
+from .util import update_or_create_user_tokens, is_spotify_authenticated, clear_user_token, create_user
 from api.models import User
 
 
@@ -18,7 +18,7 @@ class AuthURL(APIView):
             'redirect_uri': REDIRECT_URI,
             'client_id': CLIENT_ID
         }).prepare().url
-
+        
         return Response({'url': url}, status=status.HTTP_200_OK)
 
 
@@ -45,6 +45,7 @@ def spotify_callback(request, format=None):
 
     update_or_create_user_tokens(
         request.session.session_key, access_token, token_type, expires_in, refresh_token)
+    create_user(session_id=request.session.session_key)
 
     return redirect('frontend:')
 

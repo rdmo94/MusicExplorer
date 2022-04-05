@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
 
-
 function Profile() {
+  const [playlists, setPlaylists] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    
-  },[]) //empty array to avoid multiple fetches
+    fetch("/api/get_user").then(response => response.json().then(json => setUser(json)))
+    fetch("/spotify/get_playlists")
+      .then(response => response.json())
+      .then(json => setPlaylists(json))
+  }, []);
+
+  var status;
+  if(playlists == null) {
+    status = "Loading..."
+  } else {
+    status = "Done loading!"
+  }
 
   return (
     <div>
-      <h1>test</h1>
-      <div>
-        
-      </div>
-
+      <h1>{user == null ? "Loader..." : user.user}</h1>
+      <p></p>
     </div>
   );
 }

@@ -7,7 +7,7 @@ from .serializers import UserSerializer, CreateUserSerializer
 from .models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from spotipy import Spotify
 # Create your views here
 class UserView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -24,10 +24,12 @@ class CreateUserView(APIView):
         
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            email = serializer.data['email']
-            queryset = User.objects.filter(email=email)
+            id = serializer.data['id']
+            name = serializer.data['name']
+            queryset = User.objects.filter(id=id)
             if not queryset.exists():
-                user = User(email=email)
+                user = User(id=id, name=name)
+
                 user.save()
                 return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
             else:
