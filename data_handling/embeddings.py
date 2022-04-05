@@ -37,12 +37,12 @@ model = gensim.models.Word2Vec(
 #     outputFile.close()       
         
 
-tsne_model = TSNE(n_components=2, learning_rate='auto',
+tsne_model = TSNE(n_components=3, learning_rate='auto',
                   init='random', verbose=1).fit_transform(model.wv.vectors)
 print("hey")
 x = tsne_model[:, 0]
-
 y = tsne_model[:, 1]
+z = tsne_model[:, 2]
 
 # with open("index_to_genre_word2vec.json", "w") as o:
 #     json.dump(model.wv.index_to_key, o)
@@ -50,17 +50,17 @@ y = tsne_model[:, 1]
 # with open("genre_to_index_word2vec.json", "w") as o:
 #     json.dump(model.wv.key_to_index, o)
 
-# with open("datapoints.txt", "w") as outputFile:
-#     for i in range(len(x)):
-#         outputFile.write(str(x[i]) + "," + str(y[i]) + "\n")
+with open("datapoints_3d.txt", "w") as outputFile:
+    for i in range(len(x)):
+        outputFile.write(str(x[i]) + "," + str(y[i]) + "," + str(z[i]) +"\n")
         
    
 
-plt.scatter(x, y)
-for i in range(len(x)):
-    test1 = list(model.wv.key_to_index.keys())[i]
-    test2 = x[i]
-    test3 = y[i]
+plt.scatter(x, y, z)
+# for i in range(len(x)):
+#     test1 = list(model.wv.key_to_index.keys())[i]
+#     test2 = x[i]
+#     test3 = y[i]
     # plt.annotate(list(model.wv.key_to_index.keys())[i], (x[i], y[i]))
 plt.show()
 print("hey")
