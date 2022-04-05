@@ -43,7 +43,7 @@ def fetchPlaylists():
         json.dump(pairs, outfile, ensure_ascii=False)
 
 
-def filterPlaylistsToSoundOf():
+def filter_playlists_to_sound_of():
     with open('playlists50first.json') as json_file:
         data = json.load(json_file)
 
@@ -56,12 +56,7 @@ def filterPlaylistsToSoundOf():
                 pairs[key] = value
         json.dump(pairs, outfile, ensure_ascii=False)
 
-# fetchPlaylists()
-# filterPlaylistsToSoundOf()
-
-
-
-def generate_matrix():
+def generate_matrix_and_save_to_file():
     genre_genres_dict = parse_genre_genres()
 
     #generating the right size 2d array filled with 0's
@@ -73,14 +68,7 @@ def generate_matrix():
     for index in range(len(genre_labels)):
         genreToIndex[genre_labels[index]] = index
 
-    # with open('genre_to_index.json', 'w') as outfile:
-        
-    #     json.dump(genreToIndex, outfile, ensure_ascii=False)
-
-    indexes = [*range(0, len(genre_labels), 1)]
-    # df = pd.DataFrame(data=matrix, columns=indexes, index=indexes)
-    # df[0][1] += 1
-    
+    indexes = [*range(0, len(genre_labels), 1)]  
 
     try:
         for i in list(genre_genres_dict.keys()):
@@ -96,13 +84,12 @@ def generate_matrix():
                     print(e)
 
     except Exception as e:
-        print("snotskovl")
+        print(e)
 
     df = pd.DataFrame(data=matrix, columns=indexes, index=indexes)
     df.to_json("./matrix.json")
-    print("lort")
 
-def parse_matrix():
+def parse_matrix() -> pd.DataFrame:
     genres = parse_genre_genres()
     genre_labels = list(map(str.lower, list(genres.keys())))
     genreToIndex = {}
@@ -116,14 +103,5 @@ def parse_matrix():
 
     matrix_dict = read_json_file("./matrix.json")
     genre_to_index = read_json_file("./genre_to_index.json")
-    df = pd.DataFrame.from_dict(matrix_dict, orient="index")
-
-   
-    print("snot")
-
-
-# parse_matrix()
-generate_matrix()
-# fetchPlaylists()
-# scrape_genres_to_json_files()
-# scrape_artist_genres_to_json_files()
+    matrix_dataframe = pd.DataFrame.from_dict(matrix_dict, orient="index")
+    return matrix_dataframe

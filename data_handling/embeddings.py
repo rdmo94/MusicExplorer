@@ -1,3 +1,4 @@
+from ast import Tuple
 from mimetypes import init
 from gensim.test.utils import datapath
 from gensim import utils
@@ -9,7 +10,7 @@ import matplotlib.pyplot as plt
 import json
 
 
-class MyCorpus:
+class GenreCorpus:
     """An iterator that yields sentences (lists of str)."""
 
     def __iter__(self):
@@ -21,46 +22,27 @@ class MyCorpus:
             yield utils.simple_preprocess(line)
 
 
-sentences = MyCorpus()
-uniques = set()
-for i in sentences:
-    for j in i:
-        uniques.add(j)
-model = gensim.models.Word2Vec(
-    sentences=sentences, vector_size=50, window=99, min_count=1, sg=1)
 
-# with open("embeddings.txt", "w") as outputFile:
-#     for vector in model.wv.vectors:
-#         for number in vector:
-#             outputFile.write(str(number) + "    ")
-#         outputFile.write("\n")
-#     outputFile.close()       
-        
+def create_Word2Vec_model(vector_size=50, window=99, min_count=1, sg=1) -> gensim.models.Word2Vec:
+    sentences = GenreCorpus()
+    model = gensim.models.Word2Vec(
+    sentences=sentences, vector_size=vector_size, window=window, min_count=min_count, sg=sg)
+    return model
 
-tsne_model = TSNE(n_components=3, learning_rate='auto',
-                  init='random', verbose=1).fit_transform(model.wv.vectors)
-print("hey")
-x = tsne_model[:, 0]
-y = tsne_model[:, 1]
-z = tsne_model[:, 2]
 
-# with open("index_to_genre_word2vec.json", "w") as o:
-#     json.dump(model.wv.index_to_key, o)
+def create_tsne_model(word2vec_model, n_components=2, learning_rate='auto', init='random', verbose=0):
+    tsne_model = TSNE(n_components=3, learning_rate='auto',
+                  init='random', verbose=1).fit_transform(word2vec_model.wv.vectors)
+    return tsne_model
 
-# with open("genre_to_index_word2vec.json", "w") as o:
-#     json.dump(model.wv.key_to_index, o)
-
-with open("datapoints_3d.txt", "w") as outputFile:
-    for i in range(len(x)):
-        outputFile.write(str(x[i]) + "," + str(y[i]) + "," + str(z[i]) +"\n")
-        
-   
-
-plt.scatter(x, y, z)
-# for i in range(len(x)):
-#     test1 = list(model.wv.key_to_index.keys())[i]
-#     test2 = x[i]
-#     test3 = y[i]
-    # plt.annotate(list(model.wv.key_to_index.keys())[i], (x[i], y[i]))
-plt.show()
-print("hey")
+def get_x_y_coordinates_from_tsne_model(tsne_model, n_components=2):
+    coordinates = np.empty()
+    x = tsne_model[:, 0]
+    coordinates[:, 0] = x
+    y = tsne_model[:, 1]
+    coordinates[:, 1] = y
+    if n_components == 3:
+        z = tsne_model[:, 2]
+        coordinates[:, 1] = z
+    return coordinates
+    
