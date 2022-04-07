@@ -41,7 +41,6 @@ def create_user(session_id):
         current_spotify_user = response.json()
         response2 = post("http://127.0.0.1:8000/api/create_user",
                          json={"id": current_spotify_user.get('id'), "name": current_spotify_user.get('display_name')}, headers={"Content-Type": "application/json"})
-        print("jhey")
     else:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -73,6 +72,12 @@ def is_spotify_authenticated(session_id):
         return True
 
     return False
+
+def filter_spotify_playlists(playlists: dict):
+    filtered_playlists = []
+    for item in playlists["items"]:
+        filtered_playlists.append({item["id"] : item["name"]})
+    return filtered_playlists
 
 
 def refresh_spotify_token(session_id):
