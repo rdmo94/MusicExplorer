@@ -6,3 +6,5 @@ class Playlist {
         this.tracks = tracks;
     }
 }
+
+export default Playlist

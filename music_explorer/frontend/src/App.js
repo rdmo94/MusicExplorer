@@ -7,6 +7,7 @@ import Graph from "./pages/Graph";
 import Login from "./pages/Login"
 import NavBar from "./components/NavBar";
 import Playlists from "./pages/Playlists"
+import PlaylistScreen from "./pages/PlaylistScreen";
 
 export default class App extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ export default class App extends Component {
             <Route path="" element={<Home/>}> </Route>
             <Route path="/graph" element={<Graph/>}> </Route>
             <Route path="/playlists" element={<Playlists/>}> </Route>
+            <Route path="/playlist" element={<PlaylistScreen/>}> </Route>
         </Routes>
         {/* </NavBar> */}
       </BrowserRouter>

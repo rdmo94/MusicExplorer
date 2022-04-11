@@ -6,6 +6,7 @@ from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
 from rest_framework import status
 from rest_framework.response import Response
+import functools
 
 
 BASE_URL = "https://api.spotify.com/v1/me/"
@@ -72,6 +73,16 @@ def is_spotify_authenticated(session_id):
         return True
 
     return False
+
+def filter_spotify_tracks(tracks: dict):
+    filtered_tracks = []
+    for item in tracks["items"]:
+        track = item["track"]
+        filtered_track_artists = []
+        for artist in track["artists"]:
+            filtered_track_artists.append({"id": artist["id"]})
+        filtered_tracks.append({"name" : track["name"], "id" : track["id"], "duration" : track["duration_ms"], "artists": filtered_track_artists})
+    return filtered_tracks
 
 def filter_spotify_playlists(playlists: dict):
     filtered_playlists = []

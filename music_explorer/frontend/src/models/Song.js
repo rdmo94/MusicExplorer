@@ -7,3 +7,5 @@ class Song {
         this.duration = duration;
     }
 }
+
+export default Song
