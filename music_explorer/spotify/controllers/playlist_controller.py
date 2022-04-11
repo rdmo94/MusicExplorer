@@ -1,6 +1,10 @@
 import json
+from random import randint
+from unicodedata import name
+from xmlrpc.client import MAXINT
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
@@ -22,3 +26,21 @@ class GetCurrentUserPlaylistsView(APIView):
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         
+
+class CreatePlaylistView(APIView):
+    def post(self, request, format=None):
+        current_user_response = get_current_user(session_id=request.session.session_key)
+        user_tokens = get_user_tokens(session_id=request.session.session_key)
+        if current_user_response.ok:
+            user_id = int(current_user_response.json().get("id"))
+            sp = Spotify(auth=user_tokens.access_token)
+            new_playlist = sp.user_playlist_create(user=user_id, name="MusicExplorer" + str(randint(0, MAXINT)))
+            tracks_to_add = []
+            for track in request.data["playlistTracks"]:
+                tracks_to_add.append(track["uri"])
+            add_response = sp.playlist_add_items(playlist_id=new_playlist["id"], items=tracks_to_add)
+            if add_response is not None:
+                return Response(new_playlist["external_urls"]["spotify"], status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_304_NOT_MODIFIED)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)

@@ -21,7 +21,14 @@
       "args": ["runserver"],
       "django": true,
       "justMyCode": true
-    }
+    },
+    {
+      "name": "Attach to Chrome",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://127.0.0.1:8000", // use urlFilter instead of url!
+      "webRoot": "${workspaceFolder}/frontend"
+  }
   
   ]
 }
