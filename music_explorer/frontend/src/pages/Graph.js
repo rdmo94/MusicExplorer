@@ -18,7 +18,7 @@ function Graph() {
   })
 
   useEffect(() => {
-    fetch("static/test_graph_data.json")
+    fetch("static/graph_data_2_no_link.json")
       .then((response) => response.json())
       .then((data) => {
         //TODO check if data is ok
