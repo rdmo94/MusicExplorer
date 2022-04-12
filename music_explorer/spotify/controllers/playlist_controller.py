@@ -40,7 +40,21 @@ class CreatePlaylistView(APIView):
                 tracks_to_add.append(track["uri"])
             add_response = sp.playlist_add_items(playlist_id=new_playlist["id"], items=tracks_to_add)
             if add_response is not None:
-                return Response(new_playlist["external_urls"]["spotify"], status=status.HTTP_201_CREATED)
+                return Response(json.dumps(new_playlist), status=status.HTTP_201_CREATED)
             return Response(status=status.HTTP_304_NOT_MODIFIED)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+# class UpdatePlaylistView(APIView):
+#     def put(self, request, format=None):
+#         current_user_response = get_current_user(session_id=request.session.session_key)
+#         user_tokens = get_user_tokens(session_id=request.session.session_key)
+#         if current_user_response.ok:
+#             user_id = int(current_user_response.json().get("id"))
+#             sp = Spotify(auth=user_tokens.access_token)         
+#             update_response = sp.user_playlist_change_details(user=user_id, playlist_id=request.data["name"])
+#             if update_response is not None:
+#                 return Response(status=status.HTTP_200_OK)
+#             return Response(status=status.HTTP_304_NOT_MODIFIED)
+#         else:
+#             return Response(status=status.HTTP_401_UNAUTHORIZED)

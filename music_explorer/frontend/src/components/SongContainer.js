@@ -6,13 +6,14 @@ import { primaryGrey } from "../Colors";
 
 function SongContainer(props) {
   return (
-    <Box onClick={() => {props.playSongCallback()}} variant="conained" sx={{"border" : `2px solid ${primaryGrey}`, "border-radius" : "200px", "padding" : "20px", "margin" : "5px"}}>
+    <Box onClick={() => {props.playSongCallback()}} variant="conained" sx={{border : `2px solid ${primaryGrey}`, borderRadius : "200px", paddingLeft : "30px", paddingRight : "5px", margin : "5px"}}>
       <Grid
         container
         direction="row"
         justifyContent="space-between"
         alignItems="center"
       >
+        
         <Grid
           item
           direction="column"

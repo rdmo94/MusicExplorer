@@ -3,6 +3,8 @@ import { Container, Box, Grid } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import Strategies from "../components/Strategies";
 import Graph from "./Graph";
+import PlaylistScreen from "./PlaylistScreen";
+import Playlists from "./Playlists";
 
 //grid components style
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +26,9 @@ function Dashboard() {
     >
       <Grid item xs={3}>
         <Container disableGutters={true}>
-          <Box sx={{ bgcolor: "#979797", height: "100vh" }} />
+          <Box sx={{ bgcolor: "#979797", height: "100vh" }} >
+            <Playlists/>
+          </Box>
         </Container>
       </Grid>
       <Grid item xs={6}>
