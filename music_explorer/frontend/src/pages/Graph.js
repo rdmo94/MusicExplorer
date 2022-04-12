@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Graph3D from "../components/Graph3D";
 import Graph2D from "../components/Graph2D";
+import GraphColorTest from "../components/GraphColorTest";
 import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import Switch from "@mui/material/Switch";
@@ -18,7 +19,7 @@ function Graph() {
   })
 
   useEffect(() => {
-    fetch("static/test_graph_data.json")
+    fetch("static/graph_data_2_no_link.json")
       .then((response) => response.json())
       .then((data) => {
         //TODO check if data is ok
@@ -47,7 +48,9 @@ function Graph() {
     graph = <Graph2D data={data} properties={localGraphProperties} />;
   } else if (graphType == "3D") {
     graph = <Graph3D data={data} properties={localGraphProperties} />;
-  }
+  } else if (graphType == "GraphColorTest") {
+    graph = <GraphColorTest data={data} properties={localGraphProperties} />;
+  } 
 
   return (
     <div>
@@ -117,6 +120,7 @@ function Graph() {
               }
             }
             >
+            <MenuItem value={"GraphColorTest"}>GraphColorTest</MenuItem>
             <MenuItem value={"2D"}>2D</MenuItem>
             <MenuItem value={"3D"}>3D</MenuItem>
           </Select>
