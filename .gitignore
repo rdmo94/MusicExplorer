@@ -256,3 +256,5 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python,react
 data_handling/data/matrix.json
+music_explorer/frontend/main.js
+music_explorer/frontend/main.js.LICENSE.txt
