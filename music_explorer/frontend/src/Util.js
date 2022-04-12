@@ -1,12 +1,5 @@
 import { useState } from "react";
 
-export function graph_data_prettyfier(text) {
-  //TODO function that prettyfies genres by replacing correct characters, uppercases etc
-  function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(find, "g"), replace);
-  }
-}
-
 export function graph_data_prettyfier(text){
     //TODO function that prettyfies genres by replacing correct characters, uppercases etc
     function replaceAll(str, find, replace) {
