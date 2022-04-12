@@ -18,31 +18,31 @@ function PlaylistScreen(props) {
   const [newlyCreatedPlaylist, setNewlyCreatedPlaylist] = useState(null);
 
   useEffect(() => {
-    // let object = new Playlist(
-    //   "0DIvpjaOZNK0Qqb5bEm2lf",
-    //   "New playlist",
-    //   [],
-    //   [
-    //     new Song(
-    //       "5GzKIbJyrV6rUakLyezNwn",
-    //       "Mad Professor",
-    //       ["Large Professor"],
-    //       "Hip Hop",
-    //       261333,
-    //       "spotify:track:5GzKIbJyrV6rUakLyezNwn"
-    //     ),
-    //     new Song(
-    //       "3IAfUEeaXRX9s9UdKOJrFI",
-    //       "Envolver",
-    //       ["Anitta"],
-    //       "Pop",
-    //       193805,
-    //       "spotify:track:3IAfUEeaXRX9s9UdKOJrFI"
-    //     ),
-    //   ]
-    // );
-    // setPlaylist(props.playlist);
-    // setPlaylistTracks(props.playlist.tracks);
+    let object = new Playlist(
+      "0DIvpjaOZNK0Qqb5bEm2lf",
+      "New playlist",
+      [],
+      [
+        new Song(
+          "5GzKIbJyrV6rUakLyezNwn",
+          "Mad Professor",
+          ["Large Professor"],
+          "Hip Hop",
+          261333,
+          "spotify:track:5GzKIbJyrV6rUakLyezNwn"
+        ),
+        new Song(
+          "3IAfUEeaXRX9s9UdKOJrFI",
+          "Envolver",
+          ["Anitta"],
+          "Pop",
+          193805,
+          "spotify:track:3IAfUEeaXRX9s9UdKOJrFI"
+        ),
+      ]
+    );
+    setPlaylist(object);
+    setPlaylistTracks(object.tracks);
   }, []);
 
   const saveToSpotifyStates = {
