@@ -4,16 +4,28 @@ from django.utils import timezone
 from datetime import timedelta
 from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
+from rest_framework import status
+from rest_framework.response import Response
+import functools
 
 
 BASE_URL = "https://api.spotify.com/v1/me/"
+
 
 def clear_user_token(session_id):
     spotify_token = SpotifyToken.objects.get(user=session_id)
     spotify_token.delete()
 
-def get_current_user(token):
-    return get(BASE_URL, headers={"Authorization" : 'Bearer ' + token, "Accept": "application/json"}).json()
+
+def get_current_user(session_id):
+    user_tokens = get_user_tokens(session_id)
+    if user_tokens:
+        response = get(BASE_URL, headers={
+                       "Authorization": 'Bearer ' + user_tokens.access_token, "Accept": "application/json"})
+        return response
+    else:
+        Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 def get_user_tokens(session_id):
     user_tokens = SpotifyToken.objects.filter(user=session_id)
@@ -22,6 +34,16 @@ def get_user_tokens(session_id):
         return user_tokens[0]
     else:
         return None
+
+
+def create_user(session_id):
+    response = get_current_user(session_id=session_id)
+    if response.ok:
+        current_spotify_user = response.json()
+        response2 = post("http://127.0.0.1:8000/api/create_user",
+                         json={"id": current_spotify_user.get('id'), "name": current_spotify_user.get('display_name')}, headers={"Content-Type": "application/json"})
+    else:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def update_or_create_user_tokens(session_id, access_token, token_type, expires_in, refresh_token):
@@ -51,6 +73,22 @@ def is_spotify_authenticated(session_id):
         return True
 
     return False
+
+def filter_spotify_tracks(tracks: dict):
+    filtered_tracks = []
+    for item in tracks["items"]:
+        track = item["track"]
+        filtered_track_artists = []
+        for artist in track["artists"]:
+            filtered_track_artists.append({"id": artist["id"]})
+        filtered_tracks.append({"name" : track["name"], "id" : track["id"], "duration" : track["duration_ms"], "artists": filtered_track_artists})
+    return filtered_tracks
+
+def filter_spotify_playlists(playlists: dict):
+    filtered_playlists = []
+    for item in playlists["items"]:
+        filtered_playlists.append({item["id"] : item["name"]})
+    return filtered_playlists
 
 
 def refresh_spotify_token(session_id):

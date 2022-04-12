@@ -4,5 +4,6 @@ from django.db import models
 # fat models and thin views
 class User(models.Model):
     #id ...
-    email = models.CharField(max_length=50, unique=True)
+    id = models.CharField(max_length=50, unique=True, primary_key=True)
+    name = models.CharField(max_length=50, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

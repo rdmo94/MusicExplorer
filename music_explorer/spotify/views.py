@@ -4,13 +4,13 @@ from rest_framework.views import APIView
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
-from .util import update_or_create_user_tokens, is_spotify_authenticated, clear_user_token
+from .util import update_or_create_user_tokens, is_spotify_authenticated, clear_user_token, create_user
 from api.models import User
 
 
 class AuthURL(APIView):
     def get(self, request, fornat=None):
-        scopes = 'user-read-playback-state user-modify-playback-state user-read-currently-playing'
+        scopes = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-modify-private playlist-modify-public',
 
         url = Request('GET', 'https://accounts.spotify.com/authorize', params={
             'scope': scopes,
@@ -18,7 +18,7 @@ class AuthURL(APIView):
             'redirect_uri': REDIRECT_URI,
             'client_id': CLIENT_ID
         }).prepare().url
-
+        
         return Response({'url': url}, status=status.HTTP_200_OK)
 
 
@@ -31,7 +31,8 @@ def spotify_callback(request, format=None):
         'code': code,
         'redirect_uri': REDIRECT_URI,
         'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET
+        'client_secret': CLIENT_SECRET,
+
     }).json()
 
     access_token = response.get('access_token')
@@ -45,6 +46,7 @@ def spotify_callback(request, format=None):
 
     update_or_create_user_tokens(
         request.session.session_key, access_token, token_type, expires_in, refresh_token)
+    create_user(session_id=request.session.session_key)
 
     return redirect('frontend:')
 
