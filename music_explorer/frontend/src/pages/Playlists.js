@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PlaylistContainer from "../components/PlaylistContainer";
+import PlaylistCheckboxContainer from "../components/PlaylistCheckboxContainer";
 import SongContainer from "../components/SongContainer";
 import { Grid, Typography } from "@material-ui/core";
 
@@ -48,7 +48,7 @@ function Playlists() {
                 let playlistName = Object.values(playlist)[0];
                 return (
                   <Grid item>
-                    <PlaylistContainer
+                    <PlaylistCheckboxContainer
                       title={playlistName}
                       updatePlaylistsCallback={selectedPlaylistsHandler}
                     />
