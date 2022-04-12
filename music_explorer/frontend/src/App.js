@@ -6,6 +6,9 @@ import Home from "./pages/Home"
 import Graph from "./pages/Graph";
 import Login from "./pages/Login"
 import NavBar from "./components/NavBar";
+import Profile from "./pages/Profile"
+import Dashboard from "./pages/Dashboard";
+import '../static/css/styles.css';
 import Playlists from "./pages/Playlists"
 import PlaylistScreen from "./pages/PlaylistScreen";
 
@@ -27,6 +30,8 @@ export default class App extends Component {
         <Routes>
             <Route path="" element={<Home/>}> </Route>
             <Route path="/graph" element={<Graph/>}> </Route>
+            <Route path="/profile" element={<Profile/>}> </Route>
+            <Route path="/dashboard" element={<Dashboard/>}> </Route>
             <Route path="/playlists" element={<Playlists/>}> </Route>
             <Route path="/playlist" element={<PlaylistScreen/>}> </Route>
         </Routes>

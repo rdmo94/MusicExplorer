@@ -6,20 +6,19 @@ import InputLabel from "@mui/material/InputLabel";
 import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useLocalStorage } from "../Util"
 
 function Graph() {
-  const [data, setData] = useState(null);
-  const [graphType, setGraphType] = useState(null);
-  const [graphProperties, setGraphProperties] = useState({
+  const [data, setData] = useState();
+  const [graphType, setGraphType] = useLocalStorage("graphType", "")
+  const [localGraphProperties, setLocalGraphProperties] = useLocalStorage("graphProperties", {
     backgroundColor: "white",
     enableNodeDrag: false,
     nodeAutoColorBy: "",
-  });
-
-  console.log("graphProperties", graphProperties); //TODO delete
+  })
 
   useEffect(() => {
-    fetch("static/test_data.json")
+    fetch("static/test_graph_data.json")
       .then((response) => response.json())
       .then((data) => {
         //TODO check if data is ok
@@ -32,7 +31,8 @@ function Graph() {
 
   //updates the properties of the graph
   const changeHandler = (e) => {
-    setGraphProperties({ ...graphProperties, [e.target.name]: e.target.value });
+    //setGraphProperties({ ...graphProperties, [e.target.name]: e.target.value });
+    setLocalGraphProperties({ ...localGraphProperties, [e.target.name]: e.target.value })
   };
 
   //Dynamic headline
@@ -44,9 +44,9 @@ function Graph() {
 
   //Dynamic graph type rendering
   if (graphType == "2D") {
-    graph = <Graph2D data={data} properties={graphProperties} />;
+    graph = <Graph2D data={data} properties={localGraphProperties} />;
   } else if (graphType == "3D") {
-    graph = <Graph3D data={data} properties={graphProperties} />;
+    graph = <Graph3D data={data} properties={localGraphProperties} />;
   }
 
   return (
@@ -62,7 +62,7 @@ function Graph() {
             id="nodeAutoColorBy"
             label="nodeAutoColorBy"
             name="nodeAutoColorBy"
-            value={graphProperties.nodeAutoColorBy}
+            value={localGraphProperties.nodeAutoColorBy}
             onChange={changeHandler}
           >
             <MenuItem value={"fy"}>fy</MenuItem>
@@ -78,7 +78,7 @@ function Graph() {
             id="backgroundColor"
             label="backgroundColor"
             name="backgroundColor"
-            value={graphProperties.backgroundColor}
+            value={localGraphProperties.backgroundColor}
             onChange={changeHandler}
           >
             <MenuItem value={"white"}>white</MenuItem>
@@ -89,28 +89,34 @@ function Graph() {
         <Grid item xs={3}>
           <InputLabel id="enableNodeDrag">enableNodeDrag</InputLabel>
           <Switch
-            checked={graphProperties.enableNodeDrag}
+            checked={localGraphProperties.enableNodeDrag}
             name="enableNodeDrag"
             onChange={(e) =>
-              setGraphProperties({
-                ...graphProperties,
+              setLocalGraphProperties({
+                ...localGraphProperties,
                 [e.target.name]: e.target.checked,
               })
             }
           />
         </Grid>
       </Grid>
-
+      {console.log("rendered select element")}
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <InputLabel id="graph-type">Graph type</InputLabel>
           <Select
+            defaultValue={graphType}
             labelId="graph-type"
             id="graph-type"
             label="Graph type"
             name="graph-type"
-            onChange={(input) => setGraphType(input.target.value)}
-          >
+            onChange={
+              (input) => {
+                console.log("onChange called on select element");
+                setGraphType(input.target.value)
+              }
+            }
+            >
             <MenuItem value={"2D"}>2D</MenuItem>
             <MenuItem value={"3D"}>3D</MenuItem>
           </Select>
@@ -121,5 +127,7 @@ function Graph() {
     </div>
   );
 }
+
+
 
 export default Graph;
