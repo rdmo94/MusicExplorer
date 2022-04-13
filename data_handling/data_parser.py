@@ -64,3 +64,5 @@ def generate_graph_data_3d():
     with open(os.path.join("data_handling/data", "graph_data_3d.json"), "w") as f:
         json.dump(graph_data, f)
 
+generate_graph_data_2d()
+generate_graph_data_3d()

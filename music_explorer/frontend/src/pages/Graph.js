@@ -18,9 +18,10 @@ function Graph() {
   })
 
   useEffect(() => {
-    fetch("static/graph_data_2_no_link.json")
+    fetch("static/graph_data_3d_full_no_links_sg.json")
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         //TODO check if data is ok
         setData(data);
       });
