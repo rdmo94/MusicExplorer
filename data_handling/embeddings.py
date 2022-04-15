@@ -33,6 +33,7 @@ def create_tsne_model(word2vec_model, n_components=2, learning_rate='auto', init
                   init='random', verbose=1).fit_transform(word2vec_model.wv.vectors)
     return tsne_model
 
+# Old - too slow. Size was approx. 1.35 GB
 def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
     graph = {}
     script_dir = os.path.dirname(__file__)
