@@ -1,27 +1,49 @@
 import { useState } from "react";
 
-export function graph_data_prettyfier(text){
-    //TODO function that prettyfies genres by replacing correct characters, uppercases etc
-    function replaceAll(str, find, replace) {
-      return str.replace(new RegExp(find, 'g'), replace);
-    }
-    
-    text = replaceAll(text, "____","&")
-    text = replaceAll(text, "___", "'")
-    text = replaceAll(text, "__", "-")
-    text = replaceAll(text, "_", " ")
-  
-    text = text
+export function graph_data_prettyfier(text) {
+  //TODO function that prettyfies genres by replacing correct characters, uppercases etc
+  function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, "g"), replace);
+  }
+
+  text = replaceAll(text, "____", "&");
+  text = replaceAll(text, "___", "'");
+  text = replaceAll(text, "__", "-");
+  text = replaceAll(text, "_", " ");
+
+  text = text
     .toLowerCase()
     .replace(/(^\w{1})|(\s{1}\w{1})/g, (match) => match.toUpperCase());
   return text;
 }
 
-  export function millisToMinutesAndSeconds(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+export function millisToMinutesAndSeconds(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+}
+
+/**
+ *
+ * @param {String} text
+ * @param {Boolean} toWord2VecFormat true: converts special characters to text. false: reverts '_nd_' back to '&'
+ */
+export function replace_special_characters(text, toWord2VecFormat) {
+  var replaceList = [
+    [" ", "_spc_"],
+    ["-", "_hphn_"],
+    ["'", "_pstrph_"],
+    ["&", "_nd_"],
+    [":", "_cln_"]
+  ]
+
+  for(var i = 0; i<replaceList.length; i++){
+    if (toWord2VecFormat) text = text.replace(replaceList[i][0], replaceList[i][1])
+    else text = text.replace(replaceList[i][1], replaceList[i][0])
   }
+
+  return text
+}
 
 // https://usehooks.com/useLocalStorage/
 export function useLocalStorage(key, initialValue) {
