@@ -254,6 +254,8 @@ sketch
 **/matrix.json
 /data_handling/data/
 /data_handling/vector_graph.json
+/data_handling/word_2_vec_model
+/data_handling/networkx_graph
 # End of https://www.toptal.com/developers/gitignore/api/django,python,react
 data_handling/data/matrix.json
 music_explorer/frontend/main.js

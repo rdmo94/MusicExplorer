@@ -2,7 +2,8 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import {useEffect, useState} from "react";
 import { Navigate } from "react-router-dom";
-
+import Dashboard from "./Dashboard";
+import Login from "./Login";
 function Home() {
     //let navigate = Navigate()
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -35,15 +36,6 @@ function Home() {
         return fetch("/spotify/logout").then(response => true)
     }
 
-    function getSpotifyLoginUrl(){
-        fetch("/spotify/get-auth-url")
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("spotify response data", data)
-            window.location.href = data.url;
-        });
-    }
-
     function logoutSpotify() {
         spotifyLogout().then(response => window.location.href = "/")
         setIsAuthenticated(false)
@@ -51,10 +43,14 @@ function Home() {
 
     return (
         <div>
-        <h1>Homes page</h1>
-        <Button variant="contained" onClick={isAuthenticated ? logoutSpotify : getSpotifyLoginUrl} >{isAuthenticated? "Logout": "Login"}</Button>
-        {/* <Button variant="contained" onClick={getSpotifyLoginUrl} >{"Login"}</Button> */}
+            {isAuthenticated ? <Dashboard/> : <Login/>}
         </div>
+        // <div>
+
+        // <h1>Homes page</h1>
+        // <Button variant="contained" onClick={isAuthenticated ? logoutSpotify : getSpotifyLoginUrl} >{isAuthenticated? "Logout": "Login"}</Button>
+        // {/* <Button variant="contained" onClick={getSpotifyLoginUrl} >{"Login"}</Button> */}
+        // </div>
     );
 }
 

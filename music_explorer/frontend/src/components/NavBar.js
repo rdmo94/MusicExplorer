@@ -1,53 +1,75 @@
 import React from 'react';
 // import { Nav, Button, Container, Navbar, NavbarBrand, NavItem } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
 
 
-function NavMenu() {
-  let navigate = useNavigate();
-  const user = getCurrentUserFromCookies()
-  let button = null;
-  let adminNav = null;
+import {
+  AppBar,
+  Toolbar,
+  CssBaseline,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
+import { Link } from "react-router-dom";
 
-  function handleLogout() {
-    document.cookie = "user" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    navigate('/login')
+const useStyles = makeStyles((theme) => ({
+  navlinks: {
+    marginLeft: theme.spacing(10),
+    display: "flex",
+  },
+ logo: {
+    flexGrow: "1",
+    cursor: "pointer",
+    "&:hover": {
+      color: "silver",
+    },
+    margin: 0,
+    padding: 0,
+  },
+  link: {
+    textDecoration: "none",
+    color: "white",
+    fontSize: "20px",
+    marginLeft: theme.spacing(20),
+    "&:hover": {
+      color: "silver",
+    },
+  },
+  navbar: {
+
   }
+}));
 
-  if (user) {
-    button = <Button onClick={handleLogout}>logout</Button>
-  } else {
-    button = <Button href="/login">login</Button>
-  }
-
-  if (user.role === "admin") {
-    adminNav = <Nav.Link href="/admin">Admin</Nav.Link>
-  } else {
-    adminNav = ""
-  }
-
+function Navbar() {
+  const classes = useStyles();
 
   return (
-    <header>
-      <Navbar bg="dark" variant="dark" className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
-        <Container>
-          <NavbarBrand className='navbar-brand' tag={Link} to="/">LearningTool</NavbarBrand>
-          <ul className="navbar-nav flex-grow">
-            <Container>
-              <Nav className="me-auto">
-                {adminNav}
-                <Nav.Link href="/profile">Profile</Nav.Link>
-              </Nav>
-            </Container>
-            <Container>
-              {button}
-            </Container>
-          </ul>
-        </Container>
-      </Navbar>
-    </header>
+    <AppBar position="static" className={classes.navbar}>
+      <CssBaseline />
+      <Toolbar>
+        <Typography variant="h4" className={classes.logo}>
+          MusicExplorer
+        </Typography>
+          <div>
+            <Link to="/dashboard" className={classes.link}>
+                Dashboard
+              </Link> 
+          </div>
+          {/* <div className={classes.navlinks}> */}
+            {/* <Link to="/" className={classes.link}>
+              Home
+            </Link> 
+            <Link to="/about" className={classes.link}>
+              About
+            </Link>
+            <Link to="/contact" className={classes.link}>
+              Contact
+            </Link>
+            <Link to="/faq" className={classes.link}>
+              FAQ
+            </Link> */}
+          {/* </div> */}
+      </Toolbar>
+    </AppBar>
   );
-
 }
-
-export default NavMenu;
+export default Navbar;

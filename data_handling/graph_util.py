@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 GRAPH_SIZE = 5755
 
-def load_graph_from_json_file(n_edges=GRAPH_SIZE) -> nx.Graph:
+
+def load_vector_graph_from_json_file(n_edges=GRAPH_SIZE) -> nx.Graph:
     G = nx.Graph()
     script_dir = os.path.dirname(__file__)
 
@@ -39,7 +40,9 @@ def load_gml_graph(path) -> nx.Graph:
     return nx.read_gml(path)
 
 
-G = load_graph_from_json_file(n_edges=2)
-nx.draw(G)
-plt.show()
-print("hey")
+# def find_furthest_n_genres(genre, n_genres=5, n_songs_per_genre = 1):
+#     G = 
+
+
+# G = load_vector_graph_from_json_file(n_edges=7)
+# print("hey")

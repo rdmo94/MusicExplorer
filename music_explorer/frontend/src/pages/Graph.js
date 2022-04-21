@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Graph3D from "../components/Graph3D";
 import Graph2D from "../components/Graph2D";
 import GraphColorTest from "../components/GraphColorTest";
@@ -7,16 +7,21 @@ import InputLabel from "@mui/material/InputLabel";
 import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useLocalStorage } from "../Util"
+import { useLocalStorage } from "../Util";
 
 function Graph() {
   const [data, setData] = useState();
-  const [graphType, setGraphType] = useLocalStorage("graphType", "")
-  const [localGraphProperties, setLocalGraphProperties] = useLocalStorage("graphProperties", {
-    backgroundColor: "white",
-    enableNodeDrag: false,
-    nodeAutoColorBy: "",
-  })
+  const [graphType, setGraphType] = useLocalStorage("graphType", "");
+  const [localGraphProperties, setLocalGraphProperties] = useLocalStorage(
+    "graphProperties",
+    {
+      backgroundColor: "white",
+      enableNodeDrag: false,
+      nodeAutoColorBy: "",
+    }
+  );
+
+  const graphRef = useRef(null);
 
   useEffect(() => {
     fetch("static/graph_data_3d_full_no_links_sg.json")
@@ -26,7 +31,7 @@ function Graph() {
         //TODO check if data is ok
         setData(data);
       });
-  }, []); //empty array to avoid multiple fetches
+  }, [graphRef]); //empty array to avoid multiple fetches
 
   let graph;
   let headline;
@@ -34,7 +39,10 @@ function Graph() {
   //updates the properties of the graph
   const changeHandler = (e) => {
     //setGraphProperties({ ...graphProperties, [e.target.name]: e.target.value });
-    setLocalGraphProperties({ ...localGraphProperties, [e.target.name]: e.target.value })
+    setLocalGraphProperties({
+      ...localGraphProperties,
+      [e.target.name]: e.target.value,
+    });
   };
 
   //Dynamic headline
@@ -51,7 +59,7 @@ function Graph() {
     graph = <Graph3D data={data} properties={localGraphProperties} />;
   } else if (graphType == "GraphColorTest") {
     graph = <GraphColorTest data={data} properties={localGraphProperties} />;
-  } 
+  }
 
   return (
     <div>
@@ -114,25 +122,22 @@ function Graph() {
             id="graph-type"
             label="Graph type"
             name="graph-type"
-            onChange={
-              (input) => {
-                console.log("onChange called on select element");
-                setGraphType(input.target.value)
-              }
-            }
-            >
+            onChange={(input) => {
+              console.log("onChange called on select element");
+              setGraphType(input.target.value);
+            }}
+          >
             <MenuItem value={"GraphColorTest"}>GraphColorTest</MenuItem>
             <MenuItem value={"2D"}>2D</MenuItem>
             <MenuItem value={"3D"}>3D</MenuItem>
           </Select>
         </Grid>
       </Grid>
-
-      {graph}
+      <Grid container justifyContent="center" alignItems="center">
+        <Grid item>{graph}</Grid>
+      </Grid>
     </div>
   );
 }
-
-
 
 export default Graph;

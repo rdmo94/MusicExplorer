@@ -17,29 +17,43 @@ const useStyles = makeStyles((theme) => ({
 
 function Dashboard() {
   return (
-    <Grid
-      container
-      direction="row"
-      spacing={0.5}
-      justifyContent="space-evenly"
-      alignItems="stretch"
-    >
-      <Grid item xs={3}>
-        <Container disableGutters={true}>
-          <Box sx={{ bgcolor: "#979797", height: "100vh" }} >
-            <Playlists/>
+    <div>
+      <Container disableGutters={true}>
+        <Box
+          sx={{
+            bgcolor: "#d9d9d9",
+            width: "350px",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
+            borderRight: "2px solid",
+          }}
+        >
+          <Playlists />
+        </Box>
+      </Container>
+      <Container disableGutters={true}>
+        {
+          <Box
+            sx={{
+              bgcolor: "#d9d9d9",
+              width: "350px",
+              height: "100vh",
+              position: "fixed",
+              right: 0,
+              borderLeft: "2px solid",
+            }}
+          >
+            {Strategies()}
           </Box>
-        </Container>
-      </Grid>
-      <Grid item xs={6}>
-        <Container disableGutters={true}>
-          <Box sx={{ bgcolor: "#979797", height: "100vh" }}>{Graph()}</Box>
-        </Container>
-      </Grid>
-      <Grid item xs={3}>
-        <Container disableGutters={true}>{Strategies()}</Container>
-      </Grid>
-    </Grid>
+        }
+      </Container>
+      <Container disableGutters={true}>
+        <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", flexGrow: 1 }}>
+          {Graph()}
+        </Box>
+      </Container>
+    </div>
   );
 }
 

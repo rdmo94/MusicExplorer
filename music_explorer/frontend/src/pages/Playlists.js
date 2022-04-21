@@ -32,7 +32,7 @@ function Playlists() {
   };
 
   return (
-    <div>
+    <div style={{padding: 25, paddingTop: 100}}>
       <Grid container direction="row">
         <Grid item>
           <Typography variant="h3" style={{ fontWeight: "bold" }}>
