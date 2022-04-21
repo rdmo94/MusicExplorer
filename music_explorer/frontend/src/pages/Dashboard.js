@@ -5,6 +5,7 @@ import Strategies from "../components/Strategies";
 import Graph from "./Graph";
 import PlaylistScreen from "./PlaylistScreen";
 import Playlists from "./Playlists";
+import { useLocalStorage } from "../Util";
 
 //grid components style
 const useStyles = makeStyles((theme) => ({
@@ -16,6 +17,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Dashboard() {
+  const [playlistsGenreMap, setPlaylistsGenreMap] = useLocalStorage(
+    "playlistsGenreMap",
+    null
+  );
+
+  function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
+    console.log("playlistGenreMap updated");
+    setPlaylistsGenreMap(genreOccurrenceMap);
+  }
+
   return (
     <div>
       <Box display="flex">
@@ -30,7 +41,12 @@ function Dashboard() {
               borderRight: "2px solid",
             }}
           >
-            <Playlists />
+            <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
+          </Box>
+        </Container>
+        <Container disableGutters={true}>
+          <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", flexGrow: 1 }}>
+            <Graph genreMap={playlistsGenreMap} />
           </Box>
         </Container>
         <Container disableGutters={true}>
@@ -49,11 +65,7 @@ function Dashboard() {
             </Box>
           }
         </Container>
-        <Container disableGutters={true}>
-          <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", flexGrow: 1 }}>
-            {Graph()}
-          </Box>
-        </Container>
+        
       </Box>
     </div>
   );
