@@ -24,7 +24,12 @@ def main():
     for artist_id, genres in data.items():
         sentence = ""
         for genre in genres:
-            sentence = sentence + " " + genre.replace(" ", "_")
+            genre = genre.replace(" ", "_spc_")
+            genre = genre.replace("-", "_hphn_")
+            genre = genre.replace("'", "_pstrph_")
+            genre = genre.replace("&", "_nd_")
+            genre = genre.replace(":", "_cln_")
+            sentence = sentence + " " + genre
         sentence = sentence.strip()
         genre_sentences.append(sentence)
     
@@ -246,4 +251,4 @@ def get_multiple_artists_genres(artist_ids:list[str]) -> list[str]:
     
 
 
-# main()
+main()
