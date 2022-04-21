@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util"
 
-function Graph() {
+function Graph({genreMap}) {
   const [data, setData] = useState();
   const [graphType, setGraphType] = useLocalStorage("graphType", "")
   const [localGraphProperties, setLocalGraphProperties] = useLocalStorage("graphProperties", {
@@ -49,7 +49,7 @@ function Graph() {
   } else if (graphType == "3D") {
     graph = <Graph3D data={data} properties={localGraphProperties} />;
   } else if (graphType == "GraphColorTest") {
-    graph = <GraphColorTest data={data} properties={localGraphProperties} />;
+    graph = <GraphColorTest data={data} properties={localGraphProperties} userGenreMap={genreMap}/>;
   } 
 
   return (
