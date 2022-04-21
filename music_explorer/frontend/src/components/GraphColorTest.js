@@ -64,7 +64,7 @@ function GraphColorTest({data, properties, userGenreMap}) {
       //nodeVal={100}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = getNodeLabel(node)
-        const fontSize = (getNodeVal(node)*12) / globalScale;
+        const fontSize = (getNodeVal(node)*11) / globalScale;
         ctx.font = `${fontSize}px Sans-Serif`;
         const textWidth = ctx.measureText(label).width;
         const bckgDimensions = [textWidth, fontSize].map(
