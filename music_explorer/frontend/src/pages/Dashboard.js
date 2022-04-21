@@ -18,41 +18,43 @@ const useStyles = makeStyles((theme) => ({
 function Dashboard() {
   return (
     <div>
-      <Container disableGutters={true}>
-        <Box
-          sx={{
-            bgcolor: "#d9d9d9",
-            width: "350px",
-            height: "100vh",
-            position: "fixed",
-            left: 0,
-            borderRight: "2px solid",
-          }}
-        >
-          <Playlists />
-        </Box>
-      </Container>
-      <Container disableGutters={true}>
-        {
+      <Box display="flex">
+        <Container disableGutters={true}>
           <Box
             sx={{
               bgcolor: "#d9d9d9",
               width: "350px",
               height: "100vh",
               position: "fixed",
-              right: 0,
-              borderLeft: "2px solid",
+              left: 0,
+              borderRight: "2px solid",
             }}
           >
-            {Strategies()}
+            <Playlists />
           </Box>
-        }
-      </Container>
-      <Container disableGutters={true}>
-        <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", flexGrow: 1 }}>
-          {Graph()}
-        </Box>
-      </Container>
+        </Container>
+        <Container disableGutters={true}>
+          {
+            <Box
+              sx={{
+                bgcolor: "#d9d9d9",
+                width: "350px",
+                height: "100vh",
+                position: "fixed",
+                right: 0,
+                borderLeft: "2px solid",
+              }}
+            >
+              {Strategies()}
+            </Box>
+          }
+        </Container>
+        <Container disableGutters={true}>
+          <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", flexGrow: 1 }}>
+            {Graph()}
+          </Box>
+        </Container>
+      </Box>
     </div>
   );
 }
