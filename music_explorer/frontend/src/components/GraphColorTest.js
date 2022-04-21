@@ -12,7 +12,7 @@ import {
 
 
 
-function GraphColorTest(props) {
+function GraphColorTest({data, properties, userGenreMap}) {
   //Genres found in selected user playlists
   var userGenres = {
     "pop":2,
@@ -20,14 +20,18 @@ function GraphColorTest(props) {
     "techno":3
   }
 
-  for(var key in userGenres) {
-    var value = userGenres[key];
+  for(var key in userGenreMap) {
+    var value = userGenreMap[key];
     console.log(key, value)
   }
 
   function getNodeVal(node){
-    if (node.name in userGenres){
-      return userGenres[node.name]
+    if (userGenreMap) {
+      if (node.name in userGenreMap){
+        return userGenreMap[node.name]/10
+      } else {
+        return 1;
+      }
     } else {
       return 1;
     }
@@ -38,7 +42,7 @@ function GraphColorTest(props) {
   }
 
   function getNodeColor(node){
-    if (node.name in userGenres){
+    if (node.name in userGenreMap){
       return "green";
     } else{
       return "red"
@@ -47,14 +51,16 @@ function GraphColorTest(props) {
   
   return (
     <ForceGraph2D
-      backgroundColor={props.properties.backgroundColor}
-      enableNodeDrag={props.properties.enableNodeDrag}
-      graphData={props.data}
-      //nodeAutoColorBy={node => node.name in userGenres}
+    height={1000}
+    width={1000}
+      backgroundColor={properties.backgroundColor}
+      enableNodeDrag={properties.enableNodeDrag}
+      graphData={data}
+      //nodeAutoColorBy={node => node.name in userGenreMap}
       nodeColor={node => getNodeColor(node)}
       nodeLabel={node => getNodeLabel(node)} //label when hovering
       nodeVal={node => getNodeVal(node)}
-      //nodeVal={node => node.name in userGenres ? userGenres[node.name].value : 1}
+      //nodeVal={node => node.name in userGenreMap ? userGenreMap[node.name].value : 1}
       //nodeVal={100}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = getNodeLabel(node)
