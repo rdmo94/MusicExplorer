@@ -1,11 +1,12 @@
 import React from "react";
-import { Container, Box, Grid } from "@mui/material";
+import { Container, Box, Grid, Button } from "@mui/material";
 import Strategies from "../components/Strategies";
 import Graph from "./Graph";
 import PlaylistScreen from "./PlaylistScreen";
 import Playlists from "./Playlists";
 import { useLocalStorage } from "../Util";
 import "../../static/css/styles.css";
+import { primaryGreen } from "../Colors";
 
 //grid components style
 //const useStyles = makeStyles((theme) => ({
@@ -27,6 +28,8 @@ function Dashboard() {
     null
   );
 
+  const [showGraph, setShowGraph] = useLocalStorage("showGraph", null);
+
   function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
     console.log("playlistGenreMap updated");
     setPlaylistsGenreMap(genreOccurrenceMap);
@@ -34,10 +37,31 @@ function Dashboard() {
 
   function handleGeneratedPlaylistChange(generatedPlaylist) {
     setGeneratedPlaylist(generatedPlaylist);
+    setShowGraph(false);
   }
 
   return (
     <div>
+      {generatedPlaylist ? (
+        <Box
+          display="flex"
+          style={{ padding: 10, position: "fixed", top: 10, left: 350 }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => setShowGraph(!showGraph)}
+            style={{
+              padding: 10,
+              borderRadius: 200,
+              backgroundColor: primaryGreen,
+            }}
+          >
+            {showGraph ? "Go to playlist" : "Show graph"}
+          </Button>
+        </Box>
+      ) : (
+        <></>
+      )}
       <Box display="flex">
         <Container disableGutters={true}>
           <Box
@@ -55,10 +79,10 @@ function Dashboard() {
         </Container>
         <Container disableGutters={true}>
           <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", width: "auto" }}>
-            {generatedPlaylist == null ? (
+            {generatedPlaylist == null || showGraph ? (
               <Graph genreMap={playlistsGenreMap} />
             ) : (
-              <PlaylistScreen generatedPlaylist={generatedPlaylist}/>
+              <PlaylistScreen generatedPlaylist={generatedPlaylist} />
             )}
           </Box>
         </Container>
@@ -74,7 +98,14 @@ function Dashboard() {
                 borderLeft: "2px solid",
               }}
             >
-              {<Strategies selectedUserGenres={playlistsGenreMap} updateGeneratedPlaylistCallback={handleGeneratedPlaylistChange} />}
+              {
+                <Strategies
+                  selectedUserGenres={playlistsGenreMap}
+                  updateGeneratedPlaylistCallback={
+                    handleGeneratedPlaylistChange
+                  }
+                />
+              }
             </Box>
           }
         </Container>

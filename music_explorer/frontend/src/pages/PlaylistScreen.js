@@ -7,7 +7,7 @@ import {
   CircularProgress,
   Box,
   TextField,
-  List
+  List,
 } from "@material-ui/core";
 import { Done, ErrorOutline } from "@material-ui/icons";
 import Playlist from "../models/Playlist";
@@ -51,8 +51,8 @@ function PlaylistScreen({ generatedPlaylist }) {
     //     ),
     //   ]
     // );
-    console.log(generatedPlaylist[0]);
-    let playlist = Playlist.fromObject(generatedPlaylist[0]);
+    console.log(generatedPlaylist);
+    let playlist = Playlist.fromObject(generatedPlaylist);
     console.log(playlist);
     setPlaylist(playlist);
     setPlaylistTracks(playlist.tracks);
@@ -113,9 +113,9 @@ function PlaylistScreen({ generatedPlaylist }) {
   }
 
   return (
-    <Grid container direction="column" justifyContent="center">
-      {playlist ? (
-        <List sx={{ overflow: "auto", maxHeight: "100%" }}>
+    <List sx={{ overflow: "auto", height: 100 }}>
+      <Grid container direction="column" justifyContent="center">
+        {playlist ? (
           <Grid
             container
             direction="column"
@@ -214,13 +214,13 @@ function PlaylistScreen({ generatedPlaylist }) {
               <></>
             )}
           </Grid>
-        </List>
-      ) : (
-        <Typography variant="h3">
-          Add songs to a playlist to view them here
-        </Typography>
-      )}
-    </Grid>
+        ) : (
+          <Typography variant="h3">
+            Add songs to a playlist to view them here
+          </Typography>
+        )}
+      </Grid>
+    </List>
   );
 }
 
