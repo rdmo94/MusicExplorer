@@ -119,7 +119,7 @@ class GetPlaylistGenresView(APIView):
             genre_ocurrences = dict()
 
             # 0) For each playlist: //TODO check if empty
-            for (playlist_id, playlist_name) in request.data.items():
+            for playlist_id in request.data:
                 tracks = get_all_playlist_tracks(sp, playlist_id)
                 artists = self.get_track_artists(tracks)
                 genres = self.get_artist_genres(spotify=sp, artists=artists)

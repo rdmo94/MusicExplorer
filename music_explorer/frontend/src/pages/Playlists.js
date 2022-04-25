@@ -5,7 +5,7 @@ import { Grid, Typography, Button, List } from "@mui/material";
 import { useLocalStorage } from "../Util";
 
 function Playlists({ updateUserGenreMap }) {
-  const [playlists, setPlaylists] = useState(null);
+  const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylists, setSelectedPlaylists] = useLocalStorage(
     "selectedPlaylists",
     []
@@ -95,39 +95,24 @@ function Playlists({ updateUserGenreMap }) {
                 <Grid container direction="column">
                   {playlists.map((playlist) => {
                     let playlistName = Object.values(playlist)[0];
+                    let playlistId = Object.keys(playlist)[0];
+                    var playlistAlreadyChecked =
+                      Object.values(selectedPlaylists).includes(playlistId);
+
                     return (
-                      <Grid item>
-                        <PlaylistCheckboxContainer
-                          title={playlistName}
-                          updatePlaylistsCallback={selectedPlaylistsHandler}
-                        />
-                      </Grid>
+                      //Must have unique key or react will throw console error!!!
+
+                      <PlaylistCheckboxContainer
+                        title={playlistName}
+                        playlistId={playlistId}
+                        updatePlaylistsCallback={selectedPlaylistsHandler}
+                        isChecked={playlistAlreadyChecked}
+                      />
                     );
                   })}
                 </Grid>
               </List>
             )}
-          </Grid>
-          <Grid item>
-            <Grid container direction="column">
-              {playlists.map((playlist) => {
-                let playlistName = Object.values(playlist)[0];
-                let playlistId = Object.keys(playlist)[0];
-                var playlistAlreadyChecked =
-                  Object.values(selectedPlaylists).includes(playlistId);
-
-                return (
-                  //Must have unique key or react will throw console error!!!
-
-                  <PlaylistCheckboxContainer
-                    title={playlistName}
-                    playlistId={playlistId}
-                    updatePlaylistsCallback={selectedPlaylistsHandler}
-                    isChecked={playlistAlreadyChecked}
-                  />
-                );
-              })}
-            </Grid>
           </Grid>
         </Grid>
       </List>
