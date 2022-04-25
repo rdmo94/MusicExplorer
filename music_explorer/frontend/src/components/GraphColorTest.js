@@ -17,9 +17,11 @@ import {
  * @param {object} param.properties graph properties
  * @param {Map<string,number>} param.userGenreMap Map<genre,occurrence>
  * @param {Map<number,list<string>>} param.strategy Map<strategy_number,list<genres>>
+ * @param {List<Object>} param.links List<{'source': genre, 'target': genre}>
  * @returns 
  */
-function GraphColorTest({ data, properties, userGenreMap, strategy}) {
+function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
+  
   //console.log("userGenreMap", userGenreMap);
   //console.log("data", data);
 
@@ -31,6 +33,42 @@ function GraphColorTest({ data, properties, userGenreMap, strategy}) {
   
   var strategy_number = undefined
   var strategy_genres = []
+
+  /** add list of link to data **/
+  if (links && data){
+    //console.log("links", links)
+    var genreIdLinks = translate_genre_links_to_node_id_links(links)
+    //console.log("genre links", links)
+    //console.log("genreIdLinks", genreIdLinks)
+    //console.log("data", data)
+    data.links = genreIdLinks
+    //console.log("new data", data)
+  }
+
+  function translate_genre_links_to_node_id_links(links){
+    function get_node_id_from_genre(genre_nodes, genre){
+      for (var i = 0; i < genre_nodes.length; i++){
+        if (genre_nodes[i].name == genre) return genre_nodes[i].id
+      }
+      //console.log(genre + "'s id was not found... :/")
+      return null
+    }
+
+    var newLinks = []
+    for (var i = 0; i < links.length; i++){
+      var newLinkSource = get_node_id_from_genre(data.nodes, links[i].source)
+      var newLinkTarget = get_node_id_from_genre(data.nodes, links[i].target)
+      if (newLinkSource && newLinkTarget){
+        var newLink = {"source": newLinkSource, "target": newLinkTarget}
+        newLinks.push(newLink)
+      } else {
+        //console.log("could not find id links from " + links[i].source + " to " + links[i].target)
+      }
+    }
+    return newLinks
+  }
+
+  
 
   if (strategy){
     //console.log(strategy)
@@ -94,16 +132,18 @@ function GraphColorTest({ data, properties, userGenreMap, strategy}) {
       width={1000}
       backgroundColor={properties.backgroundColor}
       enableNodeDrag={properties.enableNodeDrag}
+      
       graphData={data}
       //nodeAutoColorBy={node => node.name in userGenreMap}
       nodeColor={(node) => getNodeColor(node)}
       nodeLabel={(node) => getNodeLabel(node)} //label when hovering
       nodeVal={(node) => getNodeVal(node)}
+      
       //nodeVal={node => node.name in userGenreMap ? userGenreMap[node.name].value : 1}
       //nodeVal={100}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = getNodeLabel(node);
-        const fontSize = (getNodeVal(node) * 12) / globalScale;
+        const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
         ctx.font = `${fontSize}px Sans-Serif`;
         const textWidth = ctx.measureText(label).width;
         const bckgDimensions = [textWidth, fontSize].map(
@@ -117,6 +157,11 @@ function GraphColorTest({ data, properties, userGenreMap, strategy}) {
 
         node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
       }}
+      minZoom={15}
+      //zoom={0.2} //doesnt work.. zz
+      linkColor={() => '#2ab04e'}
+      linkOpacity={0.9}
+      linkWidth={10}
     />
   );
 }
