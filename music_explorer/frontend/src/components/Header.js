@@ -1,7 +1,7 @@
 import { Typography, Link, Box } from "@material-ui/core";
 import React from "react";
 import { makeStyles } from "@material-ui/core";
-import logo from "../../assets/images/musicx.png"
+import logo from "../../assets/images/logo.png"
 
 
 const styles = makeStyles(() => {});
