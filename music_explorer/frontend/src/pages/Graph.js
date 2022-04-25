@@ -71,7 +71,7 @@ function Graph({genreMap}) {
   }
 
   return (
-    <div>
+    <div className="main">
       <Typography variant={"h3"}>{headline}</Typography>
       <Typography variant={"h4"}>Graph properties</Typography>
 

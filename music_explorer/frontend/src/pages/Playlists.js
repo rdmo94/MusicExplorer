@@ -60,11 +60,14 @@ function Playlists({ updateUserGenreMap }) {
   };
 
   return (
-    <div style={{ paddingTop: 100 }}>
-      <List style={{ overflow: "auto", maxHeight: "100%" }}>
+    <div className="main" style={{ paddingTop: 100, height: "100%" }}>
+      <List style={{ overflow: "auto" }}>
         <Grid container direction="column" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h3" style={{ fontWeight: "bold" }}>
+            <Typography
+              variant="h3"
+              style={{ color: "white", fontWeight: "bold" }}
+            >
               My playlists
             </Typography>
             <Grid
@@ -94,7 +97,7 @@ function Playlists({ updateUserGenreMap }) {
             ) : (
               <List
                 style={{
-                  maxHeight: 300,
+                  maxHeight: 600,
                   overflow: "auto",
                 }}
               >
@@ -109,20 +112,25 @@ function Playlists({ updateUserGenreMap }) {
                       //Must have unique key or react will throw console error!!!
 
                       <FormGroup key={playlistId}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            defaultChecked={playlistAlreadyChecked}
-                            onChange={(event) =>
-                              updatePlaylistsCallback(playlistId, event.target.checked)
-                            }
-                            key={playlistId.toString()}
-                            value={playlistId}
-                          />
-                        }
-                        label={playlistName}
-                      />
-                    </FormGroup>
+                        <FormControlLabel
+                          sx={{color: "white"}}
+                          control={
+                            <Checkbox
+                              sx={{ color: "white" }}
+                              defaultChecked={playlistAlreadyChecked}
+                              onChange={(event) =>
+                                updatePlaylistsCallback(
+                                  playlistId,
+                                  event.target.checked
+                                )
+                              }
+                              key={playlistId.toString()}
+                              value={playlistId}
+                            />
+                          }
+                          label={playlistName}
+                        />
+                      </FormGroup>
                     );
                   })}
                 </Grid>

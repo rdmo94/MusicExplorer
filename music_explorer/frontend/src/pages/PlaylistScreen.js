@@ -114,15 +114,19 @@ function PlaylistScreen({ generatedPlaylist }) {
 
   return (
     <List sx={{ overflow: "auto", height: 100 }}>
-      <Grid container direction="column" justifyContent="center">
+      <Grid container direction="column" justifyContent="center" sx={{backgroundColor: "red"}}>
         {playlist ? (
           <Grid
+          sx={{backgroundColor: "red"}}
+          item
             container
             direction="column"
             justifyContent="center"
             alignContent="center"
           >
             <Grid
+            sx={{backgroundColor: "red"}}
+            item
               container
               direction="column"
               justifyContent="center"
@@ -162,7 +166,7 @@ function PlaylistScreen({ generatedPlaylist }) {
                   style={{ borderRadius: 200, backgroundColor: primaryGreen }}
                   endIcon={saveToSpotifyStates[saveToSpotifyState]}
                 >
-                  <Typography
+                  <Typography color={"white"}
                     style={{ fontWeight: "bold", color: "white" }}
                     onClick={saveToSpotifyHandler}
                   >
@@ -184,7 +188,7 @@ function PlaylistScreen({ generatedPlaylist }) {
                       setSaveToSpotifyState("IDLE");
                     }}
                   >
-                    <Typography style={{ fontWeight: "bold", color: "white" }}>
+                    <Typography color={"white"} style={{ fontWeight: "bold", color: "white" }}>
                       {"OPEN PLAYLIST"}
                     </Typography>
                   </Button>
@@ -215,7 +219,7 @@ function PlaylistScreen({ generatedPlaylist }) {
             )}
           </Grid>
         ) : (
-          <Typography variant="h3">
+          <Typography color={"white"} variant="h3">
             Add songs to a playlist to view them here
           </Typography>
         )}

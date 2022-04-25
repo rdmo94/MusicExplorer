@@ -11,7 +11,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-
 import { display } from "@mui/system";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -95,12 +94,12 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
     setNumberOfSongsPerGenre(newValue);
   };
   return (
-    <div style={{ paddingTop: 100, height: "100%" }}>
-      <Typography variant="h3" style={{ fontWeight: "bold", paddingLeft: 25 }}>
+    <div className="main" style={{ paddingTop: 100, height: "100%" }}>
+      <Typography color={"white"} variant="h3" style={{ fontWeight: "bold", paddingLeft: 25 }}>
         Strategy
       </Typography>
       {userGenres == null || userGenres.length == 0 ? (
-        <Typography>
+        <Typography color={"white"}>
           Please select one or more of your playlists in the panel to the left.
         </Typography>
       ) : (
@@ -109,9 +108,10 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
           flexDirection="column"
           alignItems="center"
         >
-          <FormControl sx={{ minWidth: 300 }}>
-            <InputLabel id="label-id">Select strategy...</InputLabel>
+          <FormControl sx={{color: "white", minWidth: 300 }}>
+            <InputLabel id="label-id" sx={{color: "white"}}>Select strategy...</InputLabel>
             <Select
+            sx={{color: "white"}}
               defaultValue={""}
               labelId="label-id"
               id="selector"
@@ -125,15 +125,16 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
               <MenuItem value={3}>Random</MenuItem>
             </Select>
           </FormControl>
-          <Typography width={300}>
+          <Typography color={"white"} width={300}>
             {"Number of genres collected: " +
               Object.keys(selectedUserGenres).length}
           </Typography>
           <Box width={300} flex="center" paddingTop={5}>
-            <Typography id="slider-id" gutterBottom>
+            <Typography color={"white"} id="slider-id" gutterBottom>
               Number of wanted songs per genre: {numberOfSongsPerGenre}
             </Typography>
             <Slider
+              sx={{color: primaryGreen}}
               size="small"
               defaultValue={2}
               aria-label="Small"
@@ -145,8 +146,8 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
             />
             {strategy != null ? (
               <div>
-                <Typography sx={{ fontWeight: "bold" }}>Description</Typography>
-                <Typography>{strategies[strategy].description}</Typography>
+                <Typography color={"white"} sx={{ fontWeight: "bold" }}>Description</Typography>
+                <Typography color={"white"}>{strategies[strategy].description}</Typography>
               </div>
             ) : (
               <></>
@@ -159,7 +160,6 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
         sx={{
           position: "absolute",
           bottom: 65,
-          left: 65,
           right: 65,
           paddingTop: 5,
         }}
@@ -186,8 +186,8 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
               <></>
             ) : (
               <div>
-                <Typography sx={{ fontWeight: "bold" }}>GENERATE</Typography>
-                <Typography sx={{ fontWeight: "bold" }}>PLAYLIST</Typography>
+                <Typography color={"white"} sx={{ fontWeight: "bold" }}>GENERATE</Typography>
+                <Typography color={"white"} sx={{ fontWeight: "bold" }}>PLAYLIST</Typography>
               </div>
             )}
           </Box>

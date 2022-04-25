@@ -41,7 +41,7 @@ function Dashboard() {
   }
 
   return (
-    <div>
+    <div className="container">
       {generatedPlaylist ? (
         <Box
           display="flex"
@@ -62,7 +62,28 @@ function Dashboard() {
       ) : (
         <></>
       )}
-      <Box display="flex">
+      <Grid container direction={"row"}>
+        <Grid item width={350}>
+          <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
+        </Grid>
+        <Box display={"flex"} flexGrow={1}>
+          <Grid item>
+            {generatedPlaylist == null || showGraph ? (
+              <Graph genreMap={playlistsGenreMap} />
+            ) : (
+              <PlaylistScreen generatedPlaylist={generatedPlaylist} />
+            )}
+          </Grid>
+        </Box>
+        <Grid item width={350}>
+          <Strategies
+            selectedUserGenres={playlistsGenreMap}
+            updateGeneratedPlaylistCallback={handleGeneratedPlaylistChange}
+          />
+        </Grid>
+      </Grid>
+
+      {/* <Box display="flex">
         <Container disableGutters={true}>
           <Box
             sx={{
@@ -109,7 +130,7 @@ function Dashboard() {
             </Box>
           }
         </Container>
-      </Box>
+      </Box> */}
     </div>
   );
 }
