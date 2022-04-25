@@ -16,7 +16,7 @@ class Song {
     static fromJSON(jsonObject, genre) {
         let song = new Song();
         song.id = jsonObject["id"];
-        song.title = jsonObject["title"];
+        song.title = jsonObject["name"];
         song.artists = jsonObject["artists"];
         song.genre = genre;
         song.duration = jsonObject["duration"];

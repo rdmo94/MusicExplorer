@@ -22,7 +22,7 @@ class Playlist {
     static fromObject(object) {
         let playlist = new Playlist();
         playlist.title = "New playlist"
-        playlist.tracks = Object.values(object).map((t) => {Song.fromJSON(t);});
+        playlist.tracks = Object.keys(object).map((k) => {return Song.fromJSON(object[k], k);});
         return playlist;
     }
 }

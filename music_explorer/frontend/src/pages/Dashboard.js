@@ -58,7 +58,7 @@ function Dashboard() {
             {generatedPlaylist == null ? (
               <Graph genreMap={playlistsGenreMap} />
             ) : (
-              <PlaylistScreen />
+              <PlaylistScreen generatedPlaylist={generatedPlaylist}/>
             )}
           </Box>
         </Container>

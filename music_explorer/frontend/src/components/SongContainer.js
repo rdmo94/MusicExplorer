@@ -3,10 +3,17 @@ import { useEffect } from "react";
 import { Button, Grid, Typography, Box } from "@material-ui/core";
 import { millisToMinutesAndSeconds } from "../Util";
 import { primaryGrey } from "../Colors";
+import Song from "../models/Song.js"
 
-function SongContainer(props) {
+/**
+ * 
+ * @param {Song} track 
+ * @param {*} playSongCallback 
+ * @returns 
+ */
+function SongContainer({track, playSongCallback}) {
   return (
-    <Box onClick={() => {props.playSongCallback()}} variant="conained" sx={{border : `2px solid ${primaryGrey}`, borderRadius : "200px", paddingLeft : "30px", paddingRight : "5px", margin : "5px"}}>
+    <Box onClick={() => {playSongCallback()}} variant="conained" sx={{border : `2px solid ${primaryGrey}`, borderRadius : "200px", paddingLeft : "30px", paddingRight : "5px", margin : "5px"}}>
       <Grid
         container
         direction="row"
@@ -15,24 +22,25 @@ function SongContainer(props) {
       >
         
         <Grid
-          item
+          container
           direction="column"
           justifyContent="center"
           alignItems="flex-start"
         >
           <Grid item xs>
-            <Typography style={{ fontWeight: "bold" }}>{props.song.title}</Typography>
+            <Typography style={{ fontWeight: "bold" }}>{track.title}</Typography>
           </Grid>
           <Grid item xs>
-            <Typography>{props.song.artists.map((artist, index) => index+1 != props.song.artists.length ? artist + ", "  : artist)}</Typography>
+            {console.log(track)}
+            <Typography>{track.artists.map((artist, index) => index+1 != track.artists.length ? artist + ", "  : artist)}</Typography>
           </Grid>
           <Grid item xs>
-            <Typography>Genre:  {props.song.genre}</Typography>
+            <Typography>Genre:  {track.genre}</Typography>
           </Grid>
         </Grid>
         <Grid item>
           <Typography>
-            {millisToMinutesAndSeconds(props.song.duration)}
+            {millisToMinutesAndSeconds(track.duration)}
           </Typography>
         </Grid>
       </Grid>

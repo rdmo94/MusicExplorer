@@ -80,7 +80,9 @@ import {
           updateGeneratedPlaylistCallback(JSON.parse(data));
           setIsLoading(false);
         })
-      );
+      ).catch(e => {
+        setIsLoading(false);
+      });
     };
   
     const handleChange = (event) => {

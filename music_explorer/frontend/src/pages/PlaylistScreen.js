@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Box,
   TextField,
+  List
 } from "@material-ui/core";
 import { Done, ErrorOutline } from "@material-ui/icons";
 import Playlist from "../models/Playlist";
@@ -18,14 +19,13 @@ import { Icon } from "@iconify/react";
 import { useLocalStorage } from "../Util";
 import PlaylistHeader from "../components/PlaylistHeader";
 
-function PlaylistScreen({generatedPlaylist}) {
-  const [playlist, setPlaylist] = useState(new Playlist());
+function PlaylistScreen({ generatedPlaylist }) {
+  const [playlist, setPlaylist] = useState();
   const [currentSongPlaying, setCurrentSongPlaying] = useState(null);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [saveToSpotifyState, setSaveToSpotifyState] = useState("IDLE");
   const [newlyCreatedPlaylist, setNewlyCreatedPlaylist] = useState(null);
   const [playlistName, setPlaylistName] = useState(null);
- 
 
   useEffect(() => {
     // let object = new Playlist(
@@ -51,17 +51,18 @@ function PlaylistScreen({generatedPlaylist}) {
     //     ),
     //   ]
     // );
-    console.log(generatedPlaylist);
-    let playlist = Playlist.fromObject(generatedPlaylist);
+    console.log(generatedPlaylist[0]);
+    let playlist = Playlist.fromObject(generatedPlaylist[0]);
+    console.log(playlist);
     setPlaylist(playlist);
     setPlaylistTracks(playlist.tracks);
   }, []);
 
   const saveToSpotifyStates = {
-    SUCCESS: <Done color="white" />,
-    ERROR: <ErrorOutline color="white" />,
+    SUCCESS: <Done color="secondary" />,
+    ERROR: <ErrorOutline color="secondary" />,
     LOADING: (
-      <CircularProgress sx={{ "background-color": "white" }} size={20} />
+      <CircularProgress sx={{ "background-color": "secondary" }} size={20} />
     ),
     IDLE: <></>,
   };
@@ -80,7 +81,7 @@ function PlaylistScreen({generatedPlaylist}) {
         response.json().then((json) => {
           let _json = JSON.parse(json);
           setNewlyCreatedPlaylist(_json);
-          setPlaylistName(_json.name)
+          setPlaylistName(_json.name);
         });
       } else {
         setSaveToSpotifyState("ERROR");
@@ -90,7 +91,7 @@ function PlaylistScreen({generatedPlaylist}) {
 
   async function editTitleHandler(name) {
     // var object = {
-    //     "name": name,      
+    //     "name": name,
     // }
     // const requestOptions = {
     //   method: "PUT",
@@ -98,107 +99,122 @@ function PlaylistScreen({generatedPlaylist}) {
     //   body: JSON.stringify({ object }),
     // };
     // fetch(`/spotify/playlist/${newlyCreatedPlaylist.id}`, requestOptions).then((response) => {
-      // console.log("actually called fetch");
-      // if (response.status == 201) {
-      //   setSaveToSpotifyState("SUCCESS");
-      //   response.json().then((json) => {
-      //     setNewlyCreatedPlaylist(JSON.parse(json));
-      //     console.log(JSON.parse(json));
-      //   });
-      // } else {
-      //   setSaveToSpotifyState("ERROR");
-      // }
+    // console.log("actually called fetch");
+    // if (response.status == 201) {
+    //   setSaveToSpotifyState("SUCCESS");
+    //   response.json().then((json) => {
+    //     setNewlyCreatedPlaylist(JSON.parse(json));
+    //     console.log(JSON.parse(json));
+    //   });
+    // } else {
+    //   setSaveToSpotifyState("ERROR");
+    // }
     // });
-  };
+  }
 
   return (
-    <Grid
-      container
-      direction="column"
-      justifyContent="center"
-    >
+    <Grid container direction="column" justifyContent="center">
       {playlist ? (
-        <Grid direction="column" justifyContent="center" alignContent="center">
+        <List sx={{ overflow: "auto", maxHeight: "100%" }}>
           <Grid
             container
             direction="column"
             justifyContent="center"
             alignContent="center"
           >
-            
-            <PlaylistHeader editCallback={editTitleHandler} title={newlyCreatedPlaylist ? newlyCreatedPlaylist.name : "New playlist"}/>
-            {playlistTracks.map((track) => (
-              <Grid item>
-                <SongContainer
-                  song={track}
-                  playSongCallback={() => {
-                    setCurrentSongPlaying(track.id);
-                  }}
-                ></SongContainer>
-              </Grid>
-            ))}
-          </Grid>
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignContent="center"
-          >
-            <Grid item>
-              <Button
-                variant="contained"
-                style={{ borderRadius: 200, backgroundColor: primaryGreen }}
-                endIcon={saveToSpotifyStates[saveToSpotifyState]}
-              >
-                <Typography
-                  style={{ fontWeight: "bold", color: "white" }}
-                  onClick={saveToSpotifyHandler}
-                >
-                  {"SAVE TO\nSPOTIFY"}
-                </Typography>
-              </Button>
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignContent="center"
+            >
+              <PlaylistHeader
+                editCallback={editTitleHandler}
+                title={
+                  newlyCreatedPlaylist
+                    ? newlyCreatedPlaylist.name
+                    : "New playlist"
+                }
+              />
+
+              {playlistTracks.map((track) => {
+                return (
+                  <Grid item>
+                    <SongContainer
+                      track={track}
+                      playSongCallback={() => {
+                        setCurrentSongPlaying(track.id);
+                      }}
+                    ></SongContainer>
+                  </Grid>
+                );
+              })}
             </Grid>
-            <Box sx={{ backgroundColor: "red" }}>
-              {newlyCreatedPlaylist != null ? (
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignContent="center"
+            >
+              <Grid item>
                 <Button
                   variant="contained"
                   style={{ borderRadius: 200, backgroundColor: primaryGreen }}
-                  endIcon={<Icon icon="mdi:spotify" color="white" />}
-                  onClick={() => {
-                    window.open(newlyCreatedPlaylist.external_urls.spotify, "_blank");
-                    setSaveToSpotifyState("IDLE");
-                  }}
+                  endIcon={saveToSpotifyStates[saveToSpotifyState]}
                 >
-                  <Typography style={{ fontWeight: "bold", color: "white" }}>
-                    {"OPEN PLAYLIST"}
+                  <Typography
+                    style={{ fontWeight: "bold", color: "white" }}
+                    onClick={saveToSpotifyHandler}
+                  >
+                    {"SAVE TO\nSPOTIFY"}
                   </Typography>
                 </Button>
-              ) : (
-                <></>
-              )}
-            </Box>
-          </Grid>
+              </Grid>
+              <Box sx={{ backgroundColor: "red" }}>
+                {newlyCreatedPlaylist != null ? (
+                  <Button
+                    variant="contained"
+                    style={{ borderRadius: 200, backgroundColor: primaryGreen }}
+                    endIcon={<Icon icon="mdi:spotify" color="white" />}
+                    onClick={() => {
+                      window.open(
+                        newlyCreatedPlaylist.external_urls.spotify,
+                        "_blank"
+                      );
+                      setSaveToSpotifyState("IDLE");
+                    }}
+                  >
+                    <Typography style={{ fontWeight: "bold", color: "white" }}>
+                      {"OPEN PLAYLIST"}
+                    </Typography>
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </Box>
+            </Grid>
 
-          {currentSongPlaying != null ? (
-            <iframe
-              style={{
-                borderRadius: 12,
-                position: "absolute",
-                bottom: 20,
-                left: "50%",
-                marginLeft: -150,
-              }}
-              src={`https://open.spotify.com/embed/track/${currentSongPlaying}?utm_source=generator`}
-              width="300"
-              height={"80"}
-              frameBorder={"0"}
-              allowfullscreen={""}
-              allow={"autoplay"}
-            ></iframe>
-          ) : (
-            <></>
-          )}
-        </Grid>
+            {currentSongPlaying != null ? (
+              <iframe
+                style={{
+                  borderRadius: 12,
+                  position: "fixed",
+                  bottom: 30,
+                  left: "50%",
+                  marginLeft: -150,
+                }}
+                src={`https://open.spotify.com/embed/track/${currentSongPlaying}?utm_source=generator`}
+                width="300"
+                height={"80"}
+                frameBorder={"0"}
+                allowFullScreen={""}
+                allow={"autoplay"}
+              ></iframe>
+            ) : (
+              <></>
+            )}
+          </Grid>
+        </List>
       ) : (
         <Typography variant="h3">
           Add songs to a playlist to view them here
