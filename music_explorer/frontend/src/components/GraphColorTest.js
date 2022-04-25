@@ -49,6 +49,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy}) {
 
   for (var key in userGenreMap) {
     var value = userGenreMap[key];
+    // console.log(key, value)
   }
 
   function getNodeVal(node) {

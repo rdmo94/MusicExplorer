@@ -13,7 +13,6 @@ function LoginButton(props) {
     fetch("/spotify/get-auth-url")
       .then((response) => response.json())
       .then((data) => {
-        console.log("spotify response data", data);
         window.location.href = data.url;
         setLoading(false);
       });
@@ -21,9 +20,7 @@ function LoginButton(props) {
 
   useEffect(() => {
     fetch("/spotify/is-authenticated").then((response) => {
-        console.log(response);
         response.json().then((data) => {
-          console.log(data);
         });
     }
     );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PlaylistCheckboxContainer from "../components/PlaylistCheckboxContainer";
 import SongContainer from "../components/SongContainer";
-import { Grid, Typography, Button } from "@mui/material";
+import { Grid, Typography, Button, List } from "@mui/material";
 import { useLocalStorage } from "../Util";
 
 function Playlists({ updateUserGenreMap }) {
@@ -31,7 +31,6 @@ function Playlists({ updateUserGenreMap }) {
     };
     fetch("/spotify/get_playlist_genres", requestOptions).then((response) =>
       response.json().then((json) => {
-        //console.log(JSON.parse(json));
         updateUserGenreMap(JSON.parse(json));
         return JSON.parse(json);
       })
@@ -45,9 +44,6 @@ function Playlists({ updateUserGenreMap }) {
   }
 
   const selectedPlaylistsHandler = (playlistId, isChecked) => {
-    // selectedPlaylists.forEach((item) => console.log("before" + item));
-    // selectedPlaylists.push(playlist);
-    //console.log("playlistId", playlistId);
     if (isChecked) {
       setSelectedPlaylists(selectedPlaylists.concat([playlistId]));
     } else {
@@ -55,38 +51,64 @@ function Playlists({ updateUserGenreMap }) {
         selectedPlaylists.filter((element) => element !== playlistId)
       );
     }
-    // selectedPlaylists.forEach((item) => console.log("after" + item));
   };
 
   return (
-    <div style={{ padding: 25, paddingTop: 100 }}>
-      <Grid container direction="row">
-        <Grid item>
-          <Typography variant="h3" style={{ fontWeight: "bold" }}>
-            My playlists
-          </Typography>
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-evenly"
-            alignItems="center"
-          >
-            <Button
-              variant="contained"
-              onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+    <div style={{ paddingTop: 100 }}>
+      <List style={{ overflow: "auto", maxHeight: "100%" }}>
+        <Grid container direction="column" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h3" style={{ fontWeight: "bold" }}>
+              My playlists
+            </Typography>
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-evenly"
+              alignItems="center"
             >
-              Fetch genres
-            </Button>
-            <Button variant="outlined" onClick={() => resetPlaylistGenreMap()}>
-              Reset
-            </Button>
-          </Grid>
+              <Button
+                variant="contained"
+                onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+              >
+                Fetch genres
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => resetPlaylistGenreMap()}
+              >
+                Reset
+              </Button>
+            </Grid>
 
-          {playlists == null ? (
-            <div>
-              <p>Loading...</p>
-            </div>
-          ) : (
+            {playlists == null ? (
+              <div>
+                <p>Loading...</p>
+              </div>
+            ) : (
+              <List
+                style={{
+                  maxHeight: 300,
+                  overflow: "auto",
+                }}
+              >
+                <Grid container direction="column">
+                  {playlists.map((playlist) => {
+                    let playlistName = Object.values(playlist)[0];
+                    return (
+                      <Grid item>
+                        <PlaylistCheckboxContainer
+                          title={playlistName}
+                          updatePlaylistsCallback={selectedPlaylistsHandler}
+                        />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </List>
+            )}
+          </Grid>
+          <Grid item>
             <Grid container direction="column">
               {playlists.map((playlist) => {
                 let playlistName = Object.values(playlist)[0];
@@ -106,9 +128,9 @@ function Playlists({ updateUserGenreMap }) {
                 );
               })}
             </Grid>
-          )}
+          </Grid>
         </Grid>
-      </Grid>
+      </List>
     </div>
   );
 }

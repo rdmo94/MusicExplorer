@@ -5,6 +5,7 @@ import Graph from "./Graph";
 import PlaylistScreen from "./PlaylistScreen";
 import Playlists from "./Playlists";
 import { useLocalStorage } from "../Util";
+import "../../static/css/styles.css"
 
 //grid components style
 //const useStyles = makeStyles((theme) => ({
@@ -27,9 +28,9 @@ function Dashboard() {
   }
 
   return (
-    <div>
-      <Box display="flex">
-        <Container disableGutters={true}>
+    <div >
+      <Box display="flex" >
+        <Container disableGutters={true} >
           <Box
             sx={{
               bgcolor: "#d9d9d9",
@@ -44,7 +45,7 @@ function Dashboard() {
           </Box>
         </Container>
         <Container disableGutters={true}>
-          <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", flexGrow: 1 }}>
+          <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", width: "auto" }}>
             <Graph genreMap={playlistsGenreMap} />
           </Box>
         </Container>
@@ -60,7 +61,7 @@ function Dashboard() {
                 borderLeft: "2px solid",
               }}
             >
-              {Strategies()}
+              {<Strategies selectedUserGenres={playlistsGenreMap}/>}
             </Box>
           }
         </Container>

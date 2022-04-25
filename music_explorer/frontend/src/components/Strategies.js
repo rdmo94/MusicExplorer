@@ -10,33 +10,57 @@ import {
   Slider,
 } from "@mui/material";
 import { display } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { primaryGreen } from "../Colors";
+import { primaryGreen, primaryGrey } from "../Colors";
 import Strategy from "../models/Strategy";
 
-//Right side of dashboard
-function Strategies() {
+/**
+ * 
+ * @param {object} selectedUserGenres 
+ * @returns 
+ */
+
+function Strategies({selectedUserGenres}) {
   const strategies = [
     new Strategy(
-        "Smooth transition",
-        "This is the description of smooth transition strategy which is very long bla bla bla bla bla ipsum lorem lore upsut"
-      ),
+      "Smooth transition",
+      "This is the description of smooth transition strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "st"
+    ),
     new Strategy(
       "Take me away",
-      "This is the description of Take me away strategy which is very long bla bla bla bla bla ipsum lorem lore upsut"
+      "This is the description of Take me away strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "tma"
     ),
     new Strategy(
       "A little curious a little cautious",
-      "This is the description of A little curious a little cautious strategy which is very long bla bla bla bla bla ipsum lorem lore upsut"
+      "This is the description of A little curious a little cautious strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "alc"
     ),
     new Strategy(
-      "Radnom",
-      "This is the description of Radnom strategy which is very long bla bla bla bla bla ipsum lorem lore upsut"
+      "Random",
+      "This is the description of Radnom strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "random"
     ),
   ];
-  const [strategy, setStrategy] = React.useState(null);
+  const [strategy, setStrategy] = useState();
   const [numberOfSongsPerGenre, setNumberOfSongsPerGenre] = useState(2);
+  const [userGenres, setUserGenres] = useState(selectedUserGenres);
+
+  useEffect(() => {
+    if(selectedUserGenres == null) {
+      setUserGenres([]);
+    } else {
+      setUserGenres(selectedUserGenres);
+    }
+  }, []);
+
+  const generatePlaylist = () => {
+    fetch(`/api/${strategy.endpoint}`).then(response.json().then((data) => {
+      //CALLBACK TO DASHBOARD TO SHOW GENERATED PLAYLIST
+    }))
+  };
 
   const handleChange = (event) => {
     setStrategy(event.target.value);
@@ -47,75 +71,92 @@ function Strategies() {
   };
   return (
     <div style={{ paddingTop: 100, height: "100%" }}>
-      <Typography variant="h3" style={{ fontWeight: "bold", paddingLeft: 25 }}>
-        Strategy
-      </Typography>
-
-      <Box
-        sx={{ display: "flex", minHeight: "75%", flexGrow: 1 }}
-        flexDirection="column"
-        alignItems="center"
-      >
-        <FormControl sx={{ minWidth: 300 }}>
-          <InputLabel id="label-id">Select strategy...</InputLabel>
-          <Select
-            labelId="label-id"
-            id="selector"
-            value={strategy == null ? "" : strategy.name}
-            label="Select strategy..."
-            onChange={handleChange}
+      
+          <Typography
+            variant="h3"
+            style={{ fontWeight: "bold", paddingLeft: 25 }}
           >
-            <MenuItem value={strategies[0]}>Smooth transition</MenuItem>
-            <MenuItem value={strategies[1]}>Take me away</MenuItem>
-            <MenuItem value={strategies[2]}>A little cautious a little curious</MenuItem>
-            <MenuItem value={strategies[3]}>Random</MenuItem>
-          </Select>
-        </FormControl>
-        <Box width={300} flex="center">
-          <Typography id="slider-id" gutterBottom>
-            Number of wanted songs per genre: {numberOfSongsPerGenre}
+            Strategy
           </Typography>
-          <Slider
-            size="small"
-            defaultValue={2}
-            aria-label="Small"
-            valueLabelDisplay="auto"
-            min={1}
-            max={10}
-            onChange={handleChangeSlider}
-            aria-labelledby="slider-id"
-          />
-          {strategy != null ? (
-            <div>
-              <Typography sx={{ fontWeight: "bold" }}>Description</Typography>
-              <Typography>
-                {strategy.description}
-              </Typography>
-            </div>
-          ) : (
-            <></>
-          )}
-        </Box>
-      </Box>
-      <Box justifyContent="center" alignItems="center" display="flex">
-        <Button
-          variant="contained"
-          style={{
-            borderRadius: 200,
-            backgroundColor: primaryGreen,
-            color: "white",
-          }}
-        >
-          <Box
+          {userGenres == null || userGenres.length == 0 ? (<Typography>Please select one or more of your playlists in the panel to the left.</Typography>) : (
+            <Box
+            sx={{ display: "flex", paddingTop: 5}}
             flexDirection="column"
             alignItems="center"
-            sx={{ display: "flex", paddingLeft: 10, paddingRight: 10 }}
           >
-            <Typography sx={{ fontWeight: "bold" }}>GENERATE</Typography>
-            <Typography sx={{ fontWeight: "bold" }}>PLAYLIST</Typography>
+            <FormControl sx={{ minWidth: 300,  }}>
+              <InputLabel id="label-id">Select strategy...</InputLabel>
+              <Select
+                defaultValue={""}
+                labelId="label-id"
+                id="selector"
+                value={strategy}
+                label="Select strategy..."
+                onChange={handleChange}
+              >
+                <MenuItem value={0}>Smooth transition</MenuItem>
+                <MenuItem value={1}>Take me away</MenuItem>
+                <MenuItem value={2}>
+                  A little cautious a little curious
+                </MenuItem>
+                <MenuItem value={3}>Random</MenuItem>
+              </Select>
+            </FormControl>
+            <Typography width={300}>{"Number of genres collected: " + Object.keys(selectedUserGenres).length}</Typography>
+            <Box width={300} flex="center" paddingTop={5}>
+              <Typography id="slider-id" gutterBottom>
+                Number of wanted songs per genre: {numberOfSongsPerGenre}
+              </Typography>
+              <Slider
+                size="small"
+                defaultValue={2}
+                aria-label="Small"
+                valueLabelDisplay="auto"
+                min={1}
+                max={10}
+                onChange={handleChangeSlider}
+                aria-labelledby="slider-id"
+              />
+              {strategy != null ? (
+                <div>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Description
+                  </Typography>
+                  <Typography>
+                    {strategies[strategy].description}
+                  </Typography>
+                </div>
+              ) : (
+                <></>
+              )}
+            </Box>
           </Box>
-        </Button>
-      </Box>
+          )}
+          
+  
+          <Box sx={{position: "absolute", bottom: 65, left: 65, right: 65, paddingTop: 5}}>
+            <Button
+              disabled={strategy == null }
+              variant="contained"
+              style={{
+                width: 200,
+                borderRadius: 200,
+                backgroundColor: strategy == null ? "#FFFFF" : primaryGreen,
+                color: "white",
+              }}
+              onClick={generatePlaylist}
+            >
+              <Box
+                flexDirection="column"
+                alignItems="center"
+                sx={{ display: "flex", paddingLeft: 10, paddingRight: 10 }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>GENERATE</Typography>
+                <Typography sx={{ fontWeight: "bold" }}>PLAYLIST</Typography>
+              </Box>
+            </Button>
+          </Box>
+
     </div>
   );
 }

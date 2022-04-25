@@ -3,6 +3,7 @@ import { Button } from "@material-ui/core";
 import {useEffect, useState} from "react";
 import { Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
+import "../../static/css/styles.css";
 import Login from "./Login";
 function Home() {
     //let navigate = Navigate()
@@ -21,7 +22,6 @@ function Home() {
         return fetch("/spotify/is-authenticated")
         .then((response) => response.json())
         .then((data) => {
-            console.log("is-authenticated", data)
             if (data.status){
               //authenticated
                 return true
@@ -42,7 +42,7 @@ function Home() {
     }
 
     return (
-        <div>
+        <div className="main">
             {isAuthenticated ? <Dashboard/> : <Login/>}
         </div>
         // <div>
