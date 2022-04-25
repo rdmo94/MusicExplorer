@@ -22,7 +22,7 @@ function GraphColorTest({data, properties, userGenreMap}) {
 
   for(var key in userGenreMap) {
     var value = userGenreMap[key];
-    console.log(key, value)
+    // console.log(key, value)
   }
 
   function getNodeVal(node){
