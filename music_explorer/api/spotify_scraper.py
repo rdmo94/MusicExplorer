@@ -4,6 +4,7 @@ import spotipy
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import logging
+from os.path import exists
 import sys
 logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler())
@@ -24,7 +25,12 @@ def main():
     for artist_id, genres in data.items():
         sentence = ""
         for genre in genres:
-            sentence = sentence + " " + genre.replace(" ", "_")
+            genre = genre.replace(" ", "_spc_")
+            genre = genre.replace("-", "_hphn_")
+            genre = genre.replace("'", "_pstrph_")
+            genre = genre.replace("&", "_nd_")
+            genre = genre.replace(":", "_cln_")
+            sentence = sentence + " " + genre
         sentence = sentence.strip()
         genre_sentences.append(sentence)
     
@@ -131,7 +137,7 @@ def parse_genre_genres() -> dict[str,list[str]]:
 def convert_string_to_unicode(fucked_string:str) -> str:
     import unidecode
     unfucked_string = unidecode.unidecode(fucked_string)
-    unfucked_string = unfucked_string.replace("'","")
+    # unfucked_string = unfucked_string.replace("'","")
     return unfucked_string
 
 
@@ -244,6 +250,53 @@ def get_multiple_artists_genres(artist_ids:list[str]) -> list[str]:
             artists_genres_dict[artist['id']] = artist['genres']
     return artists_genres_dict
     
+def scrape_tracks_from_playlists(spotify:Spotify) -> list[str]:
 
+        genres_playlistIds:dict = read_json_file(os.path.join(os.path.dirname(__file__), "data/genres_playlist.json"))
+        for genre_name, playlist_id in genres_playlistIds.items():
+            if not exists(os.path.join(os.path.dirname(__file__), f"data/genre_playlist/{convert_string_to_unicode(genre_name)}.json")):
+                playlist = spotify.playlist(playlist_id=playlist_id)
+                number_of_tracks = playlist['tracks']['total']
+                tracks = []
+                for n in range(0, number_of_tracks, 100):
+                    track_chunk = spotify.playlist_tracks(playlist_id=playlist_id, offset=n)
+                    tracks.extend(track_chunk['items'])
+                track_ids = []
+                for track in tracks:
+                    if track['track']:
+                        track_ids.append(track['track']['id'])
+                with open(os.path.join(os.path.dirname(__file__), f"data/genre_playlist/{convert_string_to_unicode(genre_name)}.json"), 'w') as outFile:
+                    json.dump({genre_name: track_ids}, outFile)
+            
 
-# main()
+def normalize_genre_playlists():
+    genre_playlist_dir = os.path.join(os.path.dirname(__file__), "data/genre_playlist")
+    genre_playlist_dict = {}
+    for filename in os.listdir(genre_playlist_dir):
+        file = os.path.join(genre_playlist_dir, filename)
+        try:
+            with open(file) as currentFile:
+                genre_playlist:dict = json.load(currentFile)
+                normalized_key = genre_formatter(list(genre_playlist.keys())[0])
+                genre_playlist_dict[normalized_key] = list(genre_playlist.values())
+        except Exception:
+            print("gg")
+    
+    with open("genre_tracks.json", "w") as outFile:
+        json.dump(genre_playlist_dict, outFile)
+        outFile.close()
+
+def genre_formatter(genre:str) -> str:
+    """
+    Translates to ascii, lowercase and replaces symbols
+    """
+    import unidecode
+    genre = genre.lower()
+    genre = unidecode.unidecode(genre)
+    genre = genre.replace(" ", "_spc_")
+    genre = genre.replace("-", "_hphn_")
+    genre = genre.replace("'", "_pstrph_")
+    genre = genre.replace("&", "_nd_")
+    genre = genre.replace(":", "_cln_")
+    return genre
+

@@ -18,7 +18,7 @@ import { Icon } from "@iconify/react";
 import { useLocalStorage } from "../Util";
 import PlaylistHeader from "../components/PlaylistHeader";
 
-function PlaylistScreen(props) {
+function PlaylistScreen({generatedPlaylist}) {
   const [playlist, setPlaylist] = useState(new Playlist());
   const [currentSongPlaying, setCurrentSongPlaying] = useState(null);
   const [playlistTracks, setPlaylistTracks] = useState([]);
@@ -28,31 +28,33 @@ function PlaylistScreen(props) {
  
 
   useEffect(() => {
-    let object = new Playlist(
-      "0DIvpjaOZNK0Qqb5bEm2lf",
-      "New playlist",
-      [],
-      [
-        new Song(
-          "5GzKIbJyrV6rUakLyezNwn",
-          "Mad Professor",
-          ["Large Professor"],
-          "Hip Hop",
-          261333,
-          "spotify:track:5GzKIbJyrV6rUakLyezNwn"
-        ),
-        new Song(
-          "3IAfUEeaXRX9s9UdKOJrFI",
-          "Envolver",
-          ["Anitta"],
-          "Pop",
-          193805,
-          "spotify:track:3IAfUEeaXRX9s9UdKOJrFI"
-        ),
-      ]
-    );
-    setPlaylist(object);
-    setPlaylistTracks(object.tracks);
+    // let object = new Playlist(
+    //   "0DIvpjaOZNK0Qqb5bEm2lf",
+    //   "New playlist",
+    //   [],
+    //   [
+    //     new Song(
+    //       "5GzKIbJyrV6rUakLyezNwn",
+    //       "Mad Professor",
+    //       ["Large Professor"],
+    //       "Hip Hop",
+    //       261333,
+    //       "spotify:track:5GzKIbJyrV6rUakLyezNwn"
+    //     ),
+    //     new Song(
+    //       "3IAfUEeaXRX9s9UdKOJrFI",
+    //       "Envolver",
+    //       ["Anitta"],
+    //       "Pop",
+    //       193805,
+    //       "spotify:track:3IAfUEeaXRX9s9UdKOJrFI"
+    //     ),
+    //   ]
+    // );
+    console.log(generatedPlaylist);
+    let playlist = Playlist.fromObject(generatedPlaylist);
+    setPlaylist(playlist);
+    setPlaylistTracks(playlist.tracks);
   }, []);
 
   const saveToSpotifyStates = {
@@ -114,7 +116,6 @@ function PlaylistScreen(props) {
       container
       direction="column"
       justifyContent="center"
-      alignContent="center"
     >
       {playlist ? (
         <Grid direction="column" justifyContent="center" alignContent="center">

@@ -7,6 +7,21 @@ class Song {
         this.duration = duration;
         this.uri = uri;
     }
+    /**
+     * 
+     * @param {Object} jsonObject 
+     * @param {string} genre 
+     * @returns {Song}
+     */
+    static fromJSON(jsonObject, genre) {
+        let song = new Song();
+        song.id = jsonObject["id"];
+        song.title = jsonObject["title"];
+        song.artists = jsonObject["artists"];
+        song.genre = genre;
+        song.duration = jsonObject["duration"];
+        return song;
+    }
 }
 
 export default Song

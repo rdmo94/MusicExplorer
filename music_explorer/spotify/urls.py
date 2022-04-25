@@ -16,6 +16,7 @@ urlpatterns = [
     path('get_playlist_genres', GetPlaylistGenresView.as_view()),
     path('get_current_user', GetCurrentSpotifyUserView.as_view()),
     path('tracks/<str:playlistId>', TrackView.as_view()),
+    path('track/<str:track_id>', TrackView.as_view()),
     path('playlist/save', CreatePlaylistView.as_view()),
 
 

@@ -1,4 +1,6 @@
 from email import header
+
+from pandas import array
 from .models import SpotifyToken
 from django.utils import timezone
 from datetime import timedelta
@@ -74,20 +76,35 @@ def is_spotify_authenticated(session_id):
 
     return False
 
-def filter_spotify_tracks(tracks: dict):
+
+def filter_spotify_playlist_tracks(tracks: dict):
     filtered_tracks = []
     for item in tracks["items"]:
         track = item["track"]
         filtered_track_artists = []
         for artist in track["artists"]:
             filtered_track_artists.append({"id": artist["id"]})
-        filtered_tracks.append({"name" : track["name"], "id" : track["id"], "duration" : track["duration_ms"], "artists": filtered_track_artists})
+        filtered_tracks.append({"name": track["name"], "id": track["id"],
+                               "duration": track["duration_ms"], "artists": filtered_track_artists})
     return filtered_tracks
+
+
+def filter_spotify_track(track):
+    print("")
+    filtered_track = {}
+    filtered_track["name"] = track["name"]
+    filtered_track["id"] = track["id"]
+    filtered_track["duration"] = track["duration_ms"]
+    filtered_track["artists"] = list(map(lambda tr: tr["name"], track["artists"]))
+
+    print("f")
+    return filtered_track
+
 
 def filter_spotify_playlists(playlists: dict):
     filtered_playlists = []
     for item in playlists["items"]:
-        filtered_playlists.append({item["id"] : item["name"]})
+        filtered_playlists.append({item["id"]: item["name"]})
     return filtered_playlists
 
 
@@ -110,7 +127,7 @@ def refresh_spotify_token(session_id):
         session_id, access_token, token_type, expires_in, refresh_token)
 
 
-def genre_formatter(genre:str) -> str:
+def genre_formatter(genre: str) -> str:
     """
     Translates to ascii, lowercase and replaces symbols
     """
@@ -124,7 +141,8 @@ def genre_formatter(genre:str) -> str:
     genre = genre.replace(":", "_cln_")
     return genre
 
-def genre_prettyfier(genre:str) -> str:
+
+def genre_prettyfier(genre: str) -> str:
     genre = genre.replace("_spc_", " ")
     genre = genre.replace("_hphn_", "-")
     genre = genre.replace("_pstrph_", "'")

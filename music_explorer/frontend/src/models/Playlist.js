@@ -1,3 +1,4 @@
+import Song from "./Song";
 
 class Playlist {
     /**
@@ -10,8 +11,19 @@ class Playlist {
     constructor(id, title, artists, tracks) {
         this.id = id;
         this.title = title;
-        this.artists = artists;
         this.tracks = tracks;
+    }
+
+    /**
+     * 
+     * @param {Object} object 
+     * @returns {Playlist}
+     */
+    static fromObject(object) {
+        let playlist = new Playlist();
+        playlist.title = "New playlist"
+        playlist.tracks = Object.values(object).map((t) => {Song.fromJSON(t);});
+        return playlist;
     }
 }
 

@@ -269,4 +269,35 @@ def scrape_tracks_from_playlists(spotify:Spotify) -> list[str]:
                     json.dump({genre_name: track_ids}, outFile)
             
 
-scrape_tracks_from_playlists(spotify=spotify)
+def normalize_genre_playlists():
+    genre_playlist_dir = os.path.join(os.path.dirname(__file__), "data/genre_playlist")
+    genre_playlist_dict = {}
+    for filename in os.listdir(genre_playlist_dir):
+        file = os.path.join(genre_playlist_dir, filename)
+        try:
+            with open(file) as currentFile:
+                genre_playlist:dict = json.load(currentFile)
+                normalized_key = genre_formatter(list(genre_playlist.keys())[0])
+                genre_playlist_dict[normalized_key] = list(genre_playlist.values())
+        except Exception:
+            print("gg")
+    
+    with open("genre_tracks.json", "w") as outFile:
+        json.dump(genre_playlist_dict, outFile)
+        outFile.close()
+
+def genre_formatter(genre:str) -> str:
+    """
+    Translates to ascii, lowercase and replaces symbols
+    """
+    import unidecode
+    genre = genre.lower()
+    genre = unidecode.unidecode(genre)
+    genre = genre.replace(" ", "_spc_")
+    genre = genre.replace("-", "_hphn_")
+    genre = genre.replace("'", "_pstrph_")
+    genre = genre.replace("&", "_nd_")
+    genre = genre.replace(":", "_cln_")
+    return genre
+
+normalize_genre_playlists()
