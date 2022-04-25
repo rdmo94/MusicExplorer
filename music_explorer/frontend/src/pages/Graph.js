@@ -58,7 +58,16 @@ function Graph({genreMap}) {
   } else if (graphType == "3D") {
     graph = <Graph3D data={data} properties={localGraphProperties} />;
   } else if (graphType == "GraphColorTest") {
-    graph = <GraphColorTest data={data} properties={localGraphProperties} userGenreMap={genreMap} strategy={{0:["canadian_spc_country", "texas_spc_country"]}}/>;
+    graph = <GraphColorTest 
+    data={data} 
+    properties={localGraphProperties} 
+    userGenreMap={genreMap} 
+    strategy={{0:["canadian_spc_country", "texas_spc_country"]}}
+    links={[
+      { "source": "canadian_spc_country", "target": "texas_spc_country" },
+      { "source": "red_spc_dirt", "target": "jam_spc_band" }
+
+  ]}/>;
   }
 
   return (

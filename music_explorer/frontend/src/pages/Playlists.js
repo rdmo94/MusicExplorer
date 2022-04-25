@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import PlaylistCheckboxContainer from "../components/PlaylistCheckboxContainer";
-import SongContainer from "../components/SongContainer";
-import { Grid, Typography, Button, List } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  List,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+} from "@mui/material";
 import { useLocalStorage } from "../Util";
 
 function Playlists({ updateUserGenreMap }) {
@@ -102,12 +108,21 @@ function Playlists({ updateUserGenreMap }) {
                     return (
                       //Must have unique key or react will throw console error!!!
 
-                      <PlaylistCheckboxContainer
-                        title={playlistName}
-                        playlistId={playlistId}
-                        updatePlaylistsCallback={selectedPlaylistsHandler}
-                        isChecked={playlistAlreadyChecked}
+                      <FormGroup key={playlistId}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            defaultChecked={playlistAlreadyChecked}
+                            onChange={(event) =>
+                              updatePlaylistsCallback(playlistId, event.target.checked)
+                            }
+                            key={playlistId.toString()}
+                            value={playlistId}
+                          />
+                        }
+                        label={playlistName}
                       />
+                    </FormGroup>
                     );
                   })}
                 </Grid>
