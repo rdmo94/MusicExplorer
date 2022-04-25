@@ -8,6 +8,7 @@ import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
+import { Typography } from "@material-ui/core";
 
 function Graph({genreMap}) {
   const [data, setData] = useState();
@@ -63,11 +64,11 @@ function Graph({genreMap}) {
 
   return (
     <div>
-      <h1>{headline}</h1>
-      <h2>Graph properties</h2>
+      <Typography variant={"h3"}>{headline}</Typography>
+      <Typography variant={"h4"}>Graph properties</Typography>
 
-      <Grid container spacing={9} direction="row">
-        <Grid item xs={3}>
+      <Grid container direction="row" justifyContent={"space-evenly"} minHeight={150}>
+        <Grid item>
           <InputLabel id="nodeAutoColorBy">nodeAutoColorBy</InputLabel>
           <Select
             labelId="nodeAutoColorBy"
@@ -83,7 +84,7 @@ function Graph({genreMap}) {
           </Select>
         </Grid>
 
-        <Grid item xs={3}>
+        <Grid item>
           <InputLabel id="backgroundColor">backgroundColor</InputLabel>
           <Select
             labelId="backgroundColor"
@@ -98,7 +99,7 @@ function Graph({genreMap}) {
           </Select>
         </Grid>
 
-        <Grid item xs={3}>
+        <Grid item >
           <InputLabel id="enableNodeDrag">enableNodeDrag</InputLabel>
           <Switch
             checked={localGraphProperties.enableNodeDrag}
@@ -111,10 +112,7 @@ function Graph({genreMap}) {
             }
           />
         </Grid>
-      </Grid>
-      {console.log("rendered select element")}
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item>
           <InputLabel id="graph-type">Graph type</InputLabel>
           <Select
             defaultValue={graphType}
@@ -132,6 +130,10 @@ function Graph({genreMap}) {
             <MenuItem value={"3D"}>3D</MenuItem>
           </Select>
         </Grid>
+      </Grid>
+      {console.log("rendered select element")}
+      <Grid container spacing={2}>
+        
       </Grid>
       <Grid container justifyContent="center" alignItems="center">
         <Grid item>{graph}</Grid>

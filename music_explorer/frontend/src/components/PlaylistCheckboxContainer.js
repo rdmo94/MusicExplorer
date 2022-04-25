@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { Button, Grid, Checkbox, Typography } from "@material-ui/core";
-function PlaylistCheckboxContainer(props) {
+function PlaylistCheckboxContainer({title, updatePlaylistsCallback}) {
   
 
   return (
@@ -9,15 +9,15 @@ function PlaylistCheckboxContainer(props) {
       <Grid
         container
         direction="row"
-        justifyContent="space-around"
+        justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item xs={1}>
+        <Grid item >
 
-          <Checkbox onChange={(event) => props.updatePlaylistsCallback(props.title, event.target.checked)} />
+          <Checkbox onChange={(event) => updatePlaylistsCallback(title, event.target.checked)} />
         </Grid>
         <Grid item xs>
-          <Typography>{props.title}</Typography>
+          <Typography>{title}</Typography>
         </Grid>
       </Grid>
     </div>

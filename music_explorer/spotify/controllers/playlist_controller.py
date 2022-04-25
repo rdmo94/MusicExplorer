@@ -50,15 +50,6 @@ class GetPlaylistGenresView(APIView):
     def split_list(self, list:list[object], max_list_size:int) -> list[object]:
         return [list[i:i + max_list_size] for i in range(0, len(list), max_list_size)]
 
-    def get_all_playlist_tracks(self, spotify:Spotify, playlist_id:str) -> list[str]:
-        playlist = spotify.playlist(playlist_id=playlist_id)
-        number_of_tracks = playlist['tracks']['total']
-        tracks = []
-        for n in range(0, number_of_tracks, 100):
-            track_chunk = spotify.playlist_tracks(playlist_id=playlist_id, offset=n)
-            tracks.extend(track_chunk['items'])
-        return tracks
-
     def get_track_artists(self, tracks) -> list[str]:
         artists_ids = []
         for t in tracks:
@@ -112,7 +103,7 @@ class GetPlaylistGenresView(APIView):
 
             # 0) For each playlist: //TODO check if empty
             for (playlist_name, playlist_id) in request.data.items():
-                tracks = self.get_all_playlist_tracks(sp, playlist_id)
+                tracks = get_all_playlist_tracks(sp, playlist_id)
                 artists = self.get_track_artists(tracks)
                 genres = self.get_artist_genres(spotify=sp, artists=artists)
                 current_playlist_ocurrence_dict = self.get_occurence_dict(genres)
@@ -126,8 +117,22 @@ class GetPlaylistGenresView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
             
+class GeneratePlaylistView(APIView):
+    def post(self, request):
+        json_data = request.data
+        playlist_genres = json_data["playlist_genres"]
+        n_songs_genre = json_data["n_songs_genre"]
+        
+### GLOBAL PLAYLIST HELPER FUNCTIONS
 
-
+def get_all_playlist_tracks(spotify:Spotify, playlist_id:str) -> list[str]:
+        playlist = spotify.playlist(playlist_id=playlist_id)
+        number_of_tracks = playlist['tracks']['total']
+        tracks = []
+        for n in range(0, number_of_tracks, 100):
+            track_chunk = spotify.playlist_tracks(playlist_id=playlist_id, offset=n)
+            tracks.extend(track_chunk['items'])
+        return tracks
 
 # class UpdatePlaylistView(APIView):
 #     def put(self, request, format=None):
