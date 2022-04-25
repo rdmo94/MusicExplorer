@@ -1,26 +1,46 @@
 import React from "react";
 import { useEffect } from "react";
-import { Button, Grid, Checkbox, Typography } from "@material-ui/core";
-function PlaylistCheckboxContainer(props) {
-  
+import {
+  Button,
+  Grid,
+  Checkbox,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+} from "@mui/material";
 
+/**
+ *
+ *
+ * @param {Object} param
+ * @param {String} param.title
+ * @param {String} param.playlistId
+ * @param {Function} param.updatePlaylistsCallback
+ * @param {Boolean} param.isChecked
+ * @return {*}
+ */
+function PlaylistCheckboxContainer({
+  title,
+  playlistId,
+  updatePlaylistsCallback,
+  isChecked,
+}) {
   return (
-    <div variant="contained">
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-around"
-        alignItems="center"
-      >
-        <Grid item xs={1}>
-
-          <Checkbox onChange={(event) => props.updatePlaylistsCallback(props.title, event.target.checked)} />
-        </Grid>
-        <Grid item xs>
-          <Typography>{props.title}</Typography>
-        </Grid>
-      </Grid>
-    </div>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked={isChecked}
+              onChange={(event) =>
+                updatePlaylistsCallback(playlistId, event.target.checked)
+              }
+              key={playlistId.toString()}
+              value={title}
+            />
+          }
+          label={title}
+        />
+      </FormGroup>
   );
 }
 

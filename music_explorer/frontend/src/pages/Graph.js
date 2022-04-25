@@ -24,10 +24,9 @@ function Graph({genreMap}) {
   const graphRef = useRef(null);
 
   useEffect(() => {
-    fetch("static/graph_data_3d_full_no_links_sg.json")
+    fetch("static/graph_data_2d_updated_no_links.json")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         //TODO check if data is ok
         setData(data);
       });
@@ -58,8 +57,8 @@ function Graph({genreMap}) {
   } else if (graphType == "3D") {
     graph = <Graph3D data={data} properties={localGraphProperties} />;
   } else if (graphType == "GraphColorTest") {
-    graph = <GraphColorTest data={data} properties={localGraphProperties} userGenreMap={genreMap}/>;
-  } 
+    graph = <GraphColorTest data={data} properties={localGraphProperties} userGenreMap={genreMap} strategy={{0:["canadian_spc_country", "texas_spc_country"]}}/>;
+  }
 
   return (
     <div>
@@ -67,7 +66,13 @@ function Graph({genreMap}) {
       <h2>Graph properties</h2>
 
       <Grid container spacing={9} direction="row">
-        <Grid item xs={3}>
+      <Grid
+            
+            container
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="center"
+          >
           <InputLabel id="nodeAutoColorBy">nodeAutoColorBy</InputLabel>
           <Select
             labelId="nodeAutoColorBy"
@@ -112,7 +117,7 @@ function Graph({genreMap}) {
           />
         </Grid>
       </Grid>
-      {console.log("rendered select element")}
+
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <InputLabel id="graph-type">Graph type</InputLabel>
@@ -123,7 +128,6 @@ function Graph({genreMap}) {
             label="Graph type"
             name="graph-type"
             onChange={(input) => {
-              console.log("onChange called on select element");
               setGraphType(input.target.value);
             }}
           >

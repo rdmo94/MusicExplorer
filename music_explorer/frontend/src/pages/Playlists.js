@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import PlaylistCheckboxContainer from "../components/PlaylistCheckboxContainer";
 import SongContainer from "../components/SongContainer";
-import { Grid, Typography, Button } from "@material-ui/core";
-import {useLocalStorage} from '../Util'
+import { Grid, Typography, Button } from "@mui/material";
+import { useLocalStorage } from "../Util";
 
 function Playlists({ updateUserGenreMap }) {
   const [playlists, setPlaylists] = useState(null);
-  const [selectedPlaylists, setSelectedPlaylists] = useLocalStorage("selectedPlaylists", []);
-  const [user, setUser] = useState(null);
+  const [selectedPlaylists, setSelectedPlaylists] = useLocalStorage(
+    "selectedPlaylists",
+    []
+  );
 
   useEffect(() => {
-    // fetch("/api/get_user").then(response => response.json().then(json => setUser(json)))
     fetch("/spotify/get_playlists").then((response) =>
       response.json().then((json) => {
-        console.log("My playlists:", JSON.parse(json));
         setPlaylists(JSON.parse(json));
       })
     );
   }, []);
+
   /**
    *
    * @param {Map<String,String>} playlists <playlist_name, playlist_id>
@@ -26,14 +27,11 @@ function Playlists({ updateUserGenreMap }) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        "kr sh lort i mund": "0VfACbAYiIeof8DnNGxCrX",
-        jaistyle: "7IbxycULNvdHLD5uIVIyQr",
-      }),
+      body: JSON.stringify(playlists),
     };
     fetch("/spotify/get_playlist_genres", requestOptions).then((response) =>
       response.json().then((json) => {
-        console.log(JSON.parse(json));
+        //console.log(JSON.parse(json));
         updateUserGenreMap(JSON.parse(json));
         return JSON.parse(json);
       })
@@ -46,46 +44,42 @@ function Playlists({ updateUserGenreMap }) {
     updateUserGenreMap(null);
   }
 
-  const selectedPlaylistsHandler = (playlist, isChecked) => {
+  const selectedPlaylistsHandler = (playlistId, isChecked) => {
     // selectedPlaylists.forEach((item) => console.log("before" + item));
     // selectedPlaylists.push(playlist);
-    console.log("p:", playlist);
+    //console.log("playlistId", playlistId);
     if (isChecked) {
-      setSelectedPlaylists(selectedPlaylists.concat([playlist]));
+      setSelectedPlaylists(selectedPlaylists.concat([playlistId]));
     } else {
       setSelectedPlaylists(
-        selectedPlaylists.filter((element) => element !== playlist)
+        selectedPlaylists.filter((element) => element !== playlistId)
       );
     }
     // selectedPlaylists.forEach((item) => console.log("after" + item));
   };
 
   return (
-    <div style={{padding: 25, paddingTop: 100}}>
+    <div style={{ padding: 25, paddingTop: 100 }}>
       <Grid container direction="row">
         <Grid item>
           <Typography variant="h3" style={{ fontWeight: "bold" }}>
             My playlists
           </Typography>
           <Grid
-            
             container
             direction="row"
             justifyContent="space-evenly"
             alignItems="center"
           >
             <Button
-                variant="contained"
-                onClick={() => getSelectedPlaylistGenreMap()}
-              >
-                Fetch genres
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => resetPlaylistGenreMap()}
-              >
-                Reset
-              </Button>
+              variant="contained"
+              onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+            >
+              Fetch genres
+            </Button>
+            <Button variant="outlined" onClick={() => resetPlaylistGenreMap()}>
+              Reset
+            </Button>
           </Grid>
 
           {playlists == null ? (
@@ -96,40 +90,23 @@ function Playlists({ updateUserGenreMap }) {
             <Grid container direction="column">
               {playlists.map((playlist) => {
                 let playlistName = Object.values(playlist)[0];
+                let playlistId = Object.keys(playlist)[0];
+                var playlistAlreadyChecked =
+                  Object.values(selectedPlaylists).includes(playlistId);
+
                 return (
-                  <Grid item>
-                    <PlaylistCheckboxContainer
-                      title={playlistName}
-                      updatePlaylistsCallback={selectedPlaylistsHandler}
-                    />
-                  </Grid>
+                  //Must have unique key or react will throw console error!!!
+
+                  <PlaylistCheckboxContainer
+                    title={playlistName}
+                    playlistId={playlistId}
+                    updatePlaylistsCallback={selectedPlaylistsHandler}
+                    isChecked={playlistAlreadyChecked}
+                  />
                 );
               })}
             </Grid>
           )}
-        </Grid>
-        <Grid item>
-          <Grid container direction="column">
-            <Grid item>
-              <Typography variant="h3" style={{ fontWeight: "bold" }}>
-                Selected playlists
-              </Typography>
-            </Grid>
-            {selectedPlaylists.map((playlist) => {
-              console.log(playlist);
-              return (
-                <Grid item>
-                  <Typography>{playlist}</Typography>
-                </Grid>
-              );
-            })}
-          </Grid>
-          <Button onClick={() => props.updateUserGenreMap({ rock: 2, pop: 1 })}>
-            hey anitta
-          </Button>
-          <Button onClick={() => props.updateUserGenreMap({})}>
-            bye anitta
-          </Button>
         </Grid>
       </Grid>
     </div>

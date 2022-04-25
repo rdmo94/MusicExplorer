@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Box, Grid } from "@mui/material";
-import { makeStyles } from "@material-ui/core/styles";
 import Strategies from "../components/Strategies";
 import Graph from "./Graph";
 import PlaylistScreen from "./PlaylistScreen";
@@ -8,13 +7,13 @@ import Playlists from "./Playlists";
 import { useLocalStorage } from "../Util";
 
 //grid components style
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
+//const useStyles = makeStyles((theme) => ({
+//  paper: {
+//    padding: theme.spacing(1),
+//    textAlign: "center",
+//    color: theme.palette.text.secondary,
+//  },
+//}));
 
 function Dashboard() {
   const [playlistsGenreMap, setPlaylistsGenreMap] = useLocalStorage(

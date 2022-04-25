@@ -108,3 +108,27 @@ def refresh_spotify_token(session_id):
 
     update_or_create_user_tokens(
         session_id, access_token, token_type, expires_in, refresh_token)
+
+
+def genre_formatter(genre:str) -> str:
+    """
+    Translates to ascii, lowercase and replaces symbols
+    """
+    import unidecode
+    genre = genre.lower()
+    genre = unidecode.unidecode(genre)
+    genre = genre.replace(" ", "_spc_")
+    genre = genre.replace("-", "_hphn_")
+    genre = genre.replace("'", "_pstrph_")
+    genre = genre.replace("&", "_nd_")
+    genre = genre.replace(":", "_cln_")
+    return genre
+
+def genre_prettyfier(genre:str) -> str:
+    genre = genre.replace("_spc_", " ")
+    genre = genre.replace("_hphn_", "-")
+    genre = genre.replace("_pstrph_", "'")
+    genre = genre.replace("_nd_", "&")
+    genre = genre.replace("_cln_", ":")
+    genre = genre.title()
+    return genre

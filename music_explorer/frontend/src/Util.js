@@ -34,15 +34,26 @@ export function replace_special_characters(text, toWord2VecFormat) {
     ["-", "_hphn_"],
     ["'", "_pstrph_"],
     ["&", "_nd_"],
-    [":", "_cln_"]
-  ]
+    [":", "_cln_"],
+  ];
 
-  for(var i = 0; i<replaceList.length; i++){
-    if (toWord2VecFormat) text = text.replace(replaceList[i][0], replaceList[i][1])
-    else text = text.replace(replaceList[i][1], replaceList[i][0])
+  for (var i = 0; i < replaceList.length; i++) {
+    if (toWord2VecFormat)
+      text = text.replaceAll(replaceList[i][0], replaceList[i][1]);
+    else text = text.replaceAll(replaceList[i][1], replaceList[i][0]);
   }
 
-  return text
+  if (!toWord2VecFormat) {
+    //make nice with uppercase letters
+    text = text
+      .toLowerCase()
+      .replace(/(^\w{1})|(\s{1}\w{1})/g, (match) => match.toUpperCase());
+  } else {
+    text = text
+      .toLowerCase()
+  }
+
+  return text;
 }
 
 // https://usehooks.com/useLocalStorage/
