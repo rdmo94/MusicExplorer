@@ -115,7 +115,7 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
               //defaultValue={""}
               labelId="label-id"
               id="selector"
-              value={strategy}
+              value={strategy ? strategy : ""}
               label="Select strategy..."
               onChange={handleChange}
             >
