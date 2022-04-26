@@ -70,25 +70,6 @@ function Playlists({ updateUserGenreMap }) {
             >
               My playlists
             </Typography>
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-evenly"
-              alignItems="center"
-            >
-              <Button
-                variant="contained"
-                onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
-              >
-                Fetch genres
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => resetPlaylistGenreMap()}
-              >
-                Reset
-              </Button>
-            </Grid>
 
             {playlists == null ? (
               <div>
@@ -97,7 +78,7 @@ function Playlists({ updateUserGenreMap }) {
             ) : (
               <List
                 style={{
-                  maxHeight: 600,
+                  maxHeight: 800,
                   overflow: "auto",
                 }}
               >
@@ -113,7 +94,7 @@ function Playlists({ updateUserGenreMap }) {
 
                       <FormGroup key={playlistId}>
                         <FormControlLabel
-                          sx={{color: "white"}}
+                          sx={{ color: "white" }}
                           control={
                             <Checkbox
                               sx={{ color: "white" }}
@@ -139,6 +120,23 @@ function Playlists({ updateUserGenreMap }) {
           </Grid>
         </Grid>
       </List>
+
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
+        <Button
+          variant="contained"
+          onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+        >
+          Fetch genres
+        </Button>
+        <Button variant="outlined" onClick={() => resetPlaylistGenreMap()}>
+          Reset
+        </Button>
+      </Grid>
     </div>
   );
 }
