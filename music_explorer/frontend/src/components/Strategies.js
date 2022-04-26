@@ -112,7 +112,7 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
             <InputLabel id="label-id" sx={{color: "white"}}>Select strategy...</InputLabel>
             <Select
             sx={{color: "white"}}
-              defaultValue={""}
+              //defaultValue={""}
               labelId="label-id"
               id="selector"
               value={strategy}
@@ -176,7 +176,7 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
             color: "white",
           }}
           onClick={generatePlaylist}
-        >
+        > 
           <Box
             flexDirection="column"
             alignItems="center"

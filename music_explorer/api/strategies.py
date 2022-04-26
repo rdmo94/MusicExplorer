@@ -4,7 +4,7 @@ from .embeddings import load_vector_space_from_file, load_vector_space_dict_fron
 from collections import defaultdict
 
 
-def take_me_away_find_furthest_genres_from_genre(user_genres, n_genres=2) -> list[str]:
+def take_me_away_find_furthest_genres_from_genre(user_genres: list[str], n_genres=2) -> list[str]:
     '''Finds the furthest n genres for each of the user's genre and adds them to a dict and then returns the furthest n genres from that collection.
     If the same genre appears more than once, the distance is accumulated - prioritizing this genre'''
     vector_space_graph_dict = load_vector_space_dict_fron_json_file()
@@ -20,7 +20,7 @@ def take_me_away_find_furthest_genres_from_genre(user_genres, n_genres=2) -> lis
     return sorted(most_distant_genres_overall.items(), key=lambda d: d[1], reverse=True)[:n_genres]
 
 
-def a_little_cautious_a_little_curious_closest_unfamiliar_genres(genre, user_genres: list[str], n_genres=2) -> list[str]:
+def a_little_cautious_a_little_curious_closest_unfamiliar_genres(genre: str, user_genres: list[str], n_genres=2) -> list[str]:
     '''Finds the n closest genres not currently appearing on a users collection of genres'''
 
     vector_space_graph_dict = load_vector_space_dict_fron_json_file()
@@ -40,7 +40,8 @@ def random_choose_n_random_unfamiliar_genres(user_genres, n_genres=2) -> list[st
     while len(unique_n_random_unfamiliar_genres) != n_genres:
         unique_genre = random.sample(all_genres, 1)[0]
         if unique_genre not in user_genres:
-            unique_n_random_unfamiliar_genres.add(genre_formatter(unique_genre))
+            unique_n_random_unfamiliar_genres.add(
+                genre_formatter(unique_genre))
     return list(unique_n_random_unfamiliar_genres)
 
 

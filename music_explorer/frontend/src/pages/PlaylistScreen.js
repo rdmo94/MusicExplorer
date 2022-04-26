@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SongContainer from "../components/SongContainer";
+import SongsContainer from "../components/SongsContainer";
 import {
   Grid,
   Typography,
@@ -51,9 +51,9 @@ function PlaylistScreen({ generatedPlaylist }) {
     //     ),
     //   ]
     // );
-    console.log(generatedPlaylist);
+    //console.log(generatedPlaylist);
     let playlist = Playlist.fromObject(generatedPlaylist);
-    console.log(playlist);
+    //console.log(playlist);
     setPlaylist(playlist);
     setPlaylistTracks(playlist.tracks);
   }, []);
@@ -114,19 +114,24 @@ function PlaylistScreen({ generatedPlaylist }) {
 
   return (
     <List sx={{ overflow: "auto", height: 100 }}>
-      <Grid container direction="column" justifyContent="center" sx={{backgroundColor: "red"}}>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        sx={{ backgroundColor: "red" }}
+      >
         {playlist ? (
           <Grid
-          sx={{backgroundColor: "red"}}
-          item
+            sx={{ backgroundColor: "red" }}
+            item
             container
             direction="column"
             justifyContent="center"
             alignContent="center"
           >
             <Grid
-            sx={{backgroundColor: "red"}}
-            item
+              sx={{ backgroundColor: "red" }}
+              item
               container
               direction="column"
               justifyContent="center"
@@ -141,7 +146,14 @@ function PlaylistScreen({ generatedPlaylist }) {
                 }
               />
 
-              {playlistTracks.map((track) => {
+              <Grid item>
+                <SongsContainer
+                  tracks={playlistTracks}
+                  playSongCallback={setCurrentSongPlaying}
+                ></SongsContainer>
+              </Grid>
+
+              {/* {playlistTracks.map((track) => {
                 return (
                   <Grid item>
                     <SongContainer
@@ -152,7 +164,7 @@ function PlaylistScreen({ generatedPlaylist }) {
                     ></SongContainer>
                   </Grid>
                 );
-              })}
+              })} */}
             </Grid>
             <Grid
               container
@@ -166,8 +178,9 @@ function PlaylistScreen({ generatedPlaylist }) {
                   style={{ borderRadius: 200, backgroundColor: primaryGreen }}
                   endIcon={saveToSpotifyStates[saveToSpotifyState]}
                 >
-                  <Typography color={"white"}
-                    style={{ fontWeight: "bold", color: "white" }}
+                  <Typography
+                    
+                    style={{ fontWeight: "bold"}}
                     onClick={saveToSpotifyHandler}
                   >
                     {"SAVE TO\nSPOTIFY"}
@@ -179,7 +192,7 @@ function PlaylistScreen({ generatedPlaylist }) {
                   <Button
                     variant="contained"
                     style={{ borderRadius: 200, backgroundColor: primaryGreen }}
-                    endIcon={<Icon icon="mdi:spotify" color="white" />}
+                    endIcon={<Icon icon="mdi:spotify" />}
                     onClick={() => {
                       window.open(
                         newlyCreatedPlaylist.external_urls.spotify,
@@ -188,7 +201,9 @@ function PlaylistScreen({ generatedPlaylist }) {
                       setSaveToSpotifyState("IDLE");
                     }}
                   >
-                    <Typography color={"white"} style={{ fontWeight: "bold", color: "white" }}>
+                    <Typography
+                      style={{ fontWeight: "bold"}}
+                    >
                       {"OPEN PLAYLIST"}
                     </Typography>
                   </Button>
@@ -219,7 +234,7 @@ function PlaylistScreen({ generatedPlaylist }) {
             )}
           </Grid>
         ) : (
-          <Typography color={"white"} variant="h3">
+          <Typography variant="h3">
             Add songs to a playlist to view them here
           </Typography>
         )}

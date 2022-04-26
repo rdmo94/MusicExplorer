@@ -21,7 +21,7 @@ function PlaylistHeader(props) {
     <Grid container direction="row" justifyContent="space-between">
       <Grid item>
         {!isNameFocused ? (
-          <Typography color={"white"} variant="h3">{name}</Typography>
+          <Typography variant="h3">{name}</Typography>
         ) : (
           <TextField
             autoFocus
