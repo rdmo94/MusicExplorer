@@ -56,12 +56,12 @@ class TakeMeAwayStrategy(APIView):
         n_genres = json_data["n_genres"]
         n_songs_per_genre = json_data["n_songs_genre"]
         user_genres = json_data["user_genres"]
-        random_genres_chosen = stg.random_choose_n_random_unfamiliar_genres(
+        furthest_genres_chosen = stg.take_me_away_find_furthest_genres_from_genre(
             user_genres=user_genres, n_genres=n_genres)
 
         return requests.post("/spotify/generate_playlist", json=json.dumps(
             {"n_songs_genre": n_songs_per_genre,
-                "playlist_genres": random_genres_chosen}
+                "playlist_genres": furthest_genres_chosen}
         ))
 
 
