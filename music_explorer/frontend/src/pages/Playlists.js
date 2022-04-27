@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import DownloadIcon from "@mui/icons-material/Download";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Grid,
   Typography,
@@ -7,11 +9,14 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-  Box
+  Box,
+  CircularProgress,
 } from "@mui/material";
 import { useLocalStorage } from "../Util";
 
 function Playlists({ updateUserGenreMap }) {
+  const [loadingPlaylists, setLoadingPlaylists] = useState(false);
+  const [loadingGenres, setLoadingGenres] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylists, setSelectedPlaylists] = useLocalStorage(
     "selectedPlaylists",
@@ -19,8 +24,10 @@ function Playlists({ updateUserGenreMap }) {
   );
 
   useEffect(() => {
+    setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
       response.json().then((json) => {
+        setLoadingPlaylists(false);
         setPlaylists(JSON.parse(json));
       })
     );
@@ -31,6 +38,7 @@ function Playlists({ updateUserGenreMap }) {
    * @param {Map<String,String>} playlists <playlist_name, playlist_id>
    */
   function getSelectedPlaylistGenreMap(playlists) {
+    setLoadingGenres(true);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -38,6 +46,7 @@ function Playlists({ updateUserGenreMap }) {
     };
     fetch("/spotify/get_playlist_genres", requestOptions).then((response) =>
       response.json().then((json) => {
+        setLoadingGenres(false);
         updateUserGenreMap(JSON.parse(json));
         return JSON.parse(json);
       })
@@ -47,7 +56,8 @@ function Playlists({ updateUserGenreMap }) {
   function resetPlaylistGenreMap() {
     //TODO uncheck all checkboxes
     setSelectedPlaylists([]);
-    updateUserGenreMap(null);
+    updateUserGenreMap({});
+    setLoadingGenres(false);
   }
 
   const selectedPlaylistsHandler = (playlistId, isChecked) => {
@@ -61,7 +71,13 @@ function Playlists({ updateUserGenreMap }) {
   };
 
   return (
-    <Box className="main" style={{ paddingTop: 100, height: "100%"}} flexDirection={"column"} display={"flex"} flexGrow={1}>
+    <Box
+      className="main"
+      style={{ paddingTop: 100, height: "100%" }}
+      flexDirection={"column"}
+      display={"flex"}
+      flexGrow={1}
+    >
       <List style={{ overflow: "auto" }}>
         <Grid container direction="column" justifyContent="space-between">
           <Grid item padding={2}>
@@ -72,14 +88,19 @@ function Playlists({ updateUserGenreMap }) {
               My playlists
             </Typography>
 
-            {playlists == null ? (
-              <div>
-                <p>Loading...</p>
-              </div>
+            {loadingPlaylists ? (
+              <Grid
+                container
+                direction="row"
+                justifyContent="space-evenly"
+                alignItems="center"
+              >
+                <CircularProgress />
+              </Grid>
             ) : (
               <List
                 style={{
-                  maxHeight: 800,
+                  maxHeight: 900, //TODO fix to fit screen
                   overflow: "auto",
                 }}
               >
@@ -121,19 +142,25 @@ function Playlists({ updateUserGenreMap }) {
           </Grid>
         </Grid>
       </List>
-
+      
       <Grid
         container
         direction="row"
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Button
-          variant="contained"
+        <LoadingButton
+          size="small"
           onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+          endIcon={<DownloadIcon />}
+          loading={loadingGenres}
+          loadingPosition="end"
+          variant="contained"
+          disabled={selectedPlaylists.length == 0 ? true : false}
         >
-          Fetch genres
-        </Button>
+          Fetch Genres
+        </LoadingButton>
+
         <Button variant="outlined" onClick={() => resetPlaylistGenreMap()}>
           Reset
         </Button>

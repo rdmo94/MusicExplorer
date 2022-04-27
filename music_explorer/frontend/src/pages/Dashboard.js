@@ -31,7 +31,6 @@ function Dashboard() {
   const [showGraph, setShowGraph] = useLocalStorage("showGraph", null);
 
   function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
-    console.log("playlistGenreMap updated");
     setPlaylistsGenreMap(genreOccurrenceMap);
   }
 

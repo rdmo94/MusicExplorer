@@ -1,4 +1,4 @@
-import { Button, ButtonBase, Typography, Grid, CircularProgress } from "@material-ui/core";
+import { Button, ButtonBase, Typography, Grid, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import React from "react";
 import { Icon } from "@iconify/react";
