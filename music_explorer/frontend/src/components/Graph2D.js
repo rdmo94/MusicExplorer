@@ -13,8 +13,8 @@ import {
 function Graph2D(props) {
   return (
     <ForceGraph2D
-    height={1000}
-    width={1000}
+    height={100}
+    width={100}
       backgroundColor={props.properties.backgroundColor}
       enableNodeDrag={props.properties.enableNodeDrag}
       graphData={props.data}

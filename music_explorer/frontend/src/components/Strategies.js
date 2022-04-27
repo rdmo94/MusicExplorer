@@ -94,7 +94,7 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
     setNumberOfSongsPerGenre(newValue);
   };
   return (
-    <div className="main" style={{ paddingTop: 100, height: "100%" }}>
+    <Box className="main" style={{ paddingTop: 100, height: "100%"}} >
       <Typography color={"white"} variant="h3" style={{ fontWeight: "bold", paddingLeft: 25 }}>
         Strategy
       </Typography>
@@ -193,7 +193,7 @@ function Strategies({ selectedUserGenres, updateGeneratedPlaylistCallback }) {
           </Box>
         </LoadingButton>
       </Box>
-    </div>
+    </Box>
   );
 }
 

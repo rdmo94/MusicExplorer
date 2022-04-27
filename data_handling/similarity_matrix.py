@@ -13,7 +13,7 @@ def get_genre_to_index() -> dict:
     return read_json_file(os.path.join("data_handling", "data","genre_to_index.json"))
 
 
-def get_index_to_genre() -> dict:
+def get_index_to_genre():
     return read_json_file(os.path.join("data_handling", "data","index_to_genre.json"))
 
 def generate_similarity_matrix():

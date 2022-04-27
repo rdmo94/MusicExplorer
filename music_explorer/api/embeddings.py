@@ -8,6 +8,8 @@ from sklearn.manifold import TSNE
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+
+from .similarity_matrix import get_index_to_genre
 from .similarity_matrix import get_genre_to_index
 
 
@@ -103,7 +105,7 @@ def load_vector_space_dict_fron_json_file() -> dict:
         return vector_graph_dict
 
 def get_all_genres_available() -> list[str]:
-    return list(get_genre_to_index().keys())
+    return list(get_index_to_genre())
 # w2v = create_Word2Vec_model()
 # w2v.save(os.path.join(os.path.dirname(__file__), "word_2_vec_model"))
 

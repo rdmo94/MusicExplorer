@@ -208,7 +208,7 @@ def get_artists_from_folder(folder_path:str) -> list[str]:
     artists = list(set(artists))
     return artists
 
-def read_json_file(path:str) -> dict:
+def read_json_file(path:str):
      with open(path) as json_dict:
         return json.load(json_dict)
 
@@ -300,4 +300,4 @@ def genre_formatter(genre:str) -> str:
     genre = genre.replace(":", "_cln_")
     return genre
 
-normalize_genre_playlists()
+# normalize_genre_playlists()

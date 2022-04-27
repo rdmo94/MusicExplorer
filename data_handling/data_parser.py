@@ -9,7 +9,7 @@ def generate_graph_data_2d():
 
     # get points in datapoints.txt
     nodes = []
-    with open(os.path.join("data_handling/data", "datapoints.txt"), "r") as f:
+    with open(os.path.join("data_handling/data", "datapoints2D.txt"), "r") as f:
         lines = f.readlines()
         for index, line in enumerate(lines):
             line_split = line.split(",")
@@ -17,14 +17,14 @@ def generate_graph_data_2d():
 
     # go through the co-occurrence matrix to form the links
     links = []
-    with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
-        for index, line in enumerate(file.readlines()):
+    # with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
+    #     for index, line in enumerate(file.readlines()):
         
-            line_in_sections = line.split(",")
-            x = int(line_in_sections[0].replace(",", ""))
-            y= int(line_in_sections[1].replace(",", "").strip())
-            if x < len(nodes) and y < len(nodes):
-                links.append({"source" : x, "target": y})
+    #         line_in_sections = line.split(",")
+    #         x = int(line_in_sections[0].replace(",", ""))
+    #         y= int(line_in_sections[1].replace(",", "").strip())
+    #         if x < len(nodes) and y < len(nodes):
+    #             links.append({"source" : x, "target": y})
 
     graph_data = {}
     graph_data["nodes"] = nodes
@@ -41,7 +41,7 @@ def generate_graph_data_3d():
 
     # get points in datapoints.txt
     nodes = []
-    with open(os.path.join("data_handling/data", "datapoints_3d.txt"), "r") as f:
+    with open(os.path.join("data_handling/data", "datapoints3D.txt"), "r") as f:
         lines = f.readlines()
         for index, line in enumerate(lines):
             line_split = line.split(",")
@@ -49,14 +49,14 @@ def generate_graph_data_3d():
 
     # go through the co-occurrence matrix to form the links
     links = []
-    with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
-        for index, line in enumerate(file.readlines()):
+    # with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
+    #     for index, line in enumerate(file.readlines()):
         
-            line_in_sections = line.split(",")
-            x = int(line_in_sections[0].replace(",", ""))
-            y= int(line_in_sections[1].replace(",", "").strip())
-            if x < len(nodes) and y < len(nodes):
-                links.append({"source" : x, "target": y})
+    #         line_in_sections = line.split(",")
+    #         x = int(line_in_sections[0].replace(",", ""))
+    #         y= int(line_in_sections[1].replace(",", "").strip())
+    #         if x < len(nodes) and y < len(nodes):
+    #             links.append({"source" : x, "target": y})
 
     graph_data = {}
     graph_data["nodes"] = nodes

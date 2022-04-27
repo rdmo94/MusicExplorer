@@ -41,7 +41,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="container">
+    <Box className="container" height={"100%"}>
       {generatedPlaylist ? (
         <Box
           display="flex"
@@ -63,24 +63,34 @@ function Dashboard() {
         <></>
       )}
       <Grid container direction={"row"}>
-        <Grid item width={350}>
+        <Box width={350} display={"flex"} flexDirection={"column"}>
           <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
-        </Grid>
-        <Box display={"flex"} flexGrow={1}>
-          <Grid item>
+        </Box>
+
+        {/* <Box display={"flex"} flexDirection={"column"} flexGrow={1}> */}
+          <Box
+            display={"flex"}
+            flexGrow={1}
+            flexDirection={"row"}
+            justifyContent={"center"}
+          >
             {generatedPlaylist == null || showGraph ? (
               <Graph genreMap={playlistsGenreMap} />
             ) : (
-              <PlaylistScreen generatedPlaylist={generatedPlaylist} />
+              <PlaylistScreen
+                generatedPlaylist={generatedPlaylist}
+                updatePlaylistsCallback={handleUpdatePlaylistGenreMap}
+              />
             )}
-          </Grid>
-        </Box>
-        <Grid item width={350}>
+          </Box>
+        {/* </Box> */}
+
+        <Box width={350} display={"flex"} flexDirection={"column"}>
           <Strategies
             selectedUserGenres={playlistsGenreMap}
             updateGeneratedPlaylistCallback={handleGeneratedPlaylistChange}
           />
-        </Grid>
+        </Box>
       </Grid>
 
       {/* <Box display="flex">
@@ -131,7 +141,7 @@ function Dashboard() {
           }
         </Container>
       </Box> */}
-    </div>
+    </Box>
   );
 }
 

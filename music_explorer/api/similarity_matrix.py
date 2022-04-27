@@ -14,7 +14,7 @@ def get_genre_to_index() -> dict:
 
 
 def get_index_to_genre() -> dict:
-    return read_json_file(os.path.join("data_handling", "data","index_to_genre.json"))
+    return read_json_file(os.path.join("data_handling", "data","index_to_genre_word2vec.json"))
 
 def generate_similarity_matrix():
     artist_genres = read_json_file(os.path.join("data_handling", "data","artists_genres.json"))

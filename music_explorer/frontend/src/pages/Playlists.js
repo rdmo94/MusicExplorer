@@ -7,6 +7,7 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
+  Box
 } from "@mui/material";
 import { useLocalStorage } from "../Util";
 
@@ -60,7 +61,7 @@ function Playlists({ updateUserGenreMap }) {
   };
 
   return (
-    <div className="main" style={{ paddingTop: 100, height: "100%" }}>
+    <Box className="main" style={{ paddingTop: 100, height: "100%"}} flexDirection={"column"} display={"flex"} flexGrow={1}>
       <List style={{ overflow: "auto" }}>
         <Grid container direction="column" justifyContent="space-between">
           <Grid item>
@@ -98,9 +99,9 @@ function Playlists({ updateUserGenreMap }) {
                           control={
                             <Checkbox
                               sx={{ color: "white" }}
-                              defaultChecked={playlistAlreadyChecked}
+                              checked={playlistAlreadyChecked}
                               onChange={(event) =>
-                                updatePlaylistsCallback(
+                                selectedPlaylistsHandler(
                                   playlistId,
                                   event.target.checked
                                 )
@@ -137,7 +138,7 @@ function Playlists({ updateUserGenreMap }) {
           Reset
         </Button>
       </Grid>
-    </div>
+    </Box>
   );
 }
 

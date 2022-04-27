@@ -3,6 +3,7 @@ import Graph3D from "../components/Graph3D";
 import Graph2D from "../components/Graph2D";
 import GraphColorTest from "../components/GraphColorTest";
 import Grid from "@mui/material/Grid";
+import { Box } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
@@ -71,11 +72,11 @@ function Graph({genreMap}) {
   }
 
   return (
-    <div className="main">
+    <Box className="container" style={{width: "100%"}} >
       <Typography variant={"h3"}>{headline}</Typography>
       <Typography variant={"h4"}>Graph properties</Typography>
 
-      <Grid container direction="row" justifyContent={"space-evenly"} minHeight={150}>
+      <Grid container direction="row" justifyContent={"space-evenly"} >
         <Grid item>
           <InputLabel id="nodeAutoColorBy">nodeAutoColorBy</InputLabel>
           <Select
@@ -144,7 +145,7 @@ function Graph({genreMap}) {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item>{graph}</Grid>
       </Grid>
-    </div>
+    </Box>
   );
 }
 
