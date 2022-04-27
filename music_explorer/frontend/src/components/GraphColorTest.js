@@ -21,9 +21,23 @@ import {
  * @returns 
  */
 function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
-  
-  //console.log("userGenreMap", userGenreMap);
-  //console.log("data", data);
+  var strategy_number = undefined
+  var strategy_genres = [] //clean array of genres in strategy
+  var user_genres = [] //clean array of genres in userGenreMap
+
+  if (strategy){
+    //console.log(strategy)
+    strategy_number = Object.keys(strategy)[0]
+    //console.log("strategy_number", strategy_number)
+    strategy_genres = strategy[strategy_number]
+    //console.log("strategy_genres", strategy_genres)
+  } 
+
+  if (userGenreMap){
+    user_genres = Object.keys(userGenreMap)
+  }
+
+
 
   //fix genre names in data
 
@@ -31,8 +45,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
 
   //fix genre names in strategy
   
-  var strategy_number = undefined
-  var strategy_genres = []
+
 
   /** add list of link to data **/
   if (links && data){
@@ -68,34 +81,58 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
     return newLinks
   }
 
+  function reorderData(){
+    if (data){
+      if (strategy_genres){
+        for (var i = 0; i<strategy_genres.length; i++){
+          var strategy_genre = strategy_genres[i]
+          var indexOfGenre = getNodeIndexOfGenre(strategy_genre)
+          moveIndexToEndOfNodes(indexOfGenre)
+        }
+      }
+      if (user_genres){
+        for (var i = 0; i<user_genres.length; i++){
+          var user_genre = user_genres[i]
+          var indexOfGenre = getNodeIndexOfGenre(user_genre)
+          moveIndexToEndOfNodes(indexOfGenre)
+        }
+      }
+    }
+    
+  }
+
+  function getNodeIndexOfGenre(genre){
+    for (var i = 0; i<data.nodes.length; i++){
+      if (data.nodes[i].name === genre){
+        return i
+      }
+    }
+    console.log("could not find index of genre " + genre)
+  }
+
+  /**
+   * Moves index of node to end of nodes = rendered last
+   * @param {Integer} index 
+   */
+  function moveIndexToEndOfNodes(index){
+    data.nodes.push(data.nodes.splice(index, 1)[0]);
+  }
+
+  reorderData()
+
   
 
-  if (strategy){
-    //console.log(strategy)
-    strategy_number = Object.keys(strategy)[0]
-    //console.log("strategy_number", strategy_number)
-    strategy_genres = strategy[strategy_number]
-    //console.log("strategy_genres", strategy_genres)
-  }
-
-  //Genres found in selected user playlists
-  var userGenres = {
-    pop: 2,
-    rock: 5,
-    techno: 3,
-  };
-
-  for (var key in userGenreMap) {
-    var value = userGenreMap[key];
-    // console.log(key, value)
-  }
+  
 
   function getNodeVal(node) {
+    const max_size = 4
+    const min_size = 1
     if (userGenreMap) {
       if (node.name in userGenreMap) {
         var knownGenreSize = userGenreMap[node.name] / 8;
-        if (knownGenreSize > 1) return knownGenreSize;
-        else return 1;
+        if (knownGenreSize > max_size) return max_size;
+        else if (knownGenreSize > min_size) return knownGenreSize;
+        else return min_size;
       } else {
         return 1;
       }
@@ -114,10 +151,10 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
   }
 
   function getNodeColor(node) {
-    if (node.name in userGenreMap) {
+    if (userGenreMap && node.name in userGenreMap) {
       return "green";
     } 
-    else if (strategy_genres.includes(node.name)) {
+    else if (strategy_genres && strategy_genres.includes(node.name)) {
       //console.log(node.name + " in " + strategy_genres)
       return "blue";
     } 

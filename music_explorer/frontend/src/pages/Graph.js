@@ -26,7 +26,7 @@ function Graph({genreMap}) {
   const graphRef = useRef(null);
 
   useEffect(() => {
-    fetch("static/graph_data_2d_updated_no_links.json")
+    fetch("static/graph_data_2d.json")
       .then((response) => response.json())
       .then((data) => {
         //TODO check if data is ok
