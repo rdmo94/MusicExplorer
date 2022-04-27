@@ -15,9 +15,9 @@ import {
  * @param {object} param 
  * @param {object} param.data
  * @param {object} param.properties graph properties
- * @param {Map<string,number>} param.userGenreMap Map<genre,occurrence>
- * @param {Map<number,list<string>>} param.strategy Map<strategy_number,list<genres>>
- * @param {List<Object>} param.links List<{'source': genre, 'target': genre}>
+ * @param {Map<String,number>} param.userGenreMap Map<genre,occurrence>
+ * @param {Map<number,list<String>>} param.strategy Map<strategy_number,list<genres>>
+ * @param {List<String>} param.links List<genres>
  * @returns 
  */
 function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
@@ -50,12 +50,23 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
   /** add list of link to data **/
   if (links && data){
     //console.log("links", links)
-    var genreIdLinks = translate_genre_links_to_node_id_links(links)
+    var graphReadableLinks = convert_genre_list_to_graph_links(links)
+    var genreIdLinks = translate_genre_links_to_node_id_links(graphReadableLinks)
     //console.log("genre links", links)
     //console.log("genreIdLinks", genreIdLinks)
     //console.log("data", data)
     data.links = genreIdLinks
     //console.log("new data", data)
+  }
+
+  function convert_genre_list_to_graph_links(genreList){
+    var graphReadableLinks = []
+    for (var i = 0; i < genreList.length - 1; i++){
+      var link = {"source": genreList[i], "target":genreList[i+1]}
+      graphReadableLinks.push(link)
+    }
+    //console.log(graphReadableLinks)
+    return graphReadableLinks
   }
 
   function translate_genre_links_to_node_id_links(links){
