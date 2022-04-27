@@ -73,8 +73,11 @@ function Graph({genreMap}) {
 
   return (
     <Box className="container" style={{width: "100%"}} >
-      <Typography variant={"h3"}>{headline}</Typography>
-      <Typography variant={"h4"}>Graph properties</Typography>
+      <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+        <Typography variant={"h3"} style={{fontWeight: "bold", color: "white"}}>{headline}</Typography>
+        <Typography variant={"h4"} style={{color: "white"}}>Graph properties</Typography>
+
+      </Box>
 
       <Grid container direction="row" justifyContent={"space-evenly"} >
         <Grid item>
@@ -142,9 +145,9 @@ function Graph({genreMap}) {
       <Grid container spacing={2}>
         
       </Grid>
-      <Grid container justifyContent="center" alignItems="center">
-        <Grid item>{graph}</Grid>
-      </Grid>
+      <Box height={"80%"} display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"} flexGrow={1} paddingTop={5}>
+       {graph}
+      </Box>
     </Box>
   );
 }

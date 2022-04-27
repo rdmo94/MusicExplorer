@@ -113,7 +113,6 @@ function PlaylistScreen({ generatedPlaylist }) {
   }
 
   return (
-    <List sx={{ overflow: "auto", height: 100 }}>
       <Grid
         container
         direction="column"
@@ -239,7 +238,6 @@ function PlaylistScreen({ generatedPlaylist }) {
           </Typography>
         )}
       </Grid>
-    </List>
   );
 }
 

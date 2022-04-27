@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { Button, Grid, Typography, Box } from "@material-ui/core";
+import { Button, Grid, Typography, Box, List } from "@material-ui/core";
 import { millisToMinutesAndSeconds } from "../Util";
 import { primaryGrey } from "../Colors";
 import Song from "../models/Song.js";
@@ -46,9 +46,12 @@ function SongsContainer({ tracks, playSongCallback }) {
                 /*console.log(track)*/
               }
               <Typography style={{ color: "white" }}>
+                <List style={{maxHeight: 100, overflow: "auto"}}>
+
                 {track.artists.map((artist, index) =>
                   index + 1 != track.artists.length ? artist + ", " : artist
                 )}
+                </List>
               </Typography>
             </Grid>
             <Grid item xs>

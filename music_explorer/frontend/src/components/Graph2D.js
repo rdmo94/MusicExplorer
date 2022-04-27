@@ -1,6 +1,7 @@
 import React from "react";
 import SpriteText from "three-spritetext";
 import { graph_data_prettyfier } from "../Util";
+import { useEffect, useState } from "react";
 
 import {
   ForceGraph2D,
@@ -10,11 +11,25 @@ import {
   GraphData,
 } from "react-force-graph";
 
+
 function Graph2D(props) {
+  const [graphHeight, setGraphHeight] = useState();
+  const [graphWidth, setGraphWidth] = useState();
+  
+  useEffect(() => {
+    let availableSizeElement = document.getElementById("graph");
+    if(availableSizeElement) {
+        
+        setGraphHeight(availableSizeElement.clientHeight/1.5);
+        setGraphWidth(availableSizeElement.clientWidth/1.8);
+
+    }
+  }, []);
   return (
-    <ForceGraph2D
-    height={100}
-    width={100}
+    <ForceGraph2D 
+    height={graphHeight}
+    width={graphWidth}
+    
       backgroundColor={props.properties.backgroundColor}
       enableNodeDrag={props.properties.enableNodeDrag}
       graphData={props.data}

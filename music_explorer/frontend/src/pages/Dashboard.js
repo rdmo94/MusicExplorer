@@ -41,7 +41,7 @@ function Dashboard() {
   }
 
   return (
-    <Box className="container" height={"100%"}>
+    <Box className="container">
       {generatedPlaylist ? (
         <Box
           display="flex"
@@ -62,7 +62,7 @@ function Dashboard() {
       ) : (
         <></>
       )}
-      <Grid container direction={"row"}>
+      <Grid container direction={"row"} height={"100%"}>
         <Box width={350} display={"flex"} flexDirection={"column"}>
           <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
         </Box>
@@ -73,6 +73,7 @@ function Dashboard() {
             flexGrow={1}
             flexDirection={"row"}
             justifyContent={"center"}
+            id={"graph"}
           >
             {generatedPlaylist == null || showGraph ? (
               <Graph genreMap={playlistsGenreMap} />

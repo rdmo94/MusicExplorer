@@ -12,8 +12,16 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}" />
 
     <body class="container">
+        <script>
+            $(document).ready(function () {
+                var tHeight = $(window.top).height();
+                alert("Visible screen height is " + tHeight + "px");
+                $("#graph").height(tHeight);
+
+            });
+        </script>
         <div id="main" class="container">
-            <div id="app"/>
+            <div id="app" class="container"/>
             </div>
         </div>
         <script src="{% static "frontend/main.js" %}"></script>

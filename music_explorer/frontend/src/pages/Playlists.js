@@ -64,7 +64,7 @@ function Playlists({ updateUserGenreMap }) {
     <Box className="main" style={{ paddingTop: 100, height: "100%"}} flexDirection={"column"} display={"flex"} flexGrow={1}>
       <List style={{ overflow: "auto" }}>
         <Grid container direction="column" justifyContent="space-between">
-          <Grid item>
+          <Grid item padding={2}>
             <Typography
               variant="h3"
               style={{ color: "white", fontWeight: "bold" }}
@@ -83,7 +83,7 @@ function Playlists({ updateUserGenreMap }) {
                   overflow: "auto",
                 }}
               >
-                <Grid container direction="column">
+                <Grid container direction="column" paddingLeft={2}>
                   {playlists.map((playlist) => {
                     let playlistName = Object.values(playlist)[0];
                     let playlistId = Object.keys(playlist)[0];
