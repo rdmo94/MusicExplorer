@@ -87,7 +87,7 @@ class SmoothTransitionRandomStrategy(APIView):
         path_tracks = select_n_random_tracks(n_songs=n_songs_per_genre, chosen_genres=path_genres)
         playlist = []
         genres = []
-        id = RANDOM
+        id = SMOOTH_T
         for genre, tracks in path_tracks.items():
             genres.append(genre)
             for track in tracks:
