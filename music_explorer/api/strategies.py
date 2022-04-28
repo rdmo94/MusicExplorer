@@ -1,8 +1,10 @@
+import os
 import unidecode
 import random
 from .embeddings import load_vector_space_from_file, unpickle_pickle, get_all_genres_available
 from collections import defaultdict
-
+from .graph_util import load_gml_graph
+import networkx as nx
 
 def take_me_away_find_furthest_genres_from_genre(user_genres: list[str], n_genres=2) -> list[str]:
     '''Finds the furthest n genres for each of the user's genre and adds them to a dict and then returns the furthest n genres from that collection.
@@ -65,8 +67,12 @@ def random_choose_n_random_unfamiliar_genres(user_genres, n_genres=2) -> list[st
     return list(unique_n_random_unfamiliar_genres)
 
 
-def smooth_transition_find_path_from_familiar_to_unfamiliar_genre():
+def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, target_genre, n_genres=2):
     # Load graph
+    G = load_gml_graph(os.path.join(os.path.dirname(__file__), "data", "networkx_graph.gml"))
+
     # Find path from source to target genre
+    shortest_path = nx.shortest_path(G, source=source_genre, target=target_genre)
+
     # Return list of genres -- the path
-    raise NotImplementedError("Implement this")
+    return shortest_path

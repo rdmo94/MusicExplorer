@@ -11,7 +11,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
 import { Typography } from "@material-ui/core";
 
-function Graph({genreMap}) {
+function Graph({genreMap, strategyData}) {
   const [data, setData] = useState();
   const [graphType, setGraphType] = useLocalStorage("graphType", "");
   const [localGraphProperties, setLocalGraphProperties] = useLocalStorage(
@@ -63,8 +63,8 @@ function Graph({genreMap}) {
     data={data} 
     properties={localGraphProperties} 
     userGenreMap={genreMap} 
-    strategy={{0:["canadian_spc_country", "texas_spc_country"]}}
-    links={["canadian_spc_country", "texas_spc_country", "red_spc_dirt", "jam_spc_band"]}
+    strategy={strategyData}
+    links={Object.keys(strategyData)[0] == 3 ? Object.keys(strategyData)[1] : ["canadian_spc_country", "texas_spc_country", "red_spc_dirt", "jam_spc_band"]}
   />;
   }
 
