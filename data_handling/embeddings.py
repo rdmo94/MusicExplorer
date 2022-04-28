@@ -50,6 +50,7 @@ def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
     with open(os.path.join(script_dir, "data/index_to_genre_word2vec.json")) as file:
         data = json.load(file)
         for word in data:
+            ## TODO: Make dict of format { "genre" : { "innerGenre" : distance, ... } ... }
             distances = []
             for innerWord in data:
                 distances.append({innerWord : word2vec_model.wv.distance(word, innerWord)})

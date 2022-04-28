@@ -28,16 +28,30 @@ function Dashboard() {
     null
   );
 
+  const [strategyGenres, setStrategyGenres] = useLocalStorage(
+    "strategyOutput",
+    null
+  );
+
+  const [latestStrategy, setLatestStrategy] = useLocalStorage(
+    "latestStrategy",
+    null
+  );
+
   const [showGraph, setShowGraph] = useLocalStorage("showGraph", null);
 
   function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
     setPlaylistsGenreMap(genreOccurrenceMap);
   }
 
-  function handleGeneratedPlaylistChange(generatedPlaylist) {
-    setGeneratedPlaylist(generatedPlaylist);
+  function handleStrategyOutputChange(strategyOutput) {
+    setGeneratedPlaylist(strategyOutput["playlist"]);
+    setStrategyGenres(strategyOutput["genres"]);
+    setLatestStrategy(strategyOutput["id"]);
     setShowGraph(false);
   }
+
+  
 
   return (
     <Box className="container">
@@ -75,7 +89,7 @@ function Dashboard() {
             id={"graph"}
           >
             {generatedPlaylist == null || showGraph ? (
-              <Graph genreMap={playlistsGenreMap} />
+              <Graph genreMap={playlistsGenreMap} strategyData={{latestStrategy : strategyGenres}}/>
             ) : (
               <PlaylistScreen
                 generatedPlaylist={generatedPlaylist}
@@ -88,7 +102,7 @@ function Dashboard() {
         <Box width={350} display={"flex"} flexDirection={"column"}>
           <Strategies
             selectedUserGenres={playlistsGenreMap}
-            updateGeneratedPlaylistCallback={handleGeneratedPlaylistChange}
+            updateStrategyOutputCallback={handleStrategyOutputChange}
           />
         </Box>
       </Grid>

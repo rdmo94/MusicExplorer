@@ -1,6 +1,7 @@
 import React from "react";
 import SpriteText from "three-spritetext";
 import { graph_data_prettyfier, replace_special_characters } from "../Util";
+import { useState, useEffect } from "react";
 
 import {
   ForceGraph2D,
@@ -174,10 +175,23 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
     }
   }
 
+  const [graphHeight, setGraphHeight] = useState();
+  const [graphWidth, setGraphWidth] = useState();
+  
+  useEffect(() => {
+    let availableSizeElement = document.getElementById("graph");
+    if(availableSizeElement) {
+        
+        setGraphHeight(availableSizeElement.clientHeight/1.5);
+        setGraphWidth(availableSizeElement.clientWidth/1.8);
+
+    }
+  }, []);
+
   return (
     <ForceGraph2D
-      height={1000}
-      width={1000}
+      height={graphHeight}
+      width={graphWidth}
       backgroundColor={properties.backgroundColor}
       enableNodeDrag={properties.enableNodeDrag}
       
