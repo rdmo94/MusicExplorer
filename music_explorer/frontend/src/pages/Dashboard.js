@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Box, Grid, Button } from "@mui/material";
 import Strategies from "../components/Strategies";
 import Graph from "./Graph";
@@ -89,7 +89,7 @@ function Dashboard() {
             id={"graph"}
           >
             {generatedPlaylist == null || showGraph ? (
-              <Graph genreMap={playlistsGenreMap} strategyData={{latestStrategy : strategyGenres}}/>
+              <Graph genreMap={playlistsGenreMap} strategyData={{3 : strategyGenres}}/>
             ) : (
               <PlaylistScreen
                 generatedPlaylist={generatedPlaylist}

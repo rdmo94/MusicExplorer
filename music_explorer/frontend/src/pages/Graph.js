@@ -64,8 +64,9 @@ function Graph({genreMap, strategyData}) {
     properties={localGraphProperties} 
     userGenreMap={genreMap} 
     strategy={strategyData}
-    links={Object.keys(strategyData)[0] == 3 ? Object.keys(strategyData)[1] : ["canadian_spc_country", "texas_spc_country", "red_spc_dirt", "jam_spc_band"]}
-  />;
+    links={Object.keys(strategyData)[0] == 3 ? Object.values(strategyData)[1] : ["canadian_spc_country", "texas_spc_country", "red_spc_dirt", "jam_spc_band"]}
+    />;
+    console.log(strategyData);
   }
 
   return (

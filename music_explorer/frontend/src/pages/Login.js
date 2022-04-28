@@ -17,11 +17,11 @@ function Login() {
         <Grid item>
           <Typography
             variant="h3"
-            style={{ fontWeight: "bold", textAlign: "center" }}
+            style={{ fontWeight: "bold", textAlign: "center", color: "white" }}
           >
             Welcome to MusicXplorer!
           </Typography>
-          <Typography variant="h4">
+          <Typography variant="h4" style={{color: "white"}}>
             Sign in with your Spotify account to start exploring.
           </Typography>
         </Grid>
