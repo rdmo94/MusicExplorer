@@ -26,11 +26,11 @@ export default class App extends Component {
         {/* <NavBar /> */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/graph" element={<Graph />} />
+          {/* <Route path="/graph" element={<Graph />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/playlists" element={<Playlists />} />
           <Route path="/playlist" element={<PlaylistScreen />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} /> */}
         </Routes>
         {/* <Routes> */}
         

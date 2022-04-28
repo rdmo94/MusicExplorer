@@ -37,11 +37,14 @@ class CreatePlaylistView(APIView):
         if current_user_response.ok:
             user_id = int(current_user_response.json().get("id"))
             sp = Spotify(auth=user_tokens.access_token)
+            new_playlist_name = request.data["name"]
+            if new_playlist_name is None:
+                new_playlist_name = "MusicXplorer" + str(randint(0, MAXINT))
             new_playlist = sp.user_playlist_create(
-                user=user_id, name="MusicExplorer" + str(randint(0, MAXINT)))
+                user=user_id, name=new_playlist_name)
             tracks_to_add = []
             for track in request.data["playlistTracks"]:
-                tracks_to_add.append(track["uri"])
+                tracks_to_add.append(track["id"])
             add_response = sp.playlist_add_items(
                 playlist_id=new_playlist["id"], items=tracks_to_add)
             if add_response is not None:

@@ -85,7 +85,7 @@ def filter_spotify_playlist_tracks(tracks: dict):
         for artist in track["artists"]:
             filtered_track_artists.append({"id": artist["id"]})
         filtered_tracks.append({"name": track["name"], "id": track["id"],
-                               "duration": track["duration_ms"], "artists": filtered_track_artists})
+                               "duration": track["duration_ms"], "artists": filtered_track_artists, "image" : track["album"]["images"][0]["url"]})
     return filtered_tracks
 
 
@@ -93,6 +93,7 @@ def filter_spotify_track(track):
     print("")
     filtered_track = {}
     filtered_track["name"] = track["name"]
+    filtered_track["image"] = track["album"]["images"][0]["url"]
     filtered_track["id"] = track["id"]
     filtered_track["duration"] = track["duration_ms"]
     filtered_track["artists"] = list(map(lambda tr: tr["name"], track["artists"]))

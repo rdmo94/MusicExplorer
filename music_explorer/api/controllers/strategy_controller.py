@@ -80,7 +80,6 @@ class SmoothTransitionRandomStrategy(APIView):
         json_data = request.data
         n_genres = json_data["n_genres"]
         n_songs_per_genre = json_data["n_songs_genre"]
-        user_genres = json_data["user_genres"]
         source_genre = json_data["source_genre"]
         target_genre = json_data["target_genre"]
         path_genres = stg.smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre=source_genre, target_genre=target_genre)
