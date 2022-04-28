@@ -1,5 +1,5 @@
 import React from "react";
-import { Edit, Done } from "@material-ui/icons";
+import { EditOutlined, Done } from "@material-ui/icons";
 import {
   Grid,
   Typography,
@@ -18,12 +18,20 @@ function PlaylistHeader(props) {
   const [isNameChangeLoading, setIsNameChangeLoading] = useState(false);
 
   return (
-    <Grid container direction="row" justifyContent="space-between">
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+    >
       <Grid item>
         {!isNameFocused ? (
-          <Typography variant="h3">{name}</Typography>
+          <Typography variant="h3" style={{ color: "white" }}>
+            {name}
+          </Typography>
         ) : (
           <TextField
+            style={{input: { color: "white"}}}
             autoFocus
             // inputProps={{ className: classes.name }}
             value={name}
@@ -39,15 +47,17 @@ function PlaylistHeader(props) {
             variant="contained"
             style={{ borderRadius: 200 }}
             onClick={() => {
-              props.editCallback().then((_) => {setIsNameChangeLoading(false)});
+              props.editCallback(name);
+              setIsNameChangeLoading(false);
               setIsNamedFocused(false);
             }}
           >
             {isNameChangeLoading ? <CircularProgress size={20} /> : <Done />}
           </Button>
         ) : (
-          <Edit
-            sx={{ color: "red" }}
+          <EditOutlined
+          
+            style={{ color: "white", cursor: "pointer", padding: 20 }}
             onClick={() => {
               setIsNamedFocused(true);
             }}

@@ -13,6 +13,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useLocalStorage } from "../Util";
+import { primaryGreen } from "../Colors";
 
 function Playlists({ updateUserGenreMap }) {
   const [loadingPlaylists, setLoadingPlaylists] = useState(false);
@@ -156,12 +157,13 @@ function Playlists({ updateUserGenreMap }) {
           loading={loadingGenres}
           loadingPosition="end"
           variant="contained"
+          style={{borderRadius: 200, backgroundColor: primaryGreen}}
           disabled={selectedPlaylists.length == 0 ? true : false}
         >
           Fetch Genres
         </LoadingButton>
 
-        <Button variant="outlined" onClick={() => resetPlaylistGenreMap()}>
+        <Button variant="outlined" style={{borderRadius: 200, borderColor: primaryGreen, color: primaryGreen}} onClick={() => resetPlaylistGenreMap()}>
           Reset
         </Button>
       </Grid>

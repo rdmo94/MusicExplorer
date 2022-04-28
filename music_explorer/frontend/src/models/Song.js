@@ -1,11 +1,12 @@
 class Song {
-    constructor(id, title, artists, genre, duration, uri) {
+    constructor(id, title, artists, genre, duration, uri, image) {
         this.id = id;
         this.title = title;
         this.artists = artists;
         this.genre = genre;
         this.duration = duration;
         this.uri = uri;
+        this.image = image
     }
     /**
      * 
@@ -20,6 +21,7 @@ class Song {
         song.artists = jsonObject["artists"];
         song.genre = genre;
         song.duration = jsonObject["duration"];
+        song.image = jsonObject["image"]
         return song;
     }
 }

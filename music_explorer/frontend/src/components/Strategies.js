@@ -22,6 +22,7 @@ import {
 } from "../Colors";
 import Strategy from "../models/Strategy";
 import { useLocalStorage } from "../Util";
+import { makeStyles } from "@mui/styles";
 
 /**
  *
@@ -57,25 +58,28 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
       "st"
     ),
   ];
-  const [strategy, setStrategy] = useLocalStorage("", null);
-  const [numberOfSongsPerGenre, setNumberOfSongsPerGenre] = useState(2);
-  const [numberOfGenresToExplore, setNumberOfGenreToExplore] = useState(10);
+  const [strategy, setStrategy] = useLocalStorage("selectedStrategy", null);
+  const [numberOfSongsPerGenre, setNumberOfSongsPerGenre] = useState(1);
+  const [numberOfGenresToExplore, setNumberOfGenreToExplore] = useState(1);
   const [userGenres, setUserGenres] = useState(selectedUserGenres);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingButtonDisabled, setIsLoadingButtonDisabled] = useState(true);
   const [sourceGenre, setSourceGenre] = useState();
   const [targetGenre, setTargetGenre] = useState();
   const [allGenres, setAllGenres] = useState();
 
   useEffect(() => {
+    console.log("rendering");
     fetch("api/get_all_genres").then((response) =>
-    response.json().then((json) => setAllGenres(JSON.parse(json)))
+      response.json().then((json) => setAllGenres(JSON.parse(json)))
     );
-    
+
     if (selectedUserGenres == null) {
       setUserGenres([]);
     } else {
       setUserGenres(selectedUserGenres);
     }
+    console.log("done rendering");
   }, []);
 
   const executeStrategy = () => {
@@ -111,19 +115,36 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   };
 
   const handleSourceChange = (event) => {
+    if (targetGenre) {
+      setIsLoadingButtonDisabled(false);
+    }
     setSourceGenre(event.target.value);
   };
 
   const handleTargetChange = (event) => {
+    if (sourceGenre) {
+      setIsLoadingButtonDisabled(false);
+    }
     setTargetGenre(event.target.value);
   };
 
   const handleChangeSelect = (event) => {
+    console.log("sourceGenre", sourceGenre, "targetGenre", targetGenre);
+
+    if (event.target.value != 3 || sourceGenre !== undefined && targetGenre !== undefined) {
+      setIsLoadingButtonDisabled(false);
+    } else {
+      setIsLoadingButtonDisabled(true);
+    } 
+
     setStrategy(event.target.value);
   };
 
-  const handleChangeSlider = (event, newValue) => {
+  const handleChangeSongsSlider = (event, newValue) => {
     setNumberOfSongsPerGenre(newValue);
+  };
+  const handleChangeGenresSlider = (event, newValue) => {
+    setNumberOfGenreToExplore(newValue);
   };
   return (
     <Box className="main" style={{ paddingTop: 100, height: "100%" }}>
@@ -151,11 +172,11 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
               Select strategy...
             </InputLabel>
             <Select
-              sx={{ color: "white" }}
+              sx={{ borderColor: "white", color: "white" }}
               //defaultValue={""}
               labelId="label-id"
               id="selector"
-              value={strategy ? strategy : ""}
+              value={strategy != null ? strategy : ""}
               label="Select strategy..."
               onChange={handleChangeSelect}
             >
@@ -165,7 +186,7 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
               <MenuItem value={3}>Smooth transition</MenuItem>
             </Select>
           </FormControl>
-          {userGenres != null && strategy != null && strategies[strategy].id == 3 ? (
+          {userGenres != null && strategy != null ? (
             <Box
               padding={2}
               display={"flex"}
@@ -173,94 +194,118 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
               justifyContent={"space-evenly"}
               alignItems={"center"}
             >
-              <Typography padding={2} fontStyle={{ color: "white" }}>
-                Please select one of your own genres as a starting point and
-                which unknown genre you would like to end up at:
-              </Typography>
-              <FormControl
-                sx={{
-                  color: "white",
-                  borderColor: "white",
-                  minWidth: 300,
-                  padding: 2,
-                }}
-              >
-                <InputLabel id="label-id1" sx={{ color: "white" }}>
-                  Select starting genre...
-                </InputLabel>
-                <Select
-                  sx={{ color: "white" }}
-                  //defaultValue={""}
-                  labelId="label-id1"
-                  id="selector"
-                  label="Select starting genre..."
-                  value={sourceGenre ? sourceGenre : ""}
-                  onChange={handleSourceChange}
-                >
-                  {Object.keys(userGenres).map((genre) => {
-                    return <MenuItem value={genre}>{genre}</MenuItem>;
-                  })}
-                </Select>
-              </FormControl>
+              {strategies[strategy].id == 3 ? (
+                <div>
+                  <Typography padding={2} fontStyle={{ color: "white" }}>
+                    Please select one of your own genres as a starting point and
+                    which unknown genre you would like to end up at:
+                  </Typography>
+                  <FormControl
+                    sx={{
+                      color: "white",
+                      borderColor: "white",
+                      minWidth: 300,
+                      padding: 2,
+                    }}
+                  >
+                    <InputLabel id="label-id1" sx={{ color: "white" }}>
+                      Select starting genre...
+                    </InputLabel>
+                    <Select
+                      sx={{ color: "white" }}
+                      //defaultValue={""}
+                      labelId="label-id1"
+                      id="selector"
+                      label="Select starting genre..."
+                      value={sourceGenre ? sourceGenre : ""}
+                      onChange={handleSourceChange}
+                    >
+                      {Object.keys(userGenres).map((genre) => {
+                        return <MenuItem value={genre}>{genre}</MenuItem>;
+                      })}
+                    </Select>
+                  </FormControl>
 
-              <FormControl sx={{ color: "white", minWidth: 300, padding: 2 }}>
-                <InputLabel id="label-id" sx={{ color: "white" }}>
-                  Select destination genre...
-                </InputLabel>
-                <Select
-                  sx={{ color: "white" }}
-                  //defaultValue={""}
-                  labelId="label-id"
-                  id="selector"
-                  label="Select destination genre..."
-                  value={targetGenre ? targetGenre : ""}
-                  onChange={handleTargetChange}
-                >
-                  {allGenres ? (
-                    allGenres.map((genre) => (
-                      <MenuItem value={genre}>{genre}</MenuItem>
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                </Select>
-              </FormControl>
+                  <FormControl
+                    sx={{ color: "white", minWidth: 300, padding: 2 }}
+                  >
+                    <InputLabel id="label-id" sx={{ color: "white" }}>
+                      Select destination genre...
+                    </InputLabel>
+                    <Select
+                      sx={{ color: "white" }}
+                      //defaultValue={""}
+                      labelId="label-id"
+                      id="selector"
+                      label="Select destination genre..."
+                      value={targetGenre ? targetGenre : ""}
+                      onChange={handleTargetChange}
+                    >
+                      {allGenres ? (
+                        allGenres.map((genre) => (
+                          <MenuItem value={genre}>{genre}</MenuItem>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </Select>
+                  </FormControl>
+                </div>
+              ) : (
+                <></>
+              )}
+              <Typography color={"white"} width={300}>
+                {"Number of genres collected: " +
+                  Object.keys(selectedUserGenres).length}
+              </Typography>
+              <Box width={300} flex="center" paddingTop={5}>
+                <Typography color={"white"} id="songsSliderLabel" gutterBottom>
+                  Number of wanted songs per genre: {numberOfSongsPerGenre}
+                </Typography>
+                <Slider
+                  sx={{ color: primaryGreen }}
+                  size="small"
+                  defaultValue={2}
+                  value={numberOfSongsPerGenre}
+                  aria-label="Small"
+                  valueLabelDisplay="auto"
+                  min={1}
+                  max={10}
+                  label="songsSliderLabel"
+                  onChange={handleChangeSongsSlider}
+                  aria-labelledby="songsSliderLabel"
+                />
+
+                <Typography color={"white"} id="genresSliderLabel" gutterBottom>
+                  Number of wanted new genres to explore:{" "}
+                  {numberOfGenresToExplore}
+                </Typography>
+                <Slider
+                  sx={{ color: primaryGreen }}
+                  size="small"
+                  defaultValue={2}
+                  value={numberOfGenresToExplore}
+                  aria-label="Small"
+                  valueLabelDisplay="auto"
+                  min={1}
+                  max={50}
+                  label="genresSliderLabel"
+                  onChange={handleChangeGenresSlider}
+                  aria-labelledby="genresSliderLabel"
+                />
+                <div>
+                  <Typography color={"white"} sx={{ fontWeight: "bold" }}>
+                    Description
+                  </Typography>
+                  <Typography color={"white"}>
+                    {strategies[strategy].description}
+                  </Typography>
+                </div>
+              </Box>
             </Box>
           ) : (
             <></>
           )}
-          <Typography color={"white"} width={300}>
-            {"Number of genres collected: " +
-              Object.keys(selectedUserGenres).length}
-          </Typography>
-          <Box width={300} flex="center" paddingTop={5}>
-            <Typography color={"white"} id="slider-id" gutterBottom>
-              Number of wanted songs per genre: {numberOfSongsPerGenre}
-            </Typography>
-            <Slider
-              sx={{ color: primaryGreen }}
-              size="small"
-              defaultValue={2}
-              aria-label="Small"
-              valueLabelDisplay="auto"
-              min={1}
-              max={10}
-              onChange={handleChangeSlider}
-              aria-labelledby="slider-id"
-            />
-            {strategy != null ? (
-              <div>
-                <Typography color={"white"} sx={{ fontWeight: "bold" }}>
-                  Description
-                </Typography>
-                <Typography color={"white"}>
-                  {strategies[strategy].description}
-                </Typography>
-              </div>
-            ) : (
-              <></>
-            )}
-          </Box>
         </Box>
       )}
 
@@ -273,19 +318,18 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
         }}
       >
         <LoadingButton
-          disabled={strategy == null || Object.keys(userGenres).length == 0}
+          disabled={isLoadingButtonDisabled}
           loading={isLoading}
           variant="contained"
           style={{
             width: 200,
             height: 75,
             borderRadius: 200,
-            backgroundColor:
-              strategy == null || Object.keys(userGenres).length == 0
-                ? "#FFFFF"
-                : isLoading
-                ? primaryGreyLight
-                : primaryGreen,
+            backgroundColor: isLoadingButtonDisabled
+              ? primaryGreyDark
+              : isLoading
+              ? primaryGreyDark
+              : primaryGreen,
           }}
           onClick={executeStrategy}
         >
@@ -299,21 +343,13 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
             ) : (
               <div>
                 <Typography
-                  color={
-                    strategy == null || Object.keys(userGenres).length == 0
-                      ? primaryGreyDark
-                      : "white"
-                  }
+                  color={isLoadingButtonDisabled ? primaryGreyLight : "white"}
                   sx={{ fontWeight: "bold" }}
                 >
                   GENERATE
                 </Typography>
                 <Typography
-                  color={
-                    strategy == null || Object.keys(userGenres).length == 0
-                      ? primaryGreyDark
-                      : "white"
-                  }
+                  color={isLoadingButtonDisabled ? primaryGreyLight : "white"}
                   sx={{ fontWeight: "bold" }}
                 >
                   PLAYLIST
