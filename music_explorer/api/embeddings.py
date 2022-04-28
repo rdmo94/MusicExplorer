@@ -8,7 +8,7 @@ from sklearn.manifold import TSNE
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-
+import pandas as pd
 from .similarity_matrix import get_index_to_genre
 from .similarity_matrix import get_genre_to_index
 
@@ -98,11 +98,10 @@ def generate_datapoints(n_components=2):
 def load_vector_space_from_file(filename="word_2_vec_model") -> gensim.models.Word2Vec:
     return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), filename))
 
-def load_vector_space_dict_fron_json_file() -> dict:
-    script_dir = os.path.dirname(__file__)
-    with open(os.path.join(script_dir, "vector_graph.json")) as in_file:
-        vector_graph_dict = json.load(in_file)
-        return vector_graph_dict
+def unpickle_pickle() -> pd.DataFrame:
+    unpickled:pd.DataFrame = pd.read_pickle(os.path.join(os.path.dirname(__file__), "data","vector_space_graph.pkl"))
+    return unpickled
+    
 
 def get_all_genres_available() -> list[str]:
     return list(get_index_to_genre())

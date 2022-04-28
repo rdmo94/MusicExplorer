@@ -67,7 +67,6 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   const [allGenres, setAllGenres] = useState();
 
   useEffect(() => {
-    console.log("rendering");
     fetch("api/get_all_genres").then((response) =>
     response.json().then((json) => setAllGenres(JSON.parse(json)))
     );
@@ -77,7 +76,6 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
     } else {
       setUserGenres(selectedUserGenres);
     }
-    console.log("done rendering");
   }, []);
 
   const executeStrategy = () => {

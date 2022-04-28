@@ -28,13 +28,8 @@ function Dashboard() {
     null
   );
 
-  const [strategyGenres, setStrategyGenres] = useLocalStorage(
-    "strategyOutput",
-    null
-  );
-
-  const [latestStrategy, setLatestStrategy] = useLocalStorage(
-    "latestStrategy",
+  const [strategyData, setStrategyData] = useLocalStorage(
+    "strategyData",
     null
   );
 
@@ -45,9 +40,11 @@ function Dashboard() {
   }
 
   function handleStrategyOutputChange(strategyOutput) {
+    var tempStrategyData = {}
+    tempStrategyData[strategyOutput["id"]] = strategyOutput["genres"]
+    setStrategyData(tempStrategyData)
     setGeneratedPlaylist(strategyOutput["playlist"]);
-    setStrategyGenres(strategyOutput["genres"]);
-    setLatestStrategy(strategyOutput["id"]);
+
     setShowGraph(false);
   }
 
@@ -89,7 +86,7 @@ function Dashboard() {
             id={"graph"}
           >
             {generatedPlaylist == null || showGraph ? (
-              <Graph genreMap={playlistsGenreMap} strategyData={{3 : strategyGenres}}/>
+              <Graph genreMap={playlistsGenreMap} strategyData={strategyData}/>
             ) : (
               <PlaylistScreen
                 generatedPlaylist={generatedPlaylist}
