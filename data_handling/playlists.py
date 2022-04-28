@@ -1,4 +1,5 @@
 from asyncore import read
+import logging
 from operator import index, indexOf
 from numpy import NaN
 import spotipy
@@ -8,6 +9,7 @@ import numpy as np
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file
 
+logging.getLogger('spotipy').setLevel(logging.WARNING)
 
 SPOTIPY_CLIENT_ID = "97246a4390bf4516b9177ae13269fe86"
 SPOTIPY_CLIENT_SECRET = "b0546fc6e15e4db4ab491455c724dd19"

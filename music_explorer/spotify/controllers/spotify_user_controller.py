@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from requests import Request, post
@@ -7,6 +8,9 @@ from api.models import User
 from ..util import get_user_tokens, get_current_user
 from requests import post, put, get
 from spotipy import Spotify
+
+logging.getLogger('spotipy').setLevel(logging.WARNING)
+logging.getLogger('requests').setLevel(logging.WARNING)
 
 SPOTIFY_BASE_URL = "https://api.spotify.com/v1"
 

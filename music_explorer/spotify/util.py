@@ -90,14 +90,12 @@ def filter_spotify_playlist_tracks(tracks: dict):
 
 
 def filter_spotify_track(track):
-    print("")
     filtered_track = {}
     filtered_track["name"] = track["name"]
     filtered_track["id"] = track["id"]
     filtered_track["duration"] = track["duration_ms"]
     filtered_track["artists"] = list(map(lambda tr: tr["name"], track["artists"]))
 
-    print("f")
     return filtered_track
 
 
@@ -150,3 +148,10 @@ def genre_prettyfier(genre: str) -> str:
     genre = genre.replace("_cln_", ":")
     genre = genre.title()
     return genre
+
+
+def split_list(list:list[str], max_list_size) -> list[list]:
+    """
+    Splitting list into max_list_size chunks. Useful for splitting list of id's into chunks before making requests to spotify.
+    """
+    return [list[i:i + max_list_size] for i in range(0, len(list), max_list_size)]

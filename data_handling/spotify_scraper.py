@@ -9,6 +9,8 @@ import sys
 logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler())
 
+logging.getLogger('spotipy').setLevel(logging.WARNING)
+
 app1 = ["97246a4390bf4516b9177ae13269fe86", "b0546fc6e15e4db4ab491455c724dd19"]
 app2 = ["70ab3a9f4a844dda8202f7946bd2dba2", "145ff4ea82f648bab973af480e4371b2"]
 app3 = ["0e8f0b0bd124410492a05cb32e00db06", "f2c636adb70449c2a985f04a15026774"]

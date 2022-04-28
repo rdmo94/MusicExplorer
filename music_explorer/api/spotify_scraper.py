@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import logging
 from os.path import exists
 import sys
-logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.WARNING)
 logging.getLogger().addHandler(logging.StreamHandler())
 
 app1 = ["97246a4390bf4516b9177ae13269fe86", "b0546fc6e15e4db4ab491455c724dd19"]

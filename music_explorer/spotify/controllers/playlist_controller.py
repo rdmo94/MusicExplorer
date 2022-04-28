@@ -1,4 +1,5 @@
 import json
+import logging
 from posixpath import split
 from random import randint
 from unicodedata import name
@@ -13,6 +14,9 @@ from api.models import User
 from ..util import get_user_tokens, get_current_user, filter_spotify_playlists, genre_formatter
 from requests import post, put, get
 from spotipy import Spotify
+
+logging.getLogger('spotipy').setLevel(logging.WARNING)
+logging.getLogger('requests').setLevel(logging.WARNING)
 
 class GetCurrentUserPlaylistsView(APIView):
     def get(self, request, format=None):
