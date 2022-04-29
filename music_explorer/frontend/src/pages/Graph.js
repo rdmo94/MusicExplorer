@@ -24,9 +24,19 @@ function Graph({ genreMap, strategyData }) {
     }
   );
 
+  const [graphHeight, setGraphHeight] = useState();
+  const [graphWidth, setGraphWidth] = useState();
+  
   const graphRef = useRef(null);
 
   useEffect(() => {
+    let availableSizeElement = document.getElementById("graph");
+    if(availableSizeElement) {
+        
+        setGraphHeight(availableSizeElement.clientHeight/1.8);
+        setGraphWidth(availableSizeElement.clientWidth/1.9);
+
+    }
     fetch("static/graph_data_2d.json")
       .then((response) => response.json())
       .then((data) => {
@@ -56,9 +66,9 @@ function Graph({ genreMap, strategyData }) {
 
   //Dynamic graph type rendering
   if (graphType == "2D") {
-    graph = <Graph2D data={data} properties={localGraphProperties} />;
+    graph = <Graph2D data={data} properties={localGraphProperties} height={graphHeight} width={graphWidth}/>;
   } else if (graphType == "3D") {
-    graph = <Graph3D data={data} properties={localGraphProperties} />;
+    graph = <Graph3D data={data} properties={localGraphProperties} height={graphHeight} width={graphWidth}/>;
   } else if (graphType == "GraphColorTest") {
     var links = [];
     if (strategyData && Object.keys(strategyData)[0] == 3) {
@@ -72,6 +82,7 @@ function Graph({ genreMap, strategyData }) {
         userGenreMap={genreMap}
         strategy={strategyData}
         links={links}
+        height={graphHeight} width={graphWidth}
       />
     );
   }

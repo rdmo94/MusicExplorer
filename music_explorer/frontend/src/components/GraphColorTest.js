@@ -21,7 +21,7 @@ import {
  * @param {List<String>} param.links List<genres>
  * @returns 
  */
-function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
+function GraphColorTest({ data, properties, userGenreMap, strategy, links, height, width}) {
   var strategy_number = undefined
   var strategy_genres = [] //clean array of genres in strategy
   var user_genres = [] //clean array of genres in userGenreMap
@@ -175,23 +175,11 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links}) {
     }
   }
 
-  const [graphHeight, setGraphHeight] = useState();
-  const [graphWidth, setGraphWidth] = useState();
   
-  useEffect(() => {
-    let availableSizeElement = document.getElementById("graph");
-    if(availableSizeElement) {
-        
-        setGraphHeight(availableSizeElement.clientHeight/1.5);
-        setGraphWidth(availableSizeElement.clientWidth/1.8);
-
-    }
-  }, []);
-
   return (
     <ForceGraph2D
-      height={graphHeight}
-      width={graphWidth}
+      height={height}
+      width={width}
       backgroundColor={properties.backgroundColor}
       enableNodeDrag={properties.enableNodeDrag}
       

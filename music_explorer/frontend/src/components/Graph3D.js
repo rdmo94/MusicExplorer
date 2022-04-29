@@ -11,25 +11,14 @@ import {
 } from "react-force-graph";
 
 function Graph3D(props) {
-  const [graphHeight, setGraphHeight] = useState();
-  const [graphWidth, setGraphWidth] = useState();
   
-  useEffect(() => {
-    let availableSizeElement = document.getElementById("graph");
-    if(availableSizeElement) {
-        
-        setGraphHeight(availableSizeElement.clientHeight/1.5);
-        setGraphWidth(availableSizeElement.clientWidth/1.8);
-
-    }
-  }, []);
 
   console.log("rendering 3D graph");
   console.log("3d props:", props);
   return (
     <ForceGraph3D
-    height={graphHeight}
-    width={graphWidth}
+    height={props.graphHeight}
+    width={props.graphWidth}
       backgroundColor={props.properties.backgroundColor}
       enableNodeDrag={props.properties.enableNodeDrag}
       graphData={props.data}

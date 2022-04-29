@@ -18,7 +18,7 @@ class GenreCorpus:
     def __iter__(self):
 
         corpus_path = os.path.join(
-            "data_handling/data", "artists_genre_sentences.txt")
+            "data_handling/data", "artists_genre_sentences_word2vec_compatible.txt")
         for line in open(corpus_path):
             # assume there's one document per line, tokens separated by whitespace
             yield utils.simple_preprocess(line, min_len=1, max_len=99)
@@ -64,7 +64,8 @@ def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
         # fp.close()
 
 def get_x_y_coordinates_from_tsne_model(tsne_model, n_components=2):
-    coordinates = np.empty((5755,n_components))
+    index_to_genre = load_index_to_genre_word2vec()
+    coordinates = np.empty((len(index_to_genre),n_components))
     x = tsne_model[:, 0]
     coordinates[:, 0] = x
     y = tsne_model[:, 1]
@@ -81,12 +82,22 @@ def generate_index_to_genre_word2vec():
         json.dump(w2v_model.wv.index_to_key, outfile)
         outfile.close()
 
+def load_index_to_genre_word2vec() -> list[str]:
+    with open(os.path.join(
+            "data_handling/data", "index_to_genre_word2vec.json"), "r") as infile:
+        return json.load(infile)
+
 def generate_genre_to_index_word2vec():
     with open(os.path.join(
             "data_handling/data", "genre_to_index_word2vec.json"), "w") as outfile:
         w2v_model = load_word2vec_model()
         json.dump(w2v_model.wv.key_to_index, outfile)
         outfile.close()
+
+def load_genre_to_index_word2vec() -> list[str]:
+    with open(os.path.join(
+            "data_handling/data", "genre_to_index_word2vec.json"), "r") as infile:
+        return json.load(infile)
 
 def generate_datapoints(n_components=2):
     w2v_model = load_word2vec_model()
@@ -127,5 +138,9 @@ def get_all_genres_available() -> list[str]:
 # generate_datapoints()
 # generate_datapoints(n_components=3)
 
-generate_vector_space_graph(load_word2vec_model())
+# generate_vector_space_graph(load_word2vec_model())
+
+# load_word2vec_model()
+
+
 

@@ -17,7 +17,7 @@ def get_index_to_genre():
     return read_json_file(os.path.join("data_handling", "data","index_to_genre.json"))
 
 def generate_similarity_matrix():
-    artist_genres = read_json_file(os.path.join("data_handling", "data","artists_genres.json"))
+    artist_genres = read_json_file(os.path.join("data_handling", "data","artists_genres_word2vec_compatible.json"))
     genre_to_index = get_genre_to_index()
     matrix = np.zeros([len(list(genre_to_index.keys())),len(list(genre_to_index.keys()))])
 

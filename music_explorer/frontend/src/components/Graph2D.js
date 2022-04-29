@@ -13,23 +13,11 @@ import {
 
 
 function Graph2D(props) {
-  const [graphHeight, setGraphHeight] = useState();
-  const [graphWidth, setGraphWidth] = useState();
   
-  useEffect(() => {
-    let availableSizeElement = document.getElementById("graph");
-    if(availableSizeElement) {
-        
-        setGraphHeight(availableSizeElement.clientHeight/1.5);
-        setGraphWidth(availableSizeElement.clientWidth/1.8);
-
-    }
-  }, []);
   return (
     <ForceGraph2D 
-    height={graphHeight}
-    width={graphWidth}
-    
+    height={props.graphHeight}
+    width={props.graphWidth}
       backgroundColor={props.properties.backgroundColor}
       enableNodeDrag={props.properties.enableNodeDrag}
       graphData={props.data}
