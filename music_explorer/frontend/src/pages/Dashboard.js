@@ -28,27 +28,23 @@ function Dashboard() {
     null
   );
 
-  const [strategyData, setStrategyData] = useLocalStorage(
-    "strategyData",
-    null
-  );
+  const [strategyData, setStrategyData] = useLocalStorage("strategyData", null);
 
   const [showGraph, setShowGraph] = useLocalStorage("showGraph", null);
 
   function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
+    console.log("Setting userGenreMap in Dashboard.js");
     setPlaylistsGenreMap(genreOccurrenceMap);
   }
 
   function handleStrategyOutputChange(strategyOutput) {
-    var tempStrategyData = {}
-    tempStrategyData[strategyOutput["id"]] = strategyOutput["genres"]
-    setStrategyData(tempStrategyData)
+    var tempStrategyData = {};
+    tempStrategyData[strategyOutput["id"]] = strategyOutput["genres"];
+    setStrategyData(tempStrategyData);
     setGeneratedPlaylist(strategyOutput["playlist"]);
 
     setShowGraph(false);
   }
-
-  
 
   return (
     <Box className="container">
@@ -72,28 +68,28 @@ function Dashboard() {
       ) : (
         <></>
       )}
-      <Grid container direction={"row"} height={"100%"}>
+      <Grid container direction={"row"} height={"100%"} id={"playlist"}>
         <Box width={350} display={"flex"} flexDirection={"column"}>
           <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
         </Box>
 
         {/* <Box display={"flex"} flexDirection={"column"} flexGrow={1}> */}
-          <Box
-            display={"flex"}
-            flexGrow={1}
-            flexDirection={"row"}
-            justifyContent={"center"}
-            id={"graph"}
-          >
-            {generatedPlaylist == null || showGraph ? (
-              <Graph genreMap={playlistsGenreMap} strategyData={strategyData}/>
-            ) : (
-              <PlaylistScreen
-                generatedPlaylist={generatedPlaylist}
-                updatePlaylistsCallback={handleUpdatePlaylistGenreMap}
-              />
-            )}
-          </Box>
+        <Box
+          display={"flex"}
+          flexGrow={1}
+          flexDirection={"row"}
+          justifyContent={"center"}
+          id={"graph"}
+        >
+          {generatedPlaylist == null || showGraph ? (
+            <Graph genreMap={playlistsGenreMap} strategyData={strategyData} />
+          ) : (
+            <PlaylistScreen
+              generatedPlaylist={generatedPlaylist}
+              updatePlaylistsCallback={handleUpdatePlaylistGenreMap}
+            />
+          )}
+        </Box>
         {/* </Box> */}
 
         <Box width={350} display={"flex"} flexDirection={"column"}>

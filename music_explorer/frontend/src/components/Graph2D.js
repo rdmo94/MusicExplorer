@@ -11,13 +11,11 @@ import {
   GraphData,
 } from "react-force-graph";
 
-
 function Graph2D(props) {
-  
   return (
-    <ForceGraph2D 
-    height={props.graphHeight}
-    width={props.graphWidth}
+    <ForceGraph2D
+      height={props.graphHeight}
+      width={props.graphWidth}
       backgroundColor={props.properties.backgroundColor}
       enableNodeDrag={props.properties.enableNodeDrag}
       graphData={props.data}

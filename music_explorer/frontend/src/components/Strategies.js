@@ -23,7 +23,8 @@ import {
 import Strategy from "../models/Strategy";
 import { useLocalStorage } from "../Util";
 import { makeStyles } from "@mui/styles";
-
+import { replace_special_characters } from "../Util";
+import { styled } from "@mui/system";
 /**
  *
  * @param {Object} selectedUserGenres
@@ -58,6 +59,15 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
       "st"
     ),
   ];
+
+  const WhiteSelect = styled(Select)(({ theme }) => ({
+    color: "white",
+    "& .MuiSvgIcon-root": {
+      color: "white",
+    },
+    borderColor: "white",
+  }));
+
   const [strategy, setStrategy] = useLocalStorage("selectedStrategy", null);
   const [numberOfSongsPerGenre, setNumberOfSongsPerGenre] = useState(1);
   const [numberOfGenresToExplore, setNumberOfGenreToExplore] = useState(1);
@@ -69,9 +79,12 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   const [allGenres, setAllGenres] = useState();
 
   useEffect(() => {
-    console.log("rendering");
+    console.log(
+      "Setting selectedUserGernes in Strategies.js with value = ",
+      selectedUserGenres
+    );
     fetch("api/get_all_genres").then((response) =>
-      response.json().then((json) => setAllGenres(JSON.parse(json)))
+      response.json().then((json) => setAllGenres(JSON.parse(json).sort()))
     );
 
     if (selectedUserGenres == null) {
@@ -80,7 +93,7 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
       setUserGenres(selectedUserGenres);
     }
     console.log("done rendering");
-  }, []);
+  }, [selectedUserGenres]);
 
   const executeStrategy = () => {
     setIsLoading(true);
@@ -131,11 +144,14 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   const handleChangeSelect = (event) => {
     console.log("sourceGenre", sourceGenre, "targetGenre", targetGenre);
 
-    if (event.target.value != 3 || sourceGenre !== undefined && targetGenre !== undefined) {
+    if (
+      event.target.value != 3 ||
+      (sourceGenre !== undefined && targetGenre !== undefined)
+    ) {
       setIsLoadingButtonDisabled(false);
     } else {
       setIsLoadingButtonDisabled(true);
-    } 
+    }
 
     setStrategy(event.target.value);
   };
@@ -171,7 +187,7 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
             <InputLabel id="label-id" sx={{ color: "white" }}>
               Select strategy...
             </InputLabel>
-            <Select
+            <WhiteSelect
               sx={{ borderColor: "white", color: "white" }}
               //defaultValue={""}
               labelId="label-id"
@@ -184,7 +200,7 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
               <MenuItem value={1}>Take me away</MenuItem>
               <MenuItem value={2}>A little cautious a little curious</MenuItem>
               <MenuItem value={3}>Smooth transition</MenuItem>
-            </Select>
+            </WhiteSelect>
           </FormControl>
           {userGenres != null && strategy != null ? (
             <Box
@@ -205,15 +221,15 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
                       color: "white",
                       borderColor: "white",
                       minWidth: 300,
-                      padding: 2,
+                      margin: 1,
                     }}
                   >
                     <InputLabel id="label-id1" sx={{ color: "white" }}>
                       Select starting genre...
                     </InputLabel>
-                    <Select
+                    <WhiteSelect
                       sx={{ color: "white" }}
-                      //defaultValue={""}
+                      defaultValue={""}
                       labelId="label-id1"
                       id="selector"
                       label="Select starting genre..."
@@ -221,18 +237,22 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
                       onChange={handleSourceChange}
                     >
                       {Object.keys(userGenres).map((genre) => {
-                        return <MenuItem value={genre}>{genre}</MenuItem>;
+                        return (
+                          <MenuItem value={genre}>
+                            {replace_special_characters(genre)}
+                          </MenuItem>
+                        );
                       })}
-                    </Select>
+                    </WhiteSelect>
                   </FormControl>
 
                   <FormControl
-                    sx={{ color: "white", minWidth: 300, padding: 2 }}
+                    sx={{ color: "white", minWidth: 300, margin: 1 }}
                   >
                     <InputLabel id="label-id" sx={{ color: "white" }}>
                       Select destination genre...
                     </InputLabel>
-                    <Select
+                    <WhiteSelect
                       sx={{ color: "white" }}
                       //defaultValue={""}
                       labelId="label-id"
@@ -243,12 +263,14 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
                     >
                       {allGenres ? (
                         allGenres.map((genre) => (
-                          <MenuItem value={genre}>{genre}</MenuItem>
+                          <MenuItem value={genre}>
+                            {replace_special_characters(genre)}
+                          </MenuItem>
                         ))
                       ) : (
                         <></>
                       )}
-                    </Select>
+                    </WhiteSelect>
                   </FormControl>
                 </div>
               ) : (

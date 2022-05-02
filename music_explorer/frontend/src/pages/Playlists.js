@@ -16,6 +16,7 @@ import { useLocalStorage } from "../Util";
 import { primaryGreen } from "../Colors";
 
 function Playlists({ updateUserGenreMap }) {
+  const [listHeight, setListHeight] = useState();
   const [loadingPlaylists, setLoadingPlaylists] = useState(false);
   const [loadingGenres, setLoadingGenres] = useState(false);
   const [playlists, setPlaylists] = useState([]);
@@ -25,6 +26,10 @@ function Playlists({ updateUserGenreMap }) {
   );
 
   useEffect(() => {
+    let availableSizeElement = document.getElementById("playlist");
+    if (availableSizeElement) {
+      setListHeight(availableSizeElement.clientHeight*0.75);
+    }
     setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
       response.json().then((json) => {
@@ -45,6 +50,7 @@ function Playlists({ updateUserGenreMap }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(playlists),
     };
+    console.log("Calling getSelectedPlaylistGenreMap from Playlist.js")
     fetch("/spotify/get_playlist_genres", requestOptions).then((response) =>
       response.json().then((json) => {
         setLoadingGenres(false);
@@ -101,7 +107,7 @@ function Playlists({ updateUserGenreMap }) {
             ) : (
               <List
                 style={{
-                  maxHeight: 900, //TODO fix to fit screen
+                  height: listHeight, //TODO fix to fit screen
                   overflow: "auto",
                 }}
               >
@@ -164,7 +170,7 @@ function Playlists({ updateUserGenreMap }) {
         </LoadingButton>
 
         <Button variant="outlined" style={{borderRadius: 200, borderColor: primaryGreen, color: primaryGreen}} onClick={() => resetPlaylistGenreMap()}>
-          Reset
+          Clear
         </Button>
       </Grid>
     </Box>

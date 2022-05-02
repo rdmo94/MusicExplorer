@@ -35,6 +35,17 @@ export function replace_special_characters(text, toWord2VecFormat) {
     ["'", "_pstrph_"],
     ["&", "_nd_"],
     [":", "_cln_"],
+    ["+", "_pls_"],
+    ["1", "_eno_"],
+    ["2", "_owt_"],
+    ["3", "_eerht_"],
+    ["4", "_ruof_"],
+    ["5", "_evif_"],
+    ["6", "_xis_"],
+    ["7", "_neves_"],
+    ["8", "_thgie_"],
+    ["9", "_enin_"],
+    ["0", "_orez_"],
   ];
 
   for (var i = 0; i < replaceList.length; i++) {

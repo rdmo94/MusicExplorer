@@ -2,6 +2,7 @@ import React from "react";
 import SpriteText from "three-spritetext";
 import { graph_data_prettyfier, replace_special_characters } from "../Util";
 import { useState, useEffect } from "react";
+import { primaryGrey } from "../Colors";
 
 import {
   ForceGraph2D,
@@ -180,7 +181,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
     <ForceGraph2D
       height={height}
       width={width}
-      backgroundColor={properties.backgroundColor}
+      backgroundColor={primaryGrey}
       enableNodeDrag={properties.enableNodeDrag}
       
       graphData={data}
