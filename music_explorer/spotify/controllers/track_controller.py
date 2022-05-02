@@ -35,7 +35,6 @@ class TracksView(GenericAPIView):
 
 class TrackView(APIView):
     def get(self, request, track_ids:list[str], format=None):
-        print("whatttt")
         if not track_ids:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
