@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { Button, Grid, Typography, Box, List } from "@material-ui/core";
-import { millisToMinutesAndSeconds } from "../Util";
+import { millisToMinutesAndSeconds, replace_special_characters } from "../Util";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
 import Song from "../models/Song.js";
 
@@ -78,7 +78,7 @@ function SongsContainer({ tracks, playSongCallback }) {
                   </Grid>
                   <Grid item>
                     <Typography style={{ color: "white" }}>
-                      Genre: {track.genre}
+                      Genre: {replace_special_characters(track.genre, false)}
                     </Typography>
                   </Grid>
                 </Grid>
