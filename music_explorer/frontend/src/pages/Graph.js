@@ -40,8 +40,8 @@ function Graph({ genreMap, strategyData }) {
   useEffect(() => {
     let availableSizeElement = document.getElementById("graph");
     if (availableSizeElement) {
-      setGraphHeight(availableSizeElement.clientHeight / 1.8);
-      setGraphWidth(availableSizeElement.clientWidth / 1.9);
+      setGraphHeight(availableSizeElement.clientHeight / 2);
+      setGraphWidth(availableSizeElement.clientWidth / 2.1);
     }
     fetch("static/graph_data_2d.json")
       .then((response) => response.json())
@@ -214,7 +214,7 @@ function Graph({ genreMap, strategyData }) {
         height={"80%"}
         display={"flex"}
         flexDirection={"column"}
-        justifyContent={"center"}
+        justifyContent={"flex-start"}
         alignItems={"center"}
         flexGrow={1}
         paddingTop={5}

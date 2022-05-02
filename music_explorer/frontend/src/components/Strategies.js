@@ -37,25 +37,25 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
     new Strategy(
       0,
       "Random",
-      "This is the description of Radnom strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "The Random strategy finds a number of randomly chosen genres that does not exist in your personal music collection, based on the playlists you have chosen. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
       "random"
     ),
     new Strategy(
       1,
       "Take me away",
-      "This is the description of Take me away strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "Take me away will look at the genres that is currently present in the playlists you have selected. Then the algorithm will select a number of unknown genres, that are as far away from your taste in genres (based on the selected playlists). How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
       "tma"
     ),
     new Strategy(
       2,
       "A little curious a little cautious",
-      "This is the description of A little curious a little cautious strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "A little curious, a little cautious will look at the genres of the playlists you have chosen and find a number of unknown genres, that are as close as possible to your current taste. This method of exploration is for the one who does not want to move too far away from what they like. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
       "alc"
     ),
     new Strategy(
       3,
       "Smooth transition",
-      "This is the description of smooth transition strategy which is very long bla bla bla bla bla ipsum lorem lore upsut",
+      "Smooth transition will help you explore genres along the way from a starting genre, that you alreadt have in the playlists you have selected, to an unknown genre of your choice. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
       "st"
     ),
   ];

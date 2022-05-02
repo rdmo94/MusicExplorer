@@ -28,7 +28,7 @@ function Playlists({ updateUserGenreMap }) {
   useEffect(() => {
     let availableSizeElement = document.getElementById("playlist");
     if (availableSizeElement) {
-      setListHeight(availableSizeElement.clientHeight*0.75);
+      setListHeight(availableSizeElement.clientHeight*0.6);
     }
     setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
