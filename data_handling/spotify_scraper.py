@@ -1,4 +1,5 @@
 import json
+from operator import contains
 import os
 import spotipy
 from spotipy import Spotify
@@ -256,7 +257,7 @@ def scrape_tracks_from_playlists(spotify:Spotify) -> list[str]:
 
         genres_playlistIds:dict = read_json_file(os.path.join(os.path.dirname(__file__), "data/genres_playlist.json"))
         for genre_name, playlist_id in genres_playlistIds.items():
-            if not exists(os.path.join(os.path.dirname(__file__), f"data/genre_playlist/{convert_string_to_unicode(genre_name)}.json")):
+            if not exists(os.path.join(os.path.dirname(__file__), f"data/genre_playlist_tracks/{convert_string_to_unicode(genre_name)}.json")):
                 playlist = spotify.playlist(playlist_id=playlist_id)
                 number_of_tracks = playlist['tracks']['total']
                 tracks = []
@@ -267,31 +268,34 @@ def scrape_tracks_from_playlists(spotify:Spotify) -> list[str]:
                 for track in tracks:
                     if track['track']:
                         track_ids.append(track['track']['id'])
-                with open(os.path.join(os.path.dirname(__file__), f"data/genre_playlist/{convert_string_to_unicode(genre_name)}.json"), 'w') as outFile:
+                with open(os.path.join(os.path.dirname(__file__), f"data/genre_playlist_tracks/{convert_string_to_unicode(genre_name)}.json"), 'w') as outFile:
                     json.dump({genre_name: track_ids}, outFile)
             
 
-def normalize_genre_playlists():
-    genre_playlist_dir = os.path.join(os.path.dirname(__file__), "data/genre_playlist")
+def nomralize_genre_playlists_and_save_to_json():
+    genre_playlist_dir = os.path.join(os.path.dirname(__file__), "data/genre_playlist_tracks")
     genre_playlist_dict = {}
     for filename in os.listdir(genre_playlist_dir):
         file = os.path.join(genre_playlist_dir, filename)
+        if contains(filename, "8"):
+            print("g")
         try:
             with open(file) as currentFile:
                 genre_playlist:dict = json.load(currentFile)
                 normalized_key = genre_formatter(list(genre_playlist.keys())[0])
                 genre_playlist_dict[normalized_key] = list(genre_playlist.values())
-        except Exception:
+        except Exception as e:
             print("gg")
     
     with open("genre_tracks.json", "w") as outFile:
         json.dump(genre_playlist_dict, outFile)
         outFile.close()
 
-def genre_formatter(genre:str) -> str:
+def genre_formatter(genre: str) -> str:
     """
     Translates to ascii, lowercase and replaces symbols
     """
+    
     import unidecode
     genre = genre.lower()
     genre = unidecode.unidecode(genre)
@@ -300,6 +304,19 @@ def genre_formatter(genre:str) -> str:
     genre = genre.replace("'", "_pstrph_")
     genre = genre.replace("&", "_nd_")
     genre = genre.replace(":", "_cln_")
+    genre = genre.replace("+", "_pls_")
+    genre = genre.replace("1", "_eno_")
+    genre = genre.replace("2", "_owt_")
+    genre = genre.replace("3", "_eerht_")
+    genre = genre.replace("4", "_ruof_")
+    genre = genre.replace("5", "_evif_")
+    genre = genre.replace("6", "_xis_")
+    genre = genre.replace("7", "_neves_")
+    genre = genre.replace("8", "_thgie_")
+    genre = genre.replace("9", "_enin_")
+    genre = genre.replace("0", "_orez_")
     return genre
 
 # normalize_genre_playlists()
+
+nomralize_genre_playlists_and_save_to_json()

@@ -252,17 +252,14 @@ thumb
 sketch
 
 **/matrix.json
-/data_handling/data/
-/data_handling/vector_graph.json
-/data_handling/word_2_vec_model
-/data_handling/networkx_graph
 
-/api/data/vector_graph.json
+
 # End of https://www.toptal.com/developers/gitignore/api/django,python,react
-data_handling/data/matrix.json
+
 music_explorer/frontend/main.js
 music_explorer/frontend/main.js.LICENSE.txt
 main.js
 main.js.LICENSE.txt
-music_explorer/api/data/vector_graph.json
-music_explorer/api/data/vector_space_graph.pkl
+music_explorer/api/data/
+data_handling/data
+
