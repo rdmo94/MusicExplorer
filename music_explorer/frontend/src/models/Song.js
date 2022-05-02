@@ -18,7 +18,7 @@ class Song {
         let song = new Song();
         song.id = jsonObject["id"];
         song.title = jsonObject["name"];
-        song.artists = jsonObject["artists"];
+        song.artists = jsonObject["artists"] ?? [];
         song.genre = genre;
         song.duration = jsonObject["duration"];
         song.image = jsonObject["image"]

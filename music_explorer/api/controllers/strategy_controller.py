@@ -1,13 +1,17 @@
-import json
-import os
-import random
+from spotify.controllers import track_controller
 from django.http import HttpRequest
-from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import requests
+from rest_framework import status
+import json
 from api import strategies as stg
-from spotify.controllers import track_controller
+#import spotify.controllers.track_controller as fuck_this_shit
+#from music_explorer.spotify.controllers.track_controller import TrackView
+#from spotify.controllers import *
+#import spotify.controllers as SpotifyControllers
+#from music_explorer.spotify.controllers.track_controller import TrackView
+
+
 from ..util import select_n_random_tracks, reverse_genre_to_track_ids_dict
 
 
@@ -32,7 +36,7 @@ def get_genre_to_tracks_dict(request, genre_track_ids:dict[str,list[str]]):
 
     if all_tracks_response.status_code == 200:
         all_tracks = all_tracks_response.data
-
+    
 
     genre_to_tracks = {}
 

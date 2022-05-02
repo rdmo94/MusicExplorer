@@ -32,9 +32,10 @@ class TracksView(GenericAPIView):
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         
-  
+
 class TrackView(APIView):
     def get(self, request, track_ids:list[str], format=None):
+        print("whatttt")
         if not track_ids:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -45,12 +46,49 @@ class TrackView(APIView):
             sp = Spotify(auth=user_tokens.access_token)
             track_id_chunks = split_list(track_ids, 50) #max 50 track_ids per request
             all_fetched_tracks = []
+            all_artist_ids = []
+            artist_id_to_artist = {}
 
+            #fetch all tracks
             for track_id_chunk in track_id_chunks:
                 track_chunk = sp.tracks(tracks=track_id_chunk)
                 if track_chunk['tracks']:
                     all_fetched_tracks.extend(track_chunk['tracks'])
+            
+            #get all artist id's
+            for track in all_fetched_tracks:
+                if track['artists']:
+                    for artist in track['artists']:
+                        all_artist_ids.append(artist['id'])
+                        #artist_id_to_artist[artist['id']].append(artist['id'])
+            
+            #fetch all artists and add to dict
+            # artist_id_chunks = split_list(all_artist_ids, 50) #max 50 artists_ids per request
+            # all_fetched_artists = []
+            # for artist_id_chunk in artist_id_chunks:
+            #     artist_chunk = sp.artists(artists=artist_id_chunk)
+            #     if artist_chunk['artists']:
+            #         for artist in artist_chunk['artists']:
+            #             artist_id_to_artist[artist['id']] = artist['name']
+                    
+            
+            #add artist names to tracks
+            # for track in all_fetched_tracks:
+            #     if track['artists']:
+            #         artists_from_track = track['artists']
+                    #track['artists'] = artist_id_to_artist[]
+                    #for artist_from_track in artists_from_track:
 
-            return Response(data=all_fetched_tracks, status=status.HTTP_200_OK)
+
+            #add artist names to tracks
+            
+                        
+            filtered_tracks = []
+            for track in all_fetched_tracks:
+                filtered_tracks.append(filter_spotify_track(track))
+            
+            #all_fetched_tracks = filter_spotify_playlist_tracks(all_fetched_tracks)
+
+            return Response(data=filtered_tracks, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)

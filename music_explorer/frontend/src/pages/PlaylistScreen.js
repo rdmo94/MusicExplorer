@@ -53,6 +53,7 @@ function PlaylistScreen({ generatedPlaylist }) {
     // );
     //console.log(generatedPlaylist);
     let playlist = Playlist.fromObject(generatedPlaylist);
+    console.log(playlist)
     //console.log(playlist);
     setPlaylist(playlist);
     setPlaylistTracks(playlist.tracks);
@@ -187,12 +188,12 @@ function PlaylistScreen({ generatedPlaylist }) {
                 }
               />
 
-              <Grid item>
+              { <Grid item>
                 <SongsContainer
                   tracks={playlistTracks}
                   playSongCallback={setCurrentSongPlaying}
                 ></SongsContainer>
-              </Grid>
+              </Grid> }
 
               {/* {playlistTracks.map((track) => {
                 return (

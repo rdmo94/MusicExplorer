@@ -15,6 +15,7 @@ function SongsContainer({ tracks, playSongCallback }) {
   return (
 
     <List style={{ overflow: "auto", maxHeight: 1100}}>
+      {console.log("tracks", tracks)}
       {tracks.map((track, index) => {
         return (
           <Grid item key={index}>
@@ -67,11 +68,11 @@ function SongsContainer({ tracks, playSongCallback }) {
                     {/*console.log(track)*/}
                     <Typography style={{ color: "white" }}>
                       <List style={{ maxHeight: 100, overflow: "auto" }}>
-                        {track.artists.map((artist, index) =>
+                        {/* {track.artists.map((artist, index) =>
                           index + 1 != track.artists.length
                             ? artist + ", "
                             : artist
-                        )}
+                        )} */}
                       </List>
                     </Typography>
                   </Grid>

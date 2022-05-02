@@ -77,10 +77,9 @@ def is_spotify_authenticated(session_id):
     return False
 
 
-def filter_spotify_playlist_tracks(tracks: dict):
+def filter_spotify_playlist_tracks(tracks):
     filtered_tracks = []
-    for item in tracks["items"]:
-        track = item["track"]
+    for track in tracks:
         filtered_track_artists = []
         for artist in track["artists"]:
             filtered_track_artists.append({"id": artist["id"]})
