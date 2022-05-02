@@ -114,17 +114,20 @@ class SmoothTransitionRandomStrategy(APIView):
         playlist = []
         genres = []
         id = SMOOTH_T
-        for genre, tracks in path_tracks.items():
-            genres.append(genre)
-            for track in tracks:
-                sp_request = HttpRequest()
-                sp_request.method = "GET"
-                sp_request.session = request.session
-                # track_reponse = requests.get(f"http://127.0.0.1:8000/spotify/track/{track}")
-                track_reponse = track_controller.TrackView.as_view()(sp_request, track)
-                if track_reponse.status_code != 200:
-                    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                else:
-                    playlist.append({genre: track_reponse.data})
-        return Response(data=json.dumps({"playlist" : playlist, "genres" : genres, "id" : id}),
+
+        genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
+
+        # for genre, tracks in path_tracks.items():
+        #     genres.append(genre)
+        #     for track in tracks:
+        #         sp_request = HttpRequest()
+        #         sp_request.method = "GET"
+        #         sp_request.session = request.session
+        #         # track_reponse = requests.get(f"http://127.0.0.1:8000/spotify/track/{track}")
+        #         track_reponse = track_controller.TrackView.as_view()(sp_request, track)
+        #         if track_reponse.status_code != 200:
+        #             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        #         else:
+        #             playlist.append({genre: track_reponse.data})
+        return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : genres, "id" : id}),
                         status=status.HTTP_200_OK)
