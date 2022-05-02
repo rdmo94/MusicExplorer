@@ -57,7 +57,7 @@ function PlaylistScreen({ generatedPlaylist }) {
     //console.log(playlist);
     setPlaylist(playlist);
     setPlaylistTracks(playlist.tracks);
-  }, []);
+  }, [generatedPlaylist]);
 
   const saveToSpotifyStates = {
     SUCCESS: <Done color="white" />,
@@ -163,7 +163,7 @@ function PlaylistScreen({ generatedPlaylist }) {
         )}
       </Box>
 
-      <Grid container direction="column" justifyContent="center" style={{height: "100%"}}>
+      <Grid container direction="column" justifyContent="flex-start" alignItems={"center"} style={{height: "100%"}}>
         {playlist ? (
           <Grid
             item
