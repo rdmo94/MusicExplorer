@@ -13,8 +13,7 @@ import Song from "../models/Song.js";
  */
 function SongsContainer({ tracks, playSongCallback }) {
   return (
-
-    <List style={{ overflow: "auto", maxHeight: 1100}}>
+    <List style={{ overflow: "auto", height: "90vh" }}>
       {console.log("tracks", tracks)}
       {tracks.map((track, index) => {
         return (
