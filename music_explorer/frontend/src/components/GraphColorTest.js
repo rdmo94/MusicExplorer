@@ -139,6 +139,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
   
 
   function getNodeVal(node) {
+    const weight_divider = 400
     const max_size = 4
     const min_size = 1
     const strategy_size = 6
@@ -152,7 +153,16 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
         return strategy_size;
       }
       else {
-        return min_size;
+        //determine size based on weight
+        if (node.weight/weight_divider > min_size){
+          if (node.weight/weight_divider > max_size){
+            return max_size
+          } else {
+            return node.weight/weight_divider;
+          }
+        } else {
+          return 0;
+        }
       }
     } else {
       return min_size;
