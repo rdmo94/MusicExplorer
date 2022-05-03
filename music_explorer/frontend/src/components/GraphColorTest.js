@@ -41,7 +41,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
 
 
 
-  //fix genre names in data
+  //fix genre names in data 
 
   //fix genre names in userGenreMap
 
@@ -58,6 +58,8 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
     //console.log("genreIdLinks", genreIdLinks)
     //console.log("data", data)
     data.links = genreIdLinks
+    console.log("links from graphcolortest", links)
+    console.log("genreIdLinks from graphcolortest", genreIdLinks)
     //console.log("new data", data)
   }
 
@@ -111,7 +113,6 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
         }
       }
     }
-    
   }
 
   function getNodeIndexOfGenre(genre){
@@ -140,17 +141,21 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
   function getNodeVal(node) {
     const max_size = 4
     const min_size = 1
+    const strategy_size = 6
     if (userGenreMap) {
       if (node.name in userGenreMap) {
         var knownGenreSize = userGenreMap[node.name] / 8;
         if (knownGenreSize > max_size) return max_size;
         else if (knownGenreSize > min_size) return knownGenreSize;
         else return min_size;
-      } else {
-        return 1;
+      }else if (strategy_genres && strategy_genres.includes(node.name)) {
+        return strategy_size;
+      }
+      else {
+        return min_size;
       }
     } else {
-      return 1;
+      return min_size;
     }
   }
 

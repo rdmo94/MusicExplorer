@@ -129,5 +129,5 @@ class SmoothTransitionRandomStrategy(APIView):
         #             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         #         else:
         #             playlist.append({genre: track_reponse.data})
-        return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : genres, "id" : id}),
+        return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : path_genres, "id" : id}),
                         status=status.HTTP_200_OK)
