@@ -65,19 +65,19 @@ def main():
     # print(bcolors.OKBLUE)
     # embeddings.generate_vector_space_graph(word2vec_model=embeddings.load_word2vec_model())
 
-    # # TWEAK N_EDGES HERE
-    # OPTIMAL_N_EDGES = 6
-    # print(bcolors.HEADER,"Generating NetworkX graph from vector space with ... ", OPTIMAL_N_EDGES, " from each genre...")
-    # print(bcolors.OKBLUE)
-    # G = graph_util.generate_networkx_graph_from_vector_space(n_edges=OPTIMAL_N_EDGES)
-
-    # print(bcolors.HEADER,"Saving NetworkX graph to .gml file...")
-    # print(bcolors.OKBLUE)
-    # graph_util.save_graph_as_gml(G)
-
-    print(bcolors.HEADER,"Generating genre_tracks.json...")
+    # TWEAK N_EDGES HERE
+    OPTIMAL_N_EDGES = 6
+    print(bcolors.HEADER,"Generating NetworkX graph from vector space with ... ", OPTIMAL_N_EDGES, " from each genre...")
     print(bcolors.OKBLUE)
-    spotify_scraper.nomralize_genre_playlists_and_save_to_json()
+    G = graph_util.generate_networkx_graph_from_vector_space(n_edges=OPTIMAL_N_EDGES)
+
+    print(bcolors.HEADER,"Saving NetworkX graph to .gml file...")
+    print(bcolors.OKBLUE)
+    graph_util.save_graph_as_gml(G)
+
+    # print(bcolors.HEADER,"Generating genre_tracks.json...")
+    # print(bcolors.OKBLUE)
+    # spotify_scraper.nomralize_genre_playlists_and_save_to_json()
     
 main()
 
