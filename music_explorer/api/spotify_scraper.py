@@ -286,17 +286,29 @@ def normalize_genre_playlists():
         json.dump(genre_playlist_dict, outFile)
         outFile.close()
 
-def genre_formatter(genre:str) -> str:
+def genre_formatter(genre: str) -> str:
     """
     Translates to ascii, lowercase and replaces symbols
     """
+    
     import unidecode
     genre = genre.lower()
     genre = unidecode.unidecode(genre)
-    genre = genre.replace(" ", "_spc_")
-    genre = genre.replace("-", "_hphn_")
-    genre = genre.replace("'", "_pstrph_")
-    genre = genre.replace("&", "_nd_")
-    genre = genre.replace(":", "_cln_")
+    genre = genre.replace(" ", "qqqspcqqq")
+    genre = genre.replace("-", "qqqhphnqqq")
+    genre = genre.replace("'", "qqqpstrphqqq")
+    genre = genre.replace("&", "qqqndqqq")
+    genre = genre.replace(":", "qqqclnqqq")
+    genre = genre.replace("+", "qqqplsqqq")
+    genre = genre.replace("1", "qqqenoqqq")
+    genre = genre.replace("2", "qqqowtqqq")
+    genre = genre.replace("3", "qqqeerhtqqq")
+    genre = genre.replace("4", "qqqruofqqq")
+    genre = genre.replace("5", "qqqevifqqq")
+    genre = genre.replace("6", "qqqxisqqq")
+    genre = genre.replace("7", "qqqnevesqqq")
+    genre = genre.replace("8", "qqqthgieqqq")
+    genre = genre.replace("9", "qqqeninqqq")
+    genre = genre.replace("0", "qqqorezqqq")
     return genre
 

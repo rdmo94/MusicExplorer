@@ -129,23 +129,46 @@ def genre_formatter(genre: str) -> str:
     """
     Translates to ascii, lowercase and replaces symbols
     """
+    
     import unidecode
     genre = genre.lower()
     genre = unidecode.unidecode(genre)
-    genre = genre.replace(" ", "_spc_")
-    genre = genre.replace("-", "_hphn_")
-    genre = genre.replace("'", "_pstrph_")
-    genre = genre.replace("&", "_nd_")
-    genre = genre.replace(":", "_cln_")
+    genre = genre.replace(" ", "qqqspcqqq")
+    genre = genre.replace("-", "qqqhphnqqq")
+    genre = genre.replace("'", "qqqpstrphqqq")
+    genre = genre.replace("&", "qqqndqqq")
+    genre = genre.replace(":", "qqqclnqqq")
+    genre = genre.replace("+", "qqqplsqqq")
+    genre = genre.replace("1", "qqqenoqqq")
+    genre = genre.replace("2", "qqqowtqqq")
+    genre = genre.replace("3", "qqqeerhtqqq")
+    genre = genre.replace("4", "qqqruofqqq")
+    genre = genre.replace("5", "qqqevifqqq")
+    genre = genre.replace("6", "qqqxisqqq")
+    genre = genre.replace("7", "qqqnevesqqq")
+    genre = genre.replace("8", "qqqthgieqqq")
+    genre = genre.replace("9", "qqqeninqqq")
+    genre = genre.replace("0", "qqqorezqqq")
     return genre
 
 
 def genre_prettyfier(genre: str) -> str:
-    genre = genre.replace("_spc_", " ")
-    genre = genre.replace("_hphn_", "-")
-    genre = genre.replace("_pstrph_", "'")
-    genre = genre.replace("_nd_", "&")
-    genre = genre.replace("_cln_", ":")
+    genre = genre.replace("qqqspcqqq", " ")
+    genre = genre.replace("qqqhphnqqq", "-")
+    genre = genre.replace("qqqpstrphqqq", "'")
+    genre = genre.replace("qqqndqqq", "&")
+    genre = genre.replace("qqqclnqqq", ":")
+    genre = genre.replace("qqqplsqqq", "+")
+    genre = genre.replace("qqqenoqqq", "1")
+    genre = genre.replace("qqqowtqqq", "2")
+    genre = genre.replace("qqqeerhtqqq", "3")
+    genre = genre.replace("qqqruofqqq", "4")
+    genre = genre.replace("qqqevifqqq", "5")
+    genre = genre.replace("qqqxisqqq", "6")
+    genre = genre.replace("qqqnevesqqq", "7")
+    genre = genre.replace("qqqthgieqqq", "8")
+    genre = genre.replace("qqqeninqqq", "9")
+    genre = genre.replace("qqqorezqqq", "0")
     genre = genre.title()
     return genre
 
