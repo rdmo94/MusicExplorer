@@ -30,22 +30,22 @@ export function millisToMinutesAndSeconds(millis) {
  */
 export function replace_special_characters(text, toWord2VecFormat) {
   var replaceList = [
-    [" ", "_spc_"],
-    ["-", "_hphn_"],
-    ["'", "_pstrph_"],
-    ["&", "_nd_"],
-    [":", "_cln_"],
-    ["+", "_pls_"],
-    ["1", "_eno_"],
-    ["2", "_owt_"],
-    ["3", "_eerht_"],
-    ["4", "_ruof_"],
-    ["5", "_evif_"],
-    ["6", "_xis_"],
-    ["7", "_neves_"],
-    ["8", "_thgie_"],
-    ["9", "_enin_"],
-    ["0", "_orez_"],
+    [" ", "qqqspcqqq"],
+    ["-", "qqqhphnqqq"],
+    ["'", "qqqpstrphqqq"],
+    ["&", "qqqndqqq"],
+    [":", "qqqclnqqq"],
+    ["+", "qqqplsqqq"],
+    ["1", "qqqenoqqq"],
+    ["2", "qqqowtqqq"],
+    ["3", "qqqeerhtqqq"],
+    ["4", "qqqruofqqq"],
+    ["5", "qqqevifqqq"],
+    ["6", "qqqxisqqq"],
+    ["7", "qqqnevesqqq"],
+    ["8", "qqqthgieqqq"],
+    ["9", "qqqeninqqq"],
+    ["0", "qqqorezqqq"],
   ];
 
   for (var i = 0; i < replaceList.length; i++) {

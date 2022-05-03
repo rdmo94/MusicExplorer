@@ -199,7 +199,8 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
       //nodeVal={100}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = getNodeLabel(node);
-        const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
+        // const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
+        const fontSize = (getNodeVal(node)); //higher is smaller?
         ctx.font = `${fontSize}px Sans-Serif`;
         const textWidth = ctx.measureText(label).width;
         const bckgDimensions = [textWidth, fontSize].map(
@@ -213,7 +214,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
 
         node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
       }}
-      minZoom={15}
+      minZoom={2}
       //zoom={0.2} //doesnt work.. zz
       linkColor={() => '#2ab04e'}
       linkOpacity={0.9}

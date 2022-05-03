@@ -1,5 +1,6 @@
 from ast import Tuple
 from mimetypes import init
+from operator import contains
 from gensim.test.utils import datapath
 from gensim import utils
 import gensim.models
@@ -37,10 +38,11 @@ def save_word2vec_model(model:gensim.models.Word2Vec):
 def load_word2vec_model() -> gensim.models.Word2Vec:
     return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word2vec_model"))
 
-def create_tsne_model(word2vec_model, n_components=2, learning_rate='auto', init='random', verbose=0):
-    tsne_model = TSNE(n_components=3, learning_rate='auto',
-                  init='random', verbose=1).fit_transform(word2vec_model.wv.vectors)
-    return tsne_model
+def create_tsne_model(vectors, n_components=2, learning_rate='auto', init='random', verbose=0):
+    return TSNE(n_components=n_components).fit_transform(vectors)
+
+
+
 
 # Old - too slow. Size was approx. 1.35 GB
 def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
@@ -53,13 +55,15 @@ def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
             ## TODO: Make dict of format { "genre" : { "innerGenre" : distance, ... } ... }
             distances = []
             for innerWord in data:
+                if contains(innerWord, "_thgie__hphn_bit") or contains(word, "_thgie__hphn_bit"):
+                    print("g")
                 distances.append({innerWord : word2vec_model.wv.distance(word, innerWord)})
             graph[word] = distances
         file.close()
         
     # with open(os.path.join(script_dir, "data", "vector_graph"), 'w') as fp:
         dataframe = pd.DataFrame.from_dict(graph)
-        dataframe.to_pickle("vector_graph.pkl")
+        dataframe.to_pickle(os.path.join(script_dir, "data", "vector_space_graph.pkl"))
         # json.dump(graph, fp)
         # fp.close()
 
@@ -99,9 +103,7 @@ def load_genre_to_index_word2vec() -> list[str]:
             "data_handling/data", "genre_to_index_word2vec.json"), "r") as infile:
         return json.load(infile)
 
-def generate_datapoints(n_components=2):
-    w2v_model = load_word2vec_model()
-    tsne_model = create_tsne_model(word2vec_model=w2v_model, n_components=n_components)
+def generate_datapoints(tsne_model, n_components=2):
     coordinates = get_x_y_coordinates_from_tsne_model(tsne_model=tsne_model, n_components=n_components)
     with open(os.path.join(
             "data_handling", "data", f"datapoints{n_components}D.txt"), "w") as outfile:
@@ -141,6 +143,4 @@ def get_all_genres_available() -> list[str]:
 # generate_vector_space_graph(load_word2vec_model())
 
 # load_word2vec_model()
-
-
 

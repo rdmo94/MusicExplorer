@@ -1,5 +1,7 @@
 from django.urls import path
 
+from .controllers.matrix_controller import GetSimilarityMatrixView
+
 from .controllers.genre_controller import GetAllGenresView
 
 from .controllers.strategy_controller import ALittleCuriousStrategy, RandomStrategy, SmoothTransitionRandomStrategy, TakeMeAwayStrategy
@@ -14,4 +16,6 @@ urlpatterns = [
     path('alc', ALittleCuriousStrategy.as_view()),
     path('st', SmoothTransitionRandomStrategy.as_view()),
     path('get_all_genres', GetAllGenresView.as_view()),
+    path('get_matrix', GetSimilarityMatrixView.as_view()),
+
 ]

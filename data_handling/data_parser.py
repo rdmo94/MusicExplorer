@@ -7,6 +7,11 @@ def generate_graph_data_2d():
     index_to_genre = []
     with open(os.path.join("data_handling/data" ,"index_to_genre_word2vec.json"), "r") as f:
         index_to_genre = json.load(f)
+        f.close()
+    
+    with open(os.path.join("data_handling/data" ,"matrix.json"), "r") as f:
+        matrix = json.load(f)
+        f.close()
 
     # get points in datapoints.txt
     nodes = []
@@ -14,8 +19,12 @@ def generate_graph_data_2d():
         lines = f.readlines()
         for index, line in enumerate(lines):
             line_split = line.split(",")
-            nodes.append({"id" : index, "name": index_to_genre[index], "fx" : float(line_split[0].replace(",", "")), "fy": float(line_split[1].replace(",", ""))})
-
+            try:
+                _sum = sum(matrix[index_to_genre[index]].values())
+                nodes.append({"id" : index, "name": index_to_genre[index], "fx" : float(line_split[0].replace(",", "")), "fy": float(line_split[1].replace(",", "")), "weight" : _sum})
+            except Exception as e:
+                print("g")    
+        f.close()
     # go through the co-occurrence matrix to form the links
     links = []
     # with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
@@ -32,22 +41,28 @@ def generate_graph_data_2d():
     graph_data["links"] = links
     with open(os.path.join("data_handling/data", "graph_data_2d.json"), "w") as f:
         json.dump(graph_data, f)
-
+        f.close()
 
 def generate_graph_data_3d():
     # get genre list with index
     index_to_genre = []
     with open(os.path.join("data_handling/data" ,"index_to_genre_word2vec.json"), "r") as f:
         index_to_genre = json.load(f)
+        f.close()
 
+    with open(os.path.join("data_handling/data" ,"matrix.json"), "r") as f:
+        matrix = json.load(f)
+        f.close()
     # get points in datapoints.txt
     nodes = []
     with open(os.path.join("data_handling/data", "datapoints3D.txt"), "r") as f:
         lines = f.readlines()
         for index, line in enumerate(lines):
             line_split = line.split(",")
-            nodes.append({"id" : index, "name": index_to_genre[index], "fx" : float(line_split[0]), "fy": float(line_split[1]), "fz": float(line_split[2])})
+            _sum = sum(matrix[index_to_genre[index]].values())
 
+            nodes.append({"id" : index, "name": index_to_genre[index], "fx" : float(line_split[0]), "fy": float(line_split[1]), "fz": float(line_split[2]), "weight" : _sum})
+        f.close()
     # go through the co-occurrence matrix to form the links
     links = []
     # with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
@@ -64,7 +79,7 @@ def generate_graph_data_3d():
     graph_data["links"] = links
     with open(os.path.join("data_handling/data", "graph_data_3d.json"), "w") as f:
         json.dump(graph_data, f)
-
+        f.close()
 
 def parse_artist_genres_and_convert_to_word2vec_readable():
     formatted_artists_genres = {}
@@ -101,22 +116,22 @@ def genre_formatter(genre: str) -> str:
     import unidecode
     genre = genre.lower()
     genre = unidecode.unidecode(genre)
-    genre = genre.replace(" ", "_spc_")
-    genre = genre.replace("-", "_hphn_")
-    genre = genre.replace("'", "_pstrph_")
-    genre = genre.replace("&", "_nd_")
-    genre = genre.replace(":", "_cln_")
-    genre = genre.replace("+", "_pls_")
-    genre = genre.replace("1", "_eno_")
-    genre = genre.replace("2", "_owt_")
-    genre = genre.replace("3", "_eerht_")
-    genre = genre.replace("4", "_ruof_")
-    genre = genre.replace("5", "_evif_")
-    genre = genre.replace("6", "_xis_")
-    genre = genre.replace("7", "_neves_")
-    genre = genre.replace("8", "_thgie_")
-    genre = genre.replace("9", "_enin_")
-    genre = genre.replace("0", "_orez_")
+    genre = genre.replace(" ", "qqqspcqqq")
+    genre = genre.replace("-", "qqqhphnqqq")
+    genre = genre.replace("'", "qqqpstrphqqq")
+    genre = genre.replace("&", "qqqndqqq")
+    genre = genre.replace(":", "qqqclnqqq")
+    genre = genre.replace("+", "qqqplsqqq")
+    genre = genre.replace("1", "qqqenoqqq")
+    genre = genre.replace("2", "qqqowtqqq")
+    genre = genre.replace("3", "qqqeerhtqqq")
+    genre = genre.replace("4", "qqqruofqqq")
+    genre = genre.replace("5", "qqqevifqqq")
+    genre = genre.replace("6", "qqqxisqqq")
+    genre = genre.replace("7", "qqqnevesqqq")
+    genre = genre.replace("8", "qqqthgieqqq")
+    genre = genre.replace("9", "qqqeninqqq")
+    genre = genre.replace("0", "qqqorezqqq")
     return genre
              
 
@@ -125,3 +140,4 @@ def genre_formatter(genre: str) -> str:
 
 # parse_artist_genres_and_convert_to_word2vec_readable()
 # parse_artist_genre_sentences_and_convert_to_word2vec_readable()
+

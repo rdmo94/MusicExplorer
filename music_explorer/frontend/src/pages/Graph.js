@@ -43,13 +43,20 @@ function Graph({ genreMap, strategyData }) {
       setGraphHeight(availableSizeElement.clientHeight / 2);
       setGraphWidth(availableSizeElement.clientWidth / 2.1);
     }
+    
+  }, [graphRef]); 
+
+  //Different useEffect, as the one above gets called every time the graphRef changes
+  useEffect(() => {
+    
     fetch("static/graph_data_2d.json")
-      .then((response) => response.json())
+      .then((response) => response.json()
       .then((data) => {
         //TODO check if data is ok
         setData(data);
-      });
-  }, [graphRef]); //empty array to avoid multiple fetches
+      }));
+    
+  }, []); //empty array to avoid multiple fetches
 
   let graph;
   let headline;

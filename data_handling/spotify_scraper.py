@@ -24,15 +24,11 @@ def main():
     genre_sentences = []
     multi_genre_senteces = []
     
-    data = read_json_file(os.path.join("data_handling","data", "artists_genres.json"))
+    data = read_json_file(os.path.join(os.path.dirname(__file__),"data", "artists_genres_old.json"))
     for artist_id, genres in data.items():
         sentence = ""
         for genre in genres:
-            genre = genre.replace(" ", "_spc_")
-            genre = genre.replace("-", "_hphn_")
-            genre = genre.replace("'", "_pstrph_")
-            genre = genre.replace("&", "_nd_")
-            genre = genre.replace(":", "_cln_")
+            genre = genre_formatter(genre)
             sentence = sentence + " " + genre
         sentence = sentence.strip()
         genre_sentences.append(sentence)
@@ -277,17 +273,15 @@ def nomralize_genre_playlists_and_save_to_json():
     genre_playlist_dict = {}
     for filename in os.listdir(genre_playlist_dir):
         file = os.path.join(genre_playlist_dir, filename)
-        if contains(filename, "8"):
-            print("g")
         try:
             with open(file) as currentFile:
                 genre_playlist:dict = json.load(currentFile)
                 normalized_key = genre_formatter(list(genre_playlist.keys())[0])
                 genre_playlist_dict[normalized_key] = list(genre_playlist.values())
         except Exception as e:
-            print("gg")
+            continue
     
-    with open("genre_tracks.json", "w") as outFile:
+    with open(os.path.join(os.path.dirname(__file__), "data", "genre_tracks.json"), "w") as outFile:
         json.dump(genre_playlist_dict, outFile)
         outFile.close()
 
@@ -299,24 +293,26 @@ def genre_formatter(genre: str) -> str:
     import unidecode
     genre = genre.lower()
     genre = unidecode.unidecode(genre)
-    genre = genre.replace(" ", "_spc_")
-    genre = genre.replace("-", "_hphn_")
-    genre = genre.replace("'", "_pstrph_")
-    genre = genre.replace("&", "_nd_")
-    genre = genre.replace(":", "_cln_")
-    genre = genre.replace("+", "_pls_")
-    genre = genre.replace("1", "_eno_")
-    genre = genre.replace("2", "_owt_")
-    genre = genre.replace("3", "_eerht_")
-    genre = genre.replace("4", "_ruof_")
-    genre = genre.replace("5", "_evif_")
-    genre = genre.replace("6", "_xis_")
-    genre = genre.replace("7", "_neves_")
-    genre = genre.replace("8", "_thgie_")
-    genre = genre.replace("9", "_enin_")
-    genre = genre.replace("0", "_orez_")
+    genre = genre.replace(" ", "qqqspcqqq")
+    genre = genre.replace("-", "qqqhphnqqq")
+    genre = genre.replace("'", "qqqpstrphqqq")
+    genre = genre.replace("&", "qqqndqqq")
+    genre = genre.replace(":", "qqqclnqqq")
+    genre = genre.replace("+", "qqqplsqqq")
+    genre = genre.replace("1", "qqqenoqqq")
+    genre = genre.replace("2", "qqqowtqqq")
+    genre = genre.replace("3", "qqqeerhtqqq")
+    genre = genre.replace("4", "qqqruofqqq")
+    genre = genre.replace("5", "qqqevifqqq")
+    genre = genre.replace("6", "qqqxisqqq")
+    genre = genre.replace("7", "qqqnevesqqq")
+    genre = genre.replace("8", "qqqthgieqqq")
+    genre = genre.replace("9", "qqqeninqqq")
+    genre = genre.replace("0", "qqqorezqqq")
     return genre
 
 # normalize_genre_playlists()
 
-nomralize_genre_playlists_and_save_to_json()
+# nomralize_genre_playlists_and_save_to_json()
+
+# main()
