@@ -25,14 +25,12 @@ class Playlist {
     playlist.tracks = []
     var songs = Object.values(genreToSongs)
     var genres = Object.keys(genreToSongs)
-    console.log(songs)
     for (var i = 0; i<songs.length; i++){
       for (var j = 0; j<songs[i].length; j++){
         var song = songs[i][j]
         playlist.tracks.push(Song.fromJSON(song, genres[i]))
       }
     }
-    console.log(playlist)
     
     // Object.values(list)[0].map((track) => {
     //   return Song.fromJSON(track, Object.keys(list)[0]);

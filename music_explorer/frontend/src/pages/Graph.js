@@ -98,7 +98,8 @@ function Graph({ genreMap, strategyData }) {
     );
   } else if (graphType == "GraphColorTest") {
     var links = [];
-    if (strategyData && Object.keys(strategyData)[0] == 3) {
+    console.log("strategyData", strategyData)
+    if (strategyData && Object.keys(strategyData)[0] == '3') {
       //strategy 3 is path strategy
       links = Object.values(strategyData)[0];
     }
