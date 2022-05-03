@@ -134,25 +134,28 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
 
   reorderData()
 
+  function handleNodeClick(node,onClick){
+     console.log("node clicked", node)
+  };
   
 
   
 
   function getNodeVal(node) {
+    const occurrence_divider = 8
     const weight_divider = 400
     const max_size = 4
     const min_size = 1
     const strategy_size = 6
     if (userGenreMap) {
       if (node.name in userGenreMap) {
-        var knownGenreSize = userGenreMap[node.name] / 8;
+        var knownGenreSize = userGenreMap[node.name] / occurrence_divider;
         if (knownGenreSize > max_size) return max_size;
         else if (knownGenreSize > min_size) return knownGenreSize;
         else return min_size;
-      }else if (strategy_genres && strategy_genres.includes(node.name)) {
+      } else if (strategy_genres && strategy_genres.includes(node.name)) {
         return strategy_size;
-      }
-      else {
+      } else {
         //determine size based on weight
         if (node.weight/weight_divider > min_size){
           if (node.weight/weight_divider > max_size){
@@ -198,7 +201,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
       width={width}
       backgroundColor={primaryGrey}
       enableNodeDrag={properties.enableNodeDrag}
-      
+      onNodeClick={handleNodeClick}
       graphData={data}
       //nodeAutoColorBy={node => node.name in userGenreMap}
       nodeColor={(node) => getNodeColor(node)}
