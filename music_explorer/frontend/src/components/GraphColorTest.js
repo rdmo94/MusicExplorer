@@ -153,7 +153,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
     //   return 1;
     // }
 
-    return node.weight / 10000;
+    return node.weight / 100;
   }
 
   function getNodeLabel(node) {
