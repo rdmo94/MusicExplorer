@@ -138,20 +138,22 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
   
 
   function getNodeVal(node) {
-    const max_size = 4
-    const min_size = 1
-    if (userGenreMap) {
-      if (node.name in userGenreMap) {
-        var knownGenreSize = userGenreMap[node.name] / 8;
-        if (knownGenreSize > max_size) return max_size;
-        else if (knownGenreSize > min_size) return knownGenreSize;
-        else return min_size;
-      } else {
-        return 1;
-      }
-    } else {
-      return 1;
-    }
+    // const max_size = 4
+    // const min_size = 1
+    // if (userGenreMap) {
+    //   if (node.name in userGenreMap) {
+    //     var knownGenreSize = userGenreMap[node.name] / 8;
+    //     if (knownGenreSize > max_size) return max_size;
+    //     else if (knownGenreSize > min_size) return knownGenreSize;
+    //     else return min_size;
+    //   } else {
+    //     return 1;
+    //   }
+    // } else {
+    //   return 1;
+    // }
+
+    return node.weight / 10000;
   }
 
   function getNodeLabel(node) {
@@ -194,7 +196,8 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
       //nodeVal={100}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = getNodeLabel(node);
-        const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
+        // const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
+        const fontSize = (getNodeVal(node)); //higher is smaller?
         ctx.font = `${fontSize}px Sans-Serif`;
         const textWidth = ctx.measureText(label).width;
         const bckgDimensions = [textWidth, fontSize].map(
@@ -208,7 +211,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
 
         node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
       }}
-      minZoom={15}
+      minZoom={2}
       //zoom={0.2} //doesnt work.. zz
       linkColor={() => '#2ab04e'}
       linkOpacity={0.9}

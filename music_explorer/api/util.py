@@ -2,6 +2,11 @@ import json
 import os
 import random
 
+def load_similarity_matrix() -> dict:
+    with open(os.path.join(os.path.dirname(__file__), "data", "matrix.json")) as matrix_file:
+        matrix_as_dict = json.load(matrix_file)
+        matrix_file.close()
+        return matrix_as_dict
 
 def parse_track_data() -> dict:
         genre_playlist_dict = {}

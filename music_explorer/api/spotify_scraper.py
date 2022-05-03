@@ -17,48 +17,48 @@ spotify:Spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCreden
 scraped_genres = []
 artists_genres_dict = {}
 
-def main():
-    genre_sentences = []
-    multi_genre_senteces = []
+# def main():
+    # genre_sentences = []
+    # multi_genre_senteces = []
     
-    data = read_json_file(os.path.join("data_handling","data", "artists_genres.json"))
-    for artist_id, genres in data.items():
-        sentence = ""
-        for genre in genres:
-            genre = genre.replace(" ", "_spc_")
-            genre = genre.replace("-", "_hphn_")
-            genre = genre.replace("'", "_pstrph_")
-            genre = genre.replace("&", "_nd_")
-            genre = genre.replace(":", "_cln_")
-            sentence = sentence + " " + genre
-        sentence = sentence.strip()
-        genre_sentences.append(sentence)
+    # data = read_json_file(os.path.join("data_handling","data", "artists_genres.json"))
+    # for artist_id, genres in data.items():
+    #     sentence = ""
+    #     for genre in genres:
+    #         genre = genre.replace(" ", "_spc_")
+    #         genre = genre.replace("-", "_hphn_")
+    #         genre = genre.replace("'", "_pstrph_")
+    #         genre = genre.replace("&", "_nd_")
+    #         genre = genre.replace(":", "_cln_")
+    #         sentence = sentence + " " + genre
+    #     sentence = sentence.strip()
+    #     genre_sentences.append(sentence)
     
-    distinct_genres = set()
-    genres_from_pairs = set()
+    # distinct_genres = set()
+    # genres_from_pairs = set()
 
-    single_genre_counter = 0
-    pairs_counter = 0
-    for sentence in genre_sentences:
+    # single_genre_counter = 0
+    # pairs_counter = 0
+    # for sentence in genre_sentences:
 
-        if " " not in sentence:
-            single_genre_counter += 1
-            distinct_genres.add(sentence)
-        else:
-            multi_genre_senteces.append(sentence)
-            genres = sentence.split(" ")
-            for genre in genres:
-                distinct_genres.add(genre)
-                genres_from_pairs.add(genre)
-            n = len(genres)
-            pairs = (n*(n-1)/2)
-            pairs_counter = pairs_counter + pairs
+    #     if " " not in sentence:
+    #         single_genre_counter += 1
+    #         distinct_genres.add(sentence)
+    #     else:
+    #         multi_genre_senteces.append(sentence)
+    #         genres = sentence.split(" ")
+    #         for genre in genres:
+    #             distinct_genres.add(genre)
+    #             genres_from_pairs.add(genre)
+    #         n = len(genres)
+    #         pairs = (n*(n-1)/2)
+    #         pairs_counter = pairs_counter + pairs
     
-    with open(os.path.join("data_handling", "data", "artists_genre_sentences.txt"), "w") as new_file:
-        for l in multi_genre_senteces:
-            new_file.write(l + "\n")
+    # with open(os.path.join("data_handling", "data", "artists_genre_sentences.txt"), "w") as new_file:
+    #     for l in multi_genre_senteces:
+    #         new_file.write(l + "\n")
 
-    print("lol")
+    # print("lol")
     
 
 def convert_artist_genres_files_to_one_file():
