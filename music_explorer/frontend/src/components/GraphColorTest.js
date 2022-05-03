@@ -164,7 +164,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
             return node.weight/weight_divider;
           }
         } else {
-          return 0;
+          return 1;
         }
       }
     } else {
