@@ -9,6 +9,12 @@ import {
   Button,
   Slider,
   CircularProgress,
+  ToggleButton,
+  TextField,
+  Chip,
+  FilledInput,
+  InputAdornment,
+  OutlinedInput,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { display } from "@mui/system";
@@ -25,14 +31,26 @@ import { useLocalStorage } from "../Util";
 import { makeStyles } from "@mui/styles";
 import { replace_special_characters } from "../Util";
 import { styled } from "@mui/system";
+import {
+  CheckCircleOutlineIcon,
+  RadioButtonUncheckedIcon,
+  Edit,
+} from "@mui/icons-material";
+
 /**
  *
  * @param {Object} selectedUserGenres
  * @param updateStrategyOutputCallback
+ * @param lastSelectedNode
  * @returns
  */
 
-function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
+function Strategies({
+  selectedUserGenres,
+  updateStrategyOutputCallback,
+  lastSelectedNode,
+  setMapSelectMode
+}) {
   const strategies = [
     new Strategy(
       0,
@@ -76,24 +94,41 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   const [isLoadingButtonDisabled, setIsLoadingButtonDisabled] = useState(true);
   const [sourceGenre, setSourceGenre] = useState();
   const [targetGenre, setTargetGenre] = useState();
-  const [allGenres, setAllGenres] = useState();
+  //const [allGenres, setAllGenres] = useState();
+  const [isSelectingSource, setIsSelectingSource] = useState(false);
+  const [isSelectingTarget, setIsSelectingTarget] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "Setting selectedUserGernes in Strategies.js with value = ",
+  //     selectedUserGenres
+  //   );
+  //   fetch("api/get_all_genres").then((response) =>
+  //     response.json().then((json) => setAllGenres(JSON.parse(json).sort()))
+  //   );
+
+  //   if (selectedUserGenres == null) {
+  //     setUserGenres([]);
+  //   } else {
+  //     setUserGenres(selectedUserGenres);
+  //   }
+  //   console.log("done rendering");
+  // }, [selectedUserGenres]);
 
   useEffect(() => {
-    console.log(
-      "Setting selectedUserGernes in Strategies.js with value = ",
-      selectedUserGenres
-    );
-    fetch("api/get_all_genres").then((response) =>
-      response.json().then((json) => setAllGenres(JSON.parse(json).sort()))
-    );
-
-    if (selectedUserGenres == null) {
-      setUserGenres([]);
-    } else {
-      setUserGenres(selectedUserGenres);
+    if (lastSelectedNode) {
+      if (isSelectingSource) {
+        setSourceGenre(lastSelectedNode.name);
+        setIsSelectingSource(false);
+        setMapSelectMode("")
+      } else if (isSelectingTarget) {
+        setTargetGenre(lastSelectedNode.name);
+        setIsSelectingTarget(false);
+        setMapSelectMode("")
+      }
     }
-    console.log("done rendering");
-  }, [selectedUserGenres]);
+    setMapSelectMode("")
+  }, [lastSelectedNode]);
 
   const executeStrategy = () => {
     setIsLoading(true);
@@ -142,8 +177,6 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   };
 
   const handleChangeSelect = (event) => {
-    console.log("sourceGenre", sourceGenre, "targetGenre", targetGenre);
-
     if (
       event.target.value != 3 ||
       (sourceGenre !== undefined && targetGenre !== undefined)
@@ -159,9 +192,25 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
   const handleChangeSongsSlider = (event, newValue) => {
     setNumberOfSongsPerGenre(newValue);
   };
+
   const handleChangeGenresSlider = (event, newValue) => {
     setNumberOfGenreToExplore(newValue);
   };
+
+  function sourceClicked() {
+    setIsSelectingTarget(false);
+    setMapSelectMode("source")
+    var reversed = !isSelectingSource;
+    setIsSelectingSource(reversed);
+  }
+
+  function targetClicked() {
+    setIsSelectingSource(false);
+    setMapSelectMode("target")
+    var reversed = !isSelectingTarget;
+    setIsSelectingTarget(reversed);
+  }
+
   return (
     <Box className="main" style={{ paddingTop: 100, height: "100%" }}>
       <Typography
@@ -171,6 +220,7 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
       >
         Strategy
       </Typography>
+
       {userGenres == null || Object.keys(userGenres).length == 0 ? (
         <Typography color={"white"} padding={2}>
           Please select one or more of your playlists in the panel to the left.
@@ -216,7 +266,34 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
                     Please select one of your own genres as a starting point and
                     which unknown genre you would like to end up at:
                   </Typography>
-                  <FormControl
+
+                  <Chip
+                    icon={<Edit />}
+                    label={
+                      isSelectingSource
+                        ? "Select a source genre on map"
+                        : sourceGenre
+                        ? replace_special_characters(sourceGenre, false)
+                        : "Click to select source genre"
+                    }
+                    color={isSelectingSource ? "primary" : "success"}
+                    onClick={sourceClicked}
+                  />
+
+                  <Chip
+                    icon={<Edit />}
+                    label={
+                      isSelectingTarget
+                        ? "Select a target genre on map"
+                        : targetGenre
+                        ? replace_special_characters(targetGenre, false)
+                        : "Click to select target genre"
+                    }
+                    color={isSelectingTarget ? "primary" : "success"}
+                    onClick={targetClicked}
+                  />
+
+                  {/* <FormControl
                     sx={{
                       color: "white",
                       borderColor: "white",
@@ -244,9 +321,9 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
                         );
                       })}
                     </WhiteSelect>
-                  </FormControl>
+                  </FormControl> */}
 
-                  <FormControl
+                  {/* <FormControl
                     sx={{ color: "white", minWidth: 300, margin: 1 }}
                   >
                     <InputLabel id="label-id" sx={{ color: "white" }}>
@@ -271,7 +348,7 @@ function Strategies({ selectedUserGenres, updateStrategyOutputCallback }) {
                         <></>
                       )}
                     </WhiteSelect>
-                  </FormControl>
+                  </FormControl> */}
                 </div>
               ) : (
                 <></>

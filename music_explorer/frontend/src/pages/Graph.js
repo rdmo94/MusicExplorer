@@ -20,7 +20,7 @@ const WhiteSelect = styled(Select)(({ theme }) => ({
   },
   borderColor: "white",
 }));
-function Graph({ genreMap, strategyData }) {
+function Graph({ genreMap, strategyData, graphNodeClickCallback, graphSelectViewMode }) {
   const [data, setData] = useState();
   const [graphType, setGraphType] = useLocalStorage("graphType", "");
   const [localGraphProperties, setLocalGraphProperties] = useLocalStorage(
@@ -98,7 +98,6 @@ function Graph({ genreMap, strategyData }) {
     );
   } else if (graphType == "GraphColorTest") {
     var links = [];
-    console.log("strategyData", strategyData)
     if (strategyData && Object.keys(strategyData)[0] == '3') {
       //strategy 3 is path strategy
       links = Object.values(strategyData)[0];
@@ -112,6 +111,8 @@ function Graph({ genreMap, strategyData }) {
         links={links}
         height={graphHeight}
         width={graphWidth}
+        nodeClickCallback={graphNodeClickCallback}
+        selectViewMode={graphSelectViewMode}
       />
     );
   }

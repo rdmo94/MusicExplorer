@@ -22,7 +22,7 @@ import {
  * @param {List<String>} param.links List<genres>
  * @returns 
  */
-function GraphColorTest({ data, properties, userGenreMap, strategy, links, height, width}) {
+function GraphColorTest({ data, properties, userGenreMap, strategy, links, height, width, nodeClickCallback, selectViewMode}) {
   var strategy_number = undefined
   var strategy_genres = [] //clean array of genres in strategy
   var user_genres = [] //clean array of genres in userGenreMap
@@ -134,12 +134,18 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
 
   reorderData()
 
-  function handleNodeClick(node,onClick){
-     console.log("node clicked", node)
-  };
-  
-
-  
+  function getNodeVisibility(node){
+    if (selectViewMode == "source"){
+      if (!(node.name in userGenreMap)){
+        return false;
+      }
+    } else if (selectViewMode == "target"){
+      if (node.name in userGenreMap){
+        return false;
+      }
+    }
+    return true;
+  }
 
   function getNodeVal(node) {
     const occurrence_divider = 8
@@ -147,6 +153,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
     const max_size = 4
     const min_size = 1
     const strategy_size = 6
+
     if (userGenreMap) {
       if (node.name in userGenreMap) {
         var knownGenreSize = userGenreMap[node.name] / occurrence_divider;
@@ -201,9 +208,10 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
       width={width}
       backgroundColor={primaryGrey}
       enableNodeDrag={properties.enableNodeDrag}
-      onNodeClick={handleNodeClick}
+      onNodeClick={nodeClickCallback}
       graphData={data}
       //nodeAutoColorBy={node => node.name in userGenreMap}
+      nodeVisibility={(node) => getNodeVisibility(node)}
       nodeColor={(node) => getNodeColor(node)}
       nodeLabel={(node) => getNodeLabel(node)} //label when hovering
       nodeVal={(node) => getNodeVal(node)}

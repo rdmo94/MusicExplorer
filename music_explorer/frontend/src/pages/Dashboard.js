@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Box, Grid, Button } from "@mui/material";
 import Strategies from "../components/Strategies";
 import Graph from "./Graph";
@@ -32,8 +32,16 @@ function Dashboard() {
 
   const [showGraph, setShowGraph] = useLocalStorage("showGraph", null);
 
+  const [lastClickedGenreNode, setLastClickedGenreNode] = useLocalStorage(
+    "lastClickedGenreNode",
+    null
+  );
+
+  const [graphSelectViewMode, setGraphSelectViewMode] = useState("");
+
+  
+
   function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
-    console.log("Setting userGenreMap in Dashboard.js");
     setPlaylistsGenreMap(genreOccurrenceMap);
   }
 
@@ -44,6 +52,10 @@ function Dashboard() {
     setGeneratedPlaylist(strategyOutput["playlist"]);
 
     setShowGraph(false);
+  }
+
+  function handleNodeClick(node, event){
+    setLastClickedGenreNode(node)
   }
 
   return (
@@ -82,7 +94,12 @@ function Dashboard() {
           id={"graph"}
         >
           {generatedPlaylist == null || showGraph ? (
-            <Graph genreMap={playlistsGenreMap} strategyData={strategyData} />
+            <Graph 
+            genreMap={playlistsGenreMap} 
+            strategyData={strategyData} 
+            graphNodeClickCallback={handleNodeClick} 
+            graphSelectViewMode={graphSelectViewMode}
+            />
           ) : (
             <PlaylistScreen
               generatedPlaylist={generatedPlaylist}
@@ -96,6 +113,8 @@ function Dashboard() {
           <Strategies
             selectedUserGenres={playlistsGenreMap}
             updateStrategyOutputCallback={handleStrategyOutputChange}
+            lastSelectedNode={lastClickedGenreNode}
+            setMapSelectMode={setGraphSelectViewMode}
           />
         </Box>
       </Grid>
