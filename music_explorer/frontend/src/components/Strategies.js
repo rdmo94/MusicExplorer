@@ -15,6 +15,7 @@ import {
   FilledInput,
   InputAdornment,
   OutlinedInput,
+  List
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { display } from "@mui/system";
@@ -37,6 +38,7 @@ import {
   Edit,
 } from "@mui/icons-material";
 
+import StrategyOutput from "./StrategyOutput";
 /**
  *
  * @param {Object} selectedUserGenres
@@ -97,6 +99,8 @@ function Strategies({
   //const [allGenres, setAllGenres] = useState();
   const [isSelectingSource, setIsSelectingSource] = useState(false);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
+  const [allGenres, setAllGenres] = useState();
+  const [output, setOutput] = useLocalStorage("generatedOutput", null);
 
   // useEffect(() => {
   //   console.log(
@@ -154,7 +158,12 @@ function Strategies({
       .then((response) =>
         response.json().then((data) => {
           updateStrategyOutputCallback(JSON.parse(data));
+          console.log(
+            "Setting out out with values: ",
+            JSON.parse(data)["genres"]
+          );
           setIsLoading(false);
+          setOutput(JSON.parse(data));
         })
       )
       .catch((e) => {
@@ -213,61 +222,75 @@ function Strategies({
 
   return (
     <Box className="main" style={{ paddingTop: 100, height: "100%" }}>
-      <Typography
-        color={"white"}
-        variant="h3"
-        style={{ fontWeight: "bold", paddingLeft: 25 }}
-      >
-        Strategy
-      </Typography>
-
-      {userGenres == null || Object.keys(userGenres).length == 0 ? (
-        <Typography color={"white"} padding={2}>
-          Please select one or more of your playlists in the panel to the left.
-        </Typography>
-      ) : (
-        <Box
-          sx={{ display: "flex", paddingTop: 5 }}
-          flexDirection="column"
-          alignItems="center"
+      <List style={{overflow: "auto", maxHeight: "100%"}}>
+        <Typography
+          color={"white"}
+          variant="h3"
+          style={{ fontWeight: "bold", paddingLeft: 25 }}
         >
-          <FormControl
-            sx={{ color: "white", minWidth: 300, borderColor: "white" }}
-          >
-            <InputLabel id="label-id" sx={{ color: "white" }}>
-              Select strategy...
-            </InputLabel>
-            <WhiteSelect
-              sx={{ borderColor: "white", color: "white" }}
-              //defaultValue={""}
-              labelId="label-id"
-              id="selector"
-              value={strategy != null ? strategy : ""}
-              label="Select strategy..."
-              onChange={handleChangeSelect}
-            >
-              <MenuItem value={0}>Random</MenuItem>
-              <MenuItem value={1}>Take me away</MenuItem>
-              <MenuItem value={2}>A little cautious a little curious</MenuItem>
-              <MenuItem value={3}>Smooth transition</MenuItem>
-            </WhiteSelect>
-          </FormControl>
-          {userGenres != null && strategy != null ? (
-            <Box
-              padding={2}
-              display={"flex"}
-              flexDirection={"column"}
-              justifyContent={"space-evenly"}
-              alignItems={"center"}
-            >
-              {strategies[strategy].id == 3 ? (
-                <div>
-                  <Typography padding={2} fontStyle={{ color: "white" }}>
-                    Please select one of your own genres as a starting point and
-                    which unknown genre you would like to end up at:
-                  </Typography>
-
-                  <Chip
+          Strategy
+        </Typography>
+        {output !== null ? (
+          <div>
+            <StrategyOutput
+              output={output}
+              resetOutputCallback={() => {
+                setOutput(null);
+              }}
+            />
+          </div>
+        ) : (
+          <div>
+            {userGenres == null || Object.keys(userGenres).length == 0 ? (
+              <Typography color={"white"} padding={2}>
+                Please select one or more of your playlists in the panel to the
+                left.
+              </Typography>
+            ) : (
+              <Box
+                sx={{ display: "flex", paddingTop: 5 }}
+                flexDirection="column"
+                alignItems="center"
+              >
+                <FormControl
+                  sx={{ color: "white", minWidth: 300, borderColor: "white" }}
+                >
+                  <InputLabel id="label-id" sx={{ color: "white" }}>
+                    Select strategy...
+                  </InputLabel>
+                  <WhiteSelect
+                    sx={{ borderColor: "white", color: "white" }}
+                    //defaultValue={""}
+                    labelId="label-id"
+                    id="selector"
+                    value={strategy != null ? strategy : ""}
+                    label="Select strategy..."
+                    onChange={handleChangeSelect}
+                  >
+                    <MenuItem value={0}>Random</MenuItem>
+                    <MenuItem value={1}>Take me away</MenuItem>
+                    <MenuItem value={2}>
+                      A little cautious a little curious
+                    </MenuItem>
+                    <MenuItem value={3}>Smooth transition</MenuItem>
+                  </WhiteSelect>
+                </FormControl>
+                {userGenres != null && strategy != null ? (
+                  <Box
+                    padding={2}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"space-evenly"}
+                    alignItems={"center"}
+                  >
+                    {strategies[strategy].id == 3 ? (
+                      <div>
+                        <Typography padding={2} fontStyle={{ color: "white" }}>
+                          Please select one of your own genres as a starting
+                          point and which unknown genre you would like to end up
+                          at:
+                        </Typography>
+                        <Chip
                     icon={<Edit />}
                     label={
                       isSelectingSource
@@ -293,171 +316,131 @@ function Strategies({
                     onClick={targetClicked}
                   />
 
-                  {/* <FormControl
-                    sx={{
-                      color: "white",
-                      borderColor: "white",
-                      minWidth: 300,
-                      margin: 1,
-                    }}
-                  >
-                    <InputLabel id="label-id1" sx={{ color: "white" }}>
-                      Select starting genre...
-                    </InputLabel>
-                    <WhiteSelect
-                      sx={{ color: "white" }}
-                      defaultValue={""}
-                      labelId="label-id1"
-                      id="selector"
-                      label="Select starting genre..."
-                      value={sourceGenre ? sourceGenre : ""}
-                      onChange={handleSourceChange}
-                    >
-                      {Object.keys(userGenres).map((genre) => {
-                        return (
-                          <MenuItem value={genre}>
-                            {replace_special_characters(genre)}
-                          </MenuItem>
-                        );
-                      })}
-                    </WhiteSelect>
-                  </FormControl> */}
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    <Typography color={"white"} width={300}>
+                      {"Number of genres collected: " +
+                        Object.keys(selectedUserGenres).length}
+                    </Typography>
+                    <Box width={300} flex="center" paddingTop={5}>
+                      <Typography
+                        color={"white"}
+                        id="songsSliderLabel"
+                        gutterBottom
+                      >
+                        Number of wanted songs per genre:{" "}
+                        {numberOfSongsPerGenre}
+                      </Typography>
+                      <Slider
+                        sx={{ color: primaryGreen }}
+                        size="small"
+                        defaultValue={2}
+                        value={numberOfSongsPerGenre}
+                        aria-label="Small"
+                        valueLabelDisplay="auto"
+                        min={1}
+                        max={10}
+                        label="songsSliderLabel"
+                        onChange={handleChangeSongsSlider}
+                        aria-labelledby="songsSliderLabel"
+                      />
 
-                  {/* <FormControl
-                    sx={{ color: "white", minWidth: 300, margin: 1 }}
-                  >
-                    <InputLabel id="label-id" sx={{ color: "white" }}>
-                      Select destination genre...
-                    </InputLabel>
-                    <WhiteSelect
-                      sx={{ color: "white" }}
-                      //defaultValue={""}
-                      labelId="label-id"
-                      id="selector"
-                      label="Select destination genre..."
-                      value={targetGenre ? targetGenre : ""}
-                      onChange={handleTargetChange}
-                    >
-                      {allGenres ? (
-                        allGenres.map((genre) => (
-                          <MenuItem value={genre}>
-                            {replace_special_characters(genre)}
-                          </MenuItem>
-                        ))
-                      ) : (
-                        <></>
-                      )}
-                    </WhiteSelect>
-                  </FormControl> */}
-                </div>
-              ) : (
-                <></>
-              )}
-              <Typography color={"white"} width={300}>
-                {"Number of genres collected: " +
-                  Object.keys(selectedUserGenres).length}
-              </Typography>
-              <Box width={300} flex="center" paddingTop={5}>
-                <Typography color={"white"} id="songsSliderLabel" gutterBottom>
-                  Number of wanted songs per genre: {numberOfSongsPerGenre}
-                </Typography>
-                <Slider
-                  sx={{ color: primaryGreen }}
-                  size="small"
-                  defaultValue={2}
-                  value={numberOfSongsPerGenre}
-                  aria-label="Small"
-                  valueLabelDisplay="auto"
-                  min={1}
-                  max={10}
-                  label="songsSliderLabel"
-                  onChange={handleChangeSongsSlider}
-                  aria-labelledby="songsSliderLabel"
-                />
-
-                <Typography color={"white"} id="genresSliderLabel" gutterBottom>
-                  Number of wanted new genres to explore:{" "}
-                  {numberOfGenresToExplore}
-                </Typography>
-                <Slider
-                  sx={{ color: primaryGreen }}
-                  size="small"
-                  defaultValue={2}
-                  value={numberOfGenresToExplore}
-                  aria-label="Small"
-                  valueLabelDisplay="auto"
-                  min={1}
-                  max={50}
-                  label="genresSliderLabel"
-                  onChange={handleChangeGenresSlider}
-                  aria-labelledby="genresSliderLabel"
-                />
-                <div>
-                  <Typography color={"white"} sx={{ fontWeight: "bold" }}>
-                    Description
-                  </Typography>
-                  <Typography color={"white"}>
-                    {strategies[strategy].description}
-                  </Typography>
-                </div>
+                      <Typography
+                        color={"white"}
+                        id="genresSliderLabel"
+                        gutterBottom
+                      >
+                        Number of wanted new genres to explore:{" "}
+                        {numberOfGenresToExplore}
+                      </Typography>
+                      <Slider
+                        sx={{ color: primaryGreen }}
+                        size="small"
+                        defaultValue={2}
+                        value={numberOfGenresToExplore}
+                        aria-label="Small"
+                        valueLabelDisplay="auto"
+                        min={1}
+                        max={50}
+                        label="genresSliderLabel"
+                        onChange={handleChangeGenresSlider}
+                        aria-labelledby="genresSliderLabel"
+                      />
+                      <div>
+                        <Typography color={"white"} sx={{ fontWeight: "bold" }}>
+                          Description
+                        </Typography>
+                        <Typography color={"white"}>
+                          {strategies[strategy].description}
+                        </Typography>
+                      </div>
+                    </Box>
+                  </Box>
+                ) : (
+                  <></>
+                )}
               </Box>
-            </Box>
-          ) : (
-            <></>
-          )}
-        </Box>
-      )}
-
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 65,
-          right: 65,
-          paddingTop: 5,
-        }}
-      >
-        <LoadingButton
-          disabled={isLoadingButtonDisabled}
-          loading={isLoading}
-          variant="contained"
-          style={{
-            width: 200,
-            height: 75,
-            borderRadius: 200,
-            backgroundColor: isLoadingButtonDisabled
-              ? primaryGreyDark
-              : isLoading
-              ? primaryGreyDark
-              : primaryGreen,
-          }}
-          onClick={executeStrategy}
-        >
-          <Box
-            flexDirection="column"
-            alignItems="center"
-            sx={{ display: "flex", paddingLeft: 10, paddingRight: 10 }}
-          >
-            {isLoading ? (
-              <></>
-            ) : (
-              <div>
-                <Typography
-                  color={isLoadingButtonDisabled ? primaryGreyLight : "white"}
-                  sx={{ fontWeight: "bold" }}
-                >
-                  GENERATE
-                </Typography>
-                <Typography
-                  color={isLoadingButtonDisabled ? primaryGreyLight : "white"}
-                  sx={{ fontWeight: "bold" }}
-                >
-                  PLAYLIST
-                </Typography>
-              </div>
             )}
-          </Box>
-        </LoadingButton>
-      </Box>
+
+            <Box
+              sx={{
+                position: "fixed",
+                bottom: 65,
+                right: 65,
+                paddingTop: 5,
+              }}
+            >
+              <LoadingButton
+                disabled={isLoadingButtonDisabled}
+                loading={isLoading}
+                variant="contained"
+                style={{
+                  width: 200,
+                  height: 75,
+                  borderRadius: 200,
+                  backgroundColor: isLoadingButtonDisabled
+                    ? primaryGreyDark
+                    : isLoading
+                    ? primaryGreyDark
+                    : primaryGreen,
+                }}
+                onClick={executeStrategy}
+              >
+                <Box
+                  flexDirection="column"
+                  alignItems="center"
+                  sx={{ display: "flex", paddingLeft: 10, paddingRight: 10 }}
+                >
+                  {isLoading ? (
+                    <></>
+                  ) : (
+                    <div>
+                      <Typography
+                        color={
+                          isLoadingButtonDisabled ? primaryGreyLight : "white"
+                        }
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        GENERATE
+                      </Typography>
+                      <Typography
+                        color={
+                          isLoadingButtonDisabled ? primaryGreyLight : "white"
+                        }
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        PLAYLIST
+                      </Typography>
+                    </div>
+                  )}
+                </Box>
+              </LoadingButton>
+            </Box>
+          </div>
+        )}
+      </List>
     </Box>
   );
 }

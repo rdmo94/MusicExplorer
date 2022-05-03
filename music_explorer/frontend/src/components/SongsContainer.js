@@ -13,8 +13,7 @@ import Song from "../models/Song.js";
  */
 function SongsContainer({ tracks, playSongCallback }) {
   return (
-
-    <List style={{ overflow: "auto", maxHeight: 1100}}>
+    <List style={{ overflow: "auto", height: "90vh" }}>
       {console.log("tracks", tracks)}
       {tracks.map((track, index) => {
         return (
@@ -24,8 +23,12 @@ function SongsContainer({ tracks, playSongCallback }) {
                 playSongCallback(track.id);
               }}
               variant="conained"
-              style={{
+              sx={{
+                cursor: "pointer",
                 backgroundColor: `${primaryGrey}`,
+                "&:hover": {
+                  backgroundColor: `${primaryGreyLight}`,
+                },
                 borderRadius: "200px",
                 paddingLeft: "30px",
                 paddingRight: "5px",
@@ -53,11 +56,12 @@ function SongsContainer({ tracks, playSongCallback }) {
                 <Grid
                   container
                   direction={"column"}
+                  spacing={0}
                   item
-                  justifyContent={"space-evenly"}
+                  justifyContent={"center"}
                   alignItems={"flex-start"}
                   xs={10}
-                  style={{ padding: 5 }}
+                  style={{padding: 15}}
                 >
                   <Grid item>
                     <Typography style={{ color: "white", fontWeight: "bold" }}>
@@ -67,13 +71,11 @@ function SongsContainer({ tracks, playSongCallback }) {
                   <Grid item>
                     {/*console.log(track)*/}
                     <Typography style={{ color: "white" }}>
-                      <List style={{ maxHeight: 100, overflow: "auto" }}>
-                        {track.artists.map((artist, index) =>
-                          index + 1 != track.artists.length
-                            ? artist + ", "
-                            : artist
-                        )}
-                      </List>
+                      {track.artists.map((artist, index) =>
+                        index + 1 != track.artists.length
+                          ? artist + ", "
+                          : artist
+                      )}
                     </Typography>
                   </Grid>
                   <Grid item>

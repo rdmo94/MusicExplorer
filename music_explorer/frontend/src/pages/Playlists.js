@@ -28,7 +28,7 @@ function Playlists({ updateUserGenreMap }) {
   useEffect(() => {
     let availableSizeElement = document.getElementById("playlist");
     if (availableSizeElement) {
-      setListHeight(availableSizeElement.clientHeight*0.6);
+      setListHeight(availableSizeElement.clientHeight * 0.6);
     }
     setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
@@ -50,7 +50,7 @@ function Playlists({ updateUserGenreMap }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(playlists),
     };
-    console.log("Calling getSelectedPlaylistGenreMap from Playlist.js")
+    console.log("Calling getSelectedPlaylistGenreMap from Playlist.js");
     fetch("/spotify/get_playlist_genres", requestOptions).then((response) =>
       response.json().then((json) => {
         setLoadingGenres(false);
@@ -85,8 +85,8 @@ function Playlists({ updateUserGenreMap }) {
       display={"flex"}
       flexGrow={1}
     >
-      <List style={{ overflow: "auto" }}>
-        <Grid container direction="column" justifyContent="space-between">
+      <List style={{ overflow: "auto", width: "100%" }}>
+        <Grid container direction="column" justifyContent="space-between" height={"100%"}>
           <Grid item padding={2}>
             <Typography
               variant="h3"
@@ -95,6 +95,13 @@ function Playlists({ updateUserGenreMap }) {
               My playlists
             </Typography>
 
+            <List
+              style={{
+                width: "100%",
+                maxHeight: "70vh", //TODO fix to fit screen
+                overflow: "auto",
+              }}
+            >
             {loadingPlaylists ? (
               <Grid
                 container
@@ -105,12 +112,6 @@ function Playlists({ updateUserGenreMap }) {
                 <CircularProgress />
               </Grid>
             ) : (
-              <List
-                style={{
-                  height: listHeight, //TODO fix to fit screen
-                  overflow: "auto",
-                }}
-              >
                 <Grid container direction="column" paddingLeft={2}>
                   {playlists.map((playlist) => {
                     let playlistName = Object.values(playlist)[0];
@@ -144,17 +145,25 @@ function Playlists({ updateUserGenreMap }) {
                     );
                   })}
                 </Grid>
-              </List>
             )}
+            </List>
           </Grid>
         </Grid>
       </List>
-      
-      <Grid
-        container
-        direction="row"
+
+      <Box
+        style={{
+          position: "fixed",
+          bottom: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          width: 350
+        }}
+        
+        flexDirection="row"
         justifyContent="space-evenly"
         alignItems="center"
+        display={"flex"}
       >
         <LoadingButton
           size="small"
@@ -163,16 +172,24 @@ function Playlists({ updateUserGenreMap }) {
           loading={loadingGenres}
           loadingPosition="end"
           variant="contained"
-          style={{borderRadius: 200, backgroundColor: primaryGreen}}
+          style={{ borderRadius: 200, backgroundColor: primaryGreen }}
           disabled={selectedPlaylists.length == 0 ? true : false}
         >
           Fetch Genres
         </LoadingButton>
 
-        <Button variant="outlined" style={{borderRadius: 200, borderColor: primaryGreen, color: primaryGreen}} onClick={() => resetPlaylistGenreMap()}>
+        <Button
+          variant="outlined"
+          style={{
+            borderRadius: 200,
+            borderColor: primaryGreen,
+            color: primaryGreen,
+          }}
+          onClick={() => resetPlaylistGenreMap()}
+        >
           Clear
         </Button>
-      </Grid>
+      </Box>
     </Box>
   );
 }
