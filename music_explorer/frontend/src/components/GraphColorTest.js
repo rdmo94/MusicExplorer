@@ -58,8 +58,8 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
     //console.log("genreIdLinks", genreIdLinks)
     //console.log("data", data)
     data.links = genreIdLinks
-    console.log("links from graphcolortest", links)
-    console.log("genreIdLinks from graphcolortest", genreIdLinks)
+    // console.log("links from graphcolortest", links)
+    // console.log("genreIdLinks from graphcolortest", genreIdLinks)
     //console.log("new data", data)
   }
 
@@ -121,7 +121,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
         return i
       }
     }
-    console.log("could not find index of genre " + genre)
+    console.warn("could not find index of genre " + genre)
   }
 
   /**
@@ -135,6 +135,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
   reorderData()
 
   function getNodeVisibility(node){
+    const min_node_weight = 100 //CONFIG
     if (selectViewMode == "source"){
       if (!(node.name in userGenreMap)){
         return false;
@@ -144,7 +145,9 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
         return false;
       }
     }
-    return true;
+    if (node.weight > min_node_weight) return true;
+    else return false;
+    
   }
 
   function getNodeVal(node) {
