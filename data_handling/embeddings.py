@@ -36,7 +36,7 @@ def save_word2vec_model(model:gensim.models.Word2Vec):
     # outfile.close()
 
 def load_word2vec_model() -> gensim.models.Word2Vec:
-    return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word2vec_model"))
+    return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word_2_vec_model"))
 
 def create_tsne_model(vectors, n_components=2, learning_rate='auto', init='random', verbose=0):
     return TSNE(n_components=n_components).fit_transform(vectors)
@@ -142,5 +142,5 @@ def get_all_genres_available() -> list[str]:
 
 # generate_vector_space_graph(load_word2vec_model())
 
-# load_word2vec_model()
-
+#model = load_word2vec_model()
+#print("hey")

@@ -4,6 +4,7 @@ import random
 from .embeddings import load_vector_space_from_file, unpickle_pickle, get_all_genres_available
 from collections import defaultdict
 from .graph_util import load_gml_graph
+from .util import load_word2vec_model
 import networkx as nx
 
 def furthest_or_closest_genres(user_genres: list[str], n_genres=2, furthest:bool=True) -> list[str]:
@@ -59,7 +60,57 @@ def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, 
     G = load_gml_graph(os.path.join(os.path.dirname(__file__), "data", "networkx_graph.gml"))
 
     # Find path from source to target genre
-    shortest_path = nx.shortest_path(G, source=source_genre, target=target_genre)
+    shortest_path:list[str] = nx.shortest_path(G, source=source_genre, target=target_genre)
+
+    #load word_2_vec model
+    w2v_model = load_word2vec_model()
+
+    while len(shortest_path) != n_genres:
+        #genre_pair_to_distance:dict[tuple[str,str], float] = {}
+        genre_pair_distance:list[(str,str,float)] = []
+        for index, genre in enumerate(shortest_path):
+            #check distance between every pair
+            if index < len(shortest_path-2):
+                #genre_pair_to_distance[(genre, shortest_path[index+1])] = distance
+                distance = w2v_model.wv.distance(genre, shortest_path[index+1])
+                genre_pair_distance.append(genre, shortest_path[index+1], distance)
+
+        if len(shortest_path) > n_genres:
+            #if remove then find shortest distance
+            shortest_tuple = min(genre_pair_distance, key=lambda t: t[2])
+            index_of_shortest_distance = genre_pair_distance.index(shortest_tuple)
+
+            if index_of_shortest_distance == 0:
+                #if first index remove next index
+                del shortest_path[1]
+            elif index_of_shortest_distance == len(genre_pair_distance-1):
+                #if last index remove previous index
+                del shortest_path[len(shortest_path)-2]
+            else:
+                #check previous and next distance
+                #left = index 0
+                #right = index 1
+                left_distance = genre_pair_distance[index_of_shortest_distance-1]
+                right_distance = genre_pair_distance[index_of_shortest_distance+1]
+
+                if left_distance[2] < right_distance[2]:
+                    shortest_path.remove(left_distance[1])
+                else:
+                    shortest_path.remove(right_distance[0])
+
+
+
+        else:
+            #if add then find longest distance
+            pass
+    
+    return shortest_path
+        
+
+
+
+
+    
 
     # Return list of genres -- the path
     return shortest_path

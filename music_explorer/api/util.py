@@ -1,6 +1,9 @@
 import json
 import os
 import random
+from gensim.test.utils import datapath
+from gensim import utils
+import gensim.models
 
 def load_similarity_matrix() -> dict:
     with open(os.path.join(os.path.dirname(__file__), "data", "matrix.json")) as matrix_file:
@@ -36,3 +39,6 @@ def reverse_genre_to_track_ids_dict(genre_to_tracks:dict[str,list[str]]) -> dict
             reversed_dict[track] = genre
     
     return reversed_dict
+
+def load_word2vec_model() -> gensim.models.Word2Vec:
+    return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word_2_vec_model"))
