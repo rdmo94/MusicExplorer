@@ -94,23 +94,16 @@ def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, 
                 right_distance = genre_pair_distance[index_of_shortest_distance+1]
 
                 if left_distance[2] < right_distance[2]:
+                    print("Removing ", left_distance[1], " from shortest path!")
                     shortest_path.remove(left_distance[1])
                 else:
+                    print("Removing ", right_distance[0], " from shortest path!")
                     shortest_path.remove(right_distance[0])
-
-
-
         else:
             #if add then find longest distance
-            pass
+            longest_tuple = max(genre_pair_distance, key=lambda t: t[2])
+            most_similar = w2v_model.wv.most_similar(positive=[longest_tuple[0], longest_tuple[1]], topn=1)
+            print("Adding genre ", most_similar[0], " to shortest path")
+            shortest_path.insert(longest_tuple[1], most_similar[0])
     
-    return shortest_path
-        
-
-
-
-
-    
-
-    # Return list of genres -- the path
     return shortest_path
