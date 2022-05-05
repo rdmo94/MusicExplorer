@@ -8,7 +8,7 @@ import Login from "./Login";
 import { createTheme } from "@mui/material";
 function Home() {
   //let navigate = Navigate()
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
     handleAuthentication();
@@ -20,6 +20,7 @@ function Home() {
   }
 
   function checkIfAuthenticated() {
+    //Automatically updates the token, if it has expired
     return fetch("/spotify/is-authenticated")
       .then((response) => response.json())
       .then((data) => {
@@ -28,6 +29,7 @@ function Home() {
           return true;
         } else {
           //not authenticated
+          //Try to update
           return false;
         }
       });
@@ -45,7 +47,7 @@ function Home() {
   
 
   return (
-     <div className="main">{isAuthenticated ? <Dashboard /> : <Login />}</div>
+     <div className="main">{isAuthenticated === true ? <Dashboard /> : isAuthenticated === false ? <Login/> : <></>}</div>
   
     // <div>
 

@@ -36,6 +36,8 @@ def get_genre_to_tracks_dict(request, genre_track_ids:dict[str,list[str]]):
 
     if all_tracks_response.status_code == 200:
         all_tracks = all_tracks_response.data
+    else:
+        return None
     
 
     genre_to_tracks = {}
@@ -63,6 +65,8 @@ class RandomStrategy(APIView):
         id = RANDOM
 
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=genre_tracks)
+        if genre_to_tracks_dict is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : random_genres_chosen, "id" : id}),
                         status=status.HTTP_200_OK)
@@ -80,7 +84,8 @@ class TakeMeAwayStrategy(APIView):
         id = TAKE_ME_AWAY
 
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
-        
+        if genre_to_tracks_dict is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : genres, "id" : id}),
                         status=status.HTTP_200_OK)
 
@@ -97,7 +102,8 @@ class ALittleCuriousStrategy(APIView):
         id = ALCALC
 
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
-        
+        if genre_to_tracks_dict is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : genres, "id" : id}),
                         status=status.HTTP_200_OK)
 
@@ -116,7 +122,8 @@ class SmoothTransitionRandomStrategy(APIView):
         id = SMOOTH_T
 
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
-
+        if genre_to_tracks_dict is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         # for genre, tracks in path_tracks.items():
         #     genres.append(genre)
         #     for track in tracks:
