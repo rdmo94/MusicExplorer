@@ -117,8 +117,6 @@ class SmoothTransitionRandomStrategy(APIView):
         target_genre = json_data["target_genre"]
         path_genres = stg.smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre=source_genre, target_genre=target_genre, n_genres=n_genres)
         path_tracks = select_n_random_tracks(n_songs=n_songs_per_genre, chosen_genres=path_genres)
-        playlist = []
-        genres = []
         id = SMOOTH_T
 
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)

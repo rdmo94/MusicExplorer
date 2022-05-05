@@ -20,7 +20,6 @@
       "program": "${workspaceFolder}/music_explorer/manage.py",
       "args": ["runserver"],
       "django": true,
-      "stopOnEntry": true,
       "justMyCode": true
     },
     {

@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 from posixpath import split
 from random import randint
 from unicodedata import name
@@ -11,12 +12,17 @@ from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from api.models import User
-from ..util import get_user_tokens, get_current_user, filter_spotify_playlists, genre_formatter
 from requests import post, put, get
 from spotipy import Spotify
+from ..util import get_user_tokens, get_current_user, filter_spotify_playlists, genre_formatter
+
+if True: #hacki hacki
+    sys.path.append("...")
+    from api.util import load_word2vec_model
 
 logging.getLogger('spotipy').setLevel(logging.WARNING)
 logging.getLogger('requests').setLevel(logging.WARNING)
+
 
 class GetCurrentUserPlaylistsView(APIView):
     def get(self, request, format=None):
@@ -59,6 +65,10 @@ class CreatePlaylistView(APIView):
 
 
 class GetPlaylistGenresView(APIView):
+    def lists_intersection(self, lst1, lst2):
+        lst3 = [value for value in lst1 if value in lst2]
+        return lst3
+
     def split_list(self, list: list[object], max_list_size: int) -> list[object]:
         return [list[i:i + max_list_size] for i in range(0, len(list), max_list_size)]
 
@@ -125,11 +135,19 @@ class GetPlaylistGenresView(APIView):
             sp = Spotify(auth=user_tokens.access_token)
             genre_ocurrences = dict()
 
+            # load word_2_vec model
+            w2v_model = load_word2vec_model()
+            model_genres = w2v_model.wv.key_to_index.keys()
+
             # 0) For each playlist: //TODO check if empty
             for playlist_id in request.data:
                 tracks = get_all_playlist_tracks(sp, playlist_id)
                 artists = self.get_track_artists(tracks)
                 genres = self.get_artist_genres(spotify=sp, artists=artists)
+                
+                #filter genres not in word_2_vec_model (intersection)
+                genres = self.lists_intersection(genres, model_genres)
+
                 current_playlist_ocurrence_dict = self.get_occurence_dict(
                     genres)
                 genre_ocurrences = self.combine_occurence_dicts(
@@ -142,23 +160,25 @@ class GetPlaylistGenresView(APIView):
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-            
+
 class GeneratePlaylistView(APIView):
     def post(self, request):
         json_data = request.data
         playlist_genres = json_data["playlist_genres"]
         n_songs_genre = json_data["n_songs_genre"]
-        
-### GLOBAL PLAYLIST HELPER FUNCTIONS
 
-def get_all_playlist_tracks(spotify:Spotify, playlist_id:str) -> list[str]:
-        playlist = spotify.playlist(playlist_id=playlist_id)
-        number_of_tracks = playlist['tracks']['total']
-        tracks = []
-        for n in range(0, number_of_tracks, 100):
-            track_chunk = spotify.playlist_tracks(playlist_id=playlist_id, offset=n)
-            tracks.extend(track_chunk['items'])
-        return tracks
+# GLOBAL PLAYLIST HELPER FUNCTIONS
+
+
+def get_all_playlist_tracks(spotify: Spotify, playlist_id: str) -> list[str]:
+    playlist = spotify.playlist(playlist_id=playlist_id)
+    number_of_tracks = playlist['tracks']['total']
+    tracks = []
+    for n in range(0, number_of_tracks, 100):
+        track_chunk = spotify.playlist_tracks(
+            playlist_id=playlist_id, offset=n)
+        tracks.extend(track_chunk['items'])
+    return tracks
 
 
 # class UpdatePlaylistView(APIView):

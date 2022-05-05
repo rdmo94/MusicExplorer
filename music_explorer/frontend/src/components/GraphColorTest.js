@@ -158,13 +158,13 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
     const strategy_size = 6
 
     if (userGenreMap) {
-      if (node.name in userGenreMap) {
+      if (strategy_genres && strategy_genres.includes(node.name)) {
+        return strategy_size;
+      } else if (node.name in userGenreMap) {
         var knownGenreSize = userGenreMap[node.name] / occurrence_divider;
         if (knownGenreSize > max_size) return max_size;
         else if (knownGenreSize > min_size) return knownGenreSize;
         else return min_size;
-      } else if (strategy_genres && strategy_genres.includes(node.name)) {
-        return strategy_size;
       } else {
         //determine size based on weight
         if (node.weight/weight_divider > min_size){
@@ -192,12 +192,11 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
   }
 
   function getNodeColor(node) {
-    if (userGenreMap && node.name in userGenreMap) {
-      return "green";
-    } 
-    else if (strategy_genres && strategy_genres.includes(node.name)) {
+    if (strategy_genres && strategy_genres.includes(node.name)) {
       //console.log(node.name + " in " + strategy_genres)
       return "blue";
+    } else if (userGenreMap && node.name in userGenreMap) {
+      return "green";
     } 
     else {
       return "red";

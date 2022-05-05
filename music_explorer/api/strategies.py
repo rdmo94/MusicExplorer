@@ -7,30 +7,6 @@ from .graph_util import load_gml_graph
 from .util import load_word2vec_model
 import networkx as nx
 
-def furthest_or_closest_genres(user_genres: list[str], n_genres=2, furthest:bool=True) -> list[str]:
-    '''Finds the furthest or closest n genres for each of the user's genre and adds them to a dict and then returns the furthest n genres from that collection.
-    If the same genre appears more than once, the distance is accumulated - prioritizing this genre'''
-    vector_space_graph_dict = unpickle_pickle()
-    shortest_distance_to_any_user_genre: dict[str,float] = {} #dict[unkown_genre,shortest_distance]
-    for known_genre in user_genres: #for all unknown genres
-        unknown_genre_distances_to_user_genre = vector_space_graph_dict[known_genre]
-        for unknown_genre_distance in unknown_genre_distances_to_user_genre:
-            unknown_genre = list(unknown_genre_distance.keys())[0]
-            if unknown_genre != known_genre:
-                if unknown_genre in shortest_distance_to_any_user_genre: 
-                    #if we already have a shortest distance
-                    current_shortest = shortest_distance_to_any_user_genre[unknown_genre]
-                    if unknown_genre_distance[unknown_genre] < current_shortest:
-                        shortest_distance_to_any_user_genre[unknown_genre] = unknown_genre_distance[unknown_genre]
-                else:
-                    #no distance added yet -> add 
-                    shortest_distance_to_any_user_genre[unknown_genre] = unknown_genre_distance[unknown_genre]
-    
-    sortedDict = dict(sorted(shortest_distance_to_any_user_genre.items(), key=lambda item: item[1], reverse=furthest))
-    genres_in_descending_distance_order = list(sortedDict.keys())
-    
-    return genres_in_descending_distance_order[:n_genres]
-
 
 def a_little_cautious_a_little_curious_closest_unfamiliar_genres(genre: str, user_genres: list[str], n_genres=2) -> list[str]:
     '''Finds the n closest genres not currently appearing on a users collection of genres'''
@@ -54,6 +30,58 @@ def random_choose_n_random_unfamiliar_genres(user_genres, n_genres=2) -> list[st
             unique_n_random_unfamiliar_genres.add(unique_genre)
     return list(unique_n_random_unfamiliar_genres)
 
+def furthest_or_closest_genres_old(user_genres: list[str], n_genres=2, furthest:bool=True) -> list[str]:
+    '''Finds the furthest or closest n genres for each of the user's genre and adds them to a dict and then returns the furthest n genres from that collection.
+    If the same genre appears more than once, the distance is accumulated - prioritizing this genre'''
+    vector_space_graph_dict = unpickle_pickle()
+    shortest_distance_to_any_user_genre: dict[str,float] = {} #dict[unkown_genre,shortest_distance]
+    for known_genre in user_genres: #for all unknown genres
+        unknown_genre_distances_to_user_genre = vector_space_graph_dict[known_genre]
+        for unknown_genre_distance in unknown_genre_distances_to_user_genre:
+            unknown_genre = list(unknown_genre_distance.keys())[0]
+            if unknown_genre != known_genre:
+                if unknown_genre in shortest_distance_to_any_user_genre: 
+                    #if we already have a shortest distance
+                    current_shortest = shortest_distance_to_any_user_genre[unknown_genre]
+                    if unknown_genre_distance[unknown_genre] < current_shortest:
+                        shortest_distance_to_any_user_genre[unknown_genre] = unknown_genre_distance[unknown_genre]
+                else:
+                    #no distance added yet -> add 
+                    shortest_distance_to_any_user_genre[unknown_genre] = unknown_genre_distance[unknown_genre]
+    
+    sortedDict = dict(sorted(shortest_distance_to_any_user_genre.items(), key=lambda item: item[1], reverse=furthest))
+    genres_in_descending_distance_order = list(sortedDict.keys())
+    
+    return genres_in_descending_distance_order[:n_genres]
+
+def furthest_or_closest_genres(user_genres: list[str], n_genres=2, furthest:bool=True) -> list[str]:
+    #load word_2_vec model
+    w2v_model = load_word2vec_model()
+
+    #convert user_genres to word_2_vec indexes
+    # user_genre_indexes = []
+    # for user_genre in user_genres:
+    #     user_genre_indexes.append(w2v_model.wv.key_to_index[user_genre])
+
+    genre_to_shortest_distance: dict[str,float] = {}
+
+    for known_genre in user_genres: #for all unknown genres
+        #lookup distance to all other genres
+        distances = w2v_model.wv.distances(known_genre)
+        genre_to_distance = dict()
+         
+        for index, distance in enumerate(distances):
+            genre = w2v_model.wv.index_to_key[index]
+            #add distances to map
+            if genre in genre_to_shortest_distance:
+                if distance < genre_to_shortest_distance[genre]:
+                    genre_to_shortest_distance[genre] = distance
+            else:
+                genre_to_shortest_distance[genre] = distance
+        
+    sorted_by_distance = dict(sorted(genre_to_shortest_distance.items(), key=lambda item: item[1], reverse=furthest))
+    genres_in_descending_distance_order = list(sorted_by_distance.keys())
+    return genres_in_descending_distance_order[:n_genres]
 
 def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, target_genre, n_genres=2):
     # Load graph
