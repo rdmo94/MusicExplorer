@@ -15,7 +15,7 @@ import {
   FilledInput,
   InputAdornment,
   OutlinedInput,
-  List
+  List,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { display } from "@mui/system";
@@ -51,7 +51,7 @@ function Strategies({
   selectedUserGenres,
   updateStrategyOutputCallback,
   lastSelectedNode,
-  setMapSelectMode
+  setMapSelectMode,
 }) {
   const strategies = [
     new Strategy(
@@ -124,14 +124,17 @@ function Strategies({
       if (isSelectingSource) {
         setSourceGenre(lastSelectedNode.name);
         setIsSelectingSource(false);
-        setMapSelectMode("")
+        setMapSelectMode("");
       } else if (isSelectingTarget) {
         setTargetGenre(lastSelectedNode.name);
         setIsSelectingTarget(false);
-        setMapSelectMode("")
+        setMapSelectMode("");
       }
     }
-    setMapSelectMode("")
+    if(sourceGenre !== undefined && targetGenre !== undefined) {
+      setIsLoadingButtonDisabled(false);
+    }
+    setMapSelectMode("");
   }, [lastSelectedNode]);
 
   const executeStrategy = () => {
@@ -208,21 +211,21 @@ function Strategies({
 
   function sourceClicked() {
     setIsSelectingTarget(false);
-    setMapSelectMode("source")
+    setMapSelectMode("source");
     var reversed = !isSelectingSource;
     setIsSelectingSource(reversed);
   }
 
   function targetClicked() {
     setIsSelectingSource(false);
-    setMapSelectMode("target")
+    setMapSelectMode("target");
     var reversed = !isSelectingTarget;
     setIsSelectingTarget(reversed);
   }
 
   return (
     <Box className="main" style={{ paddingTop: 100, height: "100%" }}>
-      <List style={{overflow: "auto", maxHeight: "100%"}}>
+      <List style={{ overflow: "auto", maxHeight: "100%" }}>
         <Typography
           color={"white"}
           variant="h3"
@@ -291,31 +294,30 @@ function Strategies({
                           at:
                         </Typography>
                         <Chip
-                    icon={<Edit />}
-                    label={
-                      isSelectingSource
-                        ? "Select a source genre on map"
-                        : sourceGenre
-                        ? replace_special_characters(sourceGenre, false)
-                        : "Click to select source genre"
-                    }
-                    color={isSelectingSource ? "primary" : "success"}
-                    onClick={sourceClicked}
-                  />
+                          icon={<Edit />}
+                          label={
+                            isSelectingSource
+                              ? "Select a source genre on map"
+                              : sourceGenre
+                              ? replace_special_characters(sourceGenre, false)
+                              : "Click to select source genre"
+                          }
+                          color={isSelectingSource ? "primary" : "success"}
+                          onClick={sourceClicked}
+                        />
 
-                  <Chip
-                    icon={<Edit />}
-                    label={
-                      isSelectingTarget
-                        ? "Select a target genre on map"
-                        : targetGenre
-                        ? replace_special_characters(targetGenre, false)
-                        : "Click to select target genre"
-                    }
-                    color={isSelectingTarget ? "primary" : "success"}
-                    onClick={targetClicked}
-                  />
-
+                        <Chip
+                          icon={<Edit />}
+                          label={
+                            isSelectingTarget
+                              ? "Select a target genre on map"
+                              : targetGenre
+                              ? replace_special_characters(targetGenre, false)
+                              : "Click to select target genre"
+                          }
+                          color={isSelectingTarget ? "primary" : "success"}
+                          onClick={targetClicked}
+                        />
                       </div>
                     ) : (
                       <></>
