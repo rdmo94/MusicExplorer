@@ -135,7 +135,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
   reorderData()
 
   function getNodeVisibility(node){
-    const min_node_weight = 100 //CONFIG
+    const min_node_weight = 10 //CONFIG
     if (selectViewMode == "source"){
       if (!(node.name in userGenreMap)){
         return false;
@@ -174,7 +174,7 @@ function GraphColorTest({ data, properties, userGenreMap, strategy, links, heigh
             return node.weight/weight_divider;
           }
         } else {
-          return 1;
+          return min_size;
         }
       }
     } else {

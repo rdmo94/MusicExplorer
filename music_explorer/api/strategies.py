@@ -70,10 +70,10 @@ def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, 
         genre_pair_distance:list[(str,str,float)] = []
         for index, genre in enumerate(shortest_path):
             #check distance between every pair
-            if index < len(shortest_path-2):
+            if index <= len(shortest_path)-2:
                 #genre_pair_to_distance[(genre, shortest_path[index+1])] = distance
                 distance = w2v_model.wv.distance(genre, shortest_path[index+1])
-                genre_pair_distance.append(genre, shortest_path[index+1], distance)
+                genre_pair_distance.append((genre, shortest_path[index+1], distance))
 
         if len(shortest_path) > n_genres:
             #if remove then find shortest distance
@@ -83,7 +83,7 @@ def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, 
             if index_of_shortest_distance == 0:
                 #if first index remove next index
                 del shortest_path[1]
-            elif index_of_shortest_distance == len(genre_pair_distance-1):
+            elif index_of_shortest_distance == len(genre_pair_distance)-1:
                 #if last index remove previous index
                 del shortest_path[len(shortest_path)-2]
             else:
@@ -102,8 +102,13 @@ def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, 
         else:
             #if add then find longest distance
             longest_tuple = max(genre_pair_distance, key=lambda t: t[2])
-            most_similar = w2v_model.wv.most_similar(positive=[longest_tuple[0], longest_tuple[1]], topn=1)
+            most_similar = w2v_model.wv.most_similar(positive=[longest_tuple[0], longest_tuple[1]], topn=51) # Must correspond with the max limit of n_genres in the frontend +1
             print("Adding genre ", most_similar[0], " to shortest path")
-            shortest_path.insert(longest_tuple[1], most_similar[0])
+            for similar in most_similar:
+                if similar[0] not in shortest_path:
+                    shortest_path.insert(shortest_path.index(longest_tuple[1]), similar[0])
+                    break
+
+                
     
     return shortest_path

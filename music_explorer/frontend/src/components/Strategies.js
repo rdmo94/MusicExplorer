@@ -102,22 +102,22 @@ function Strategies({
   const [allGenres, setAllGenres] = useState();
   const [output, setOutput] = useLocalStorage("generatedOutput", null);
 
-  // useEffect(() => {
-  //   console.log(
-  //     "Setting selectedUserGernes in Strategies.js with value = ",
-  //     selectedUserGenres
-  //   );
-  //   fetch("api/get_all_genres").then((response) =>
-  //     response.json().then((json) => setAllGenres(JSON.parse(json).sort()))
-  //   );
+  useEffect(() => {
+    console.log(
+      "Setting selectedUserGernes in Strategies.js with value = ",
+      selectedUserGenres
+    );
+    fetch("api/get_all_genres").then((response) =>
+      response.json().then((json) => setAllGenres(JSON.parse(json).sort()))
+    );
 
-  //   if (selectedUserGenres == null) {
-  //     setUserGenres([]);
-  //   } else {
-  //     setUserGenres(selectedUserGenres);
-  //   }
-  //   console.log("done rendering");
-  // }, [selectedUserGenres]);
+    if (selectedUserGenres == null) {
+      setUserGenres([]);
+    } else {
+      setUserGenres(selectedUserGenres);
+    }
+    console.log("done rendering");
+  }, [selectedUserGenres]);
 
   useEffect(() => {
     if (lastSelectedNode) {
