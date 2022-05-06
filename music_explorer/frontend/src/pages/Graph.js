@@ -220,7 +220,7 @@ function Graph({ genreMap, strategyData, graphNodeClickCallback, graphSelectView
       </Box>
 
       <Box
-        height={"80%"}
+        height={"70%"}
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"flex-start"}

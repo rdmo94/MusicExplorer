@@ -86,7 +86,12 @@ function Playlists({ updateUserGenreMap }) {
       flexGrow={1}
     >
       <List style={{ overflow: "auto", width: "100%" }}>
-        <Grid container direction="column" justifyContent="space-between" height={"100%"}>
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          height={"100%"}
+        >
           <Grid item padding={2}>
             <Typography
               variant="h3"
@@ -102,16 +107,16 @@ function Playlists({ updateUserGenreMap }) {
                 overflow: "auto",
               }}
             >
-            {loadingPlaylists ? (
-              <Grid
-                container
-                direction="row"
-                justifyContent="space-evenly"
-                alignItems="center"
-              >
-                <CircularProgress />
-              </Grid>
-            ) : (
+              {loadingPlaylists ? (
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-evenly"
+                  alignItems="center"
+                >
+                  <CircularProgress />
+                </Grid>
+              ) : (
                 <Grid container direction="column" paddingLeft={2}>
                   {playlists.map((playlist) => {
                     let playlistName = Object.values(playlist)[0];
@@ -145,51 +150,49 @@ function Playlists({ updateUserGenreMap }) {
                     );
                   })}
                 </Grid>
-            )}
+              )}
             </List>
           </Grid>
         </Grid>
       </List>
-
-      <Box
-        style={{
-          position: "fixed",
-          bottom: 10,
-          paddingTop: 10,
-          paddingBottom: 10,
-          width: 350
-        }}
-        
-        flexDirection="row"
-        justifyContent="space-evenly"
-        alignItems="center"
-        display={"flex"}
-      >
-        <LoadingButton
-          size="small"
-          onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
-          endIcon={<DownloadIcon />}
-          loading={loadingGenres}
-          loadingPosition="end"
-          variant="contained"
-          style={{ borderRadius: 200, backgroundColor: primaryGreen }}
-          disabled={selectedPlaylists.length == 0 ? true : false}
-        >
-          Fetch Genres
-        </LoadingButton>
-
-        <Button
-          variant="outlined"
+        <Box
           style={{
-            borderRadius: 200,
-            borderColor: primaryGreen,
-            color: primaryGreen,
+            // position: "fixed",
+            // bottom: 10,
+            // paddingTop: 10,
+            // paddingBottom: 10,
+            width: 350,
           }}
-          onClick={() => resetPlaylistGenreMap()}
+          flexDirection="row"
+          justifyContent="space-evenly"
+          alignItems="center"
+          display={"flex"}
         >
-          Clear
-        </Button>
-      </Box>
+          <LoadingButton
+            size="small"
+            onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+            endIcon={<DownloadIcon />}
+            loading={loadingGenres}
+            loadingPosition="end"
+            variant="contained"
+            style={{ borderRadius: 200, backgroundColor: primaryGreen }}
+            disabled={selectedPlaylists.length == 0 ? true : false}
+          >
+            Fetch Genres
+          </LoadingButton>
+
+          <Button
+            variant="outlined"
+            style={{
+              borderRadius: 200,
+              borderColor: primaryGreen,
+              color: primaryGreen,
+            }}
+            onClick={() => resetPlaylistGenreMap()}
+          >
+            Clear
+          </Button>
+        </Box>
     </Box>
   );
 }

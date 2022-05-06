@@ -12,18 +12,13 @@ import { useState } from "react";
 import Song from "../models/Song";
 import Playlist from "../models/Playlist";
 
-function PlaylistHeader(props) {
-  const [name, setName] = useState(props.title);
+function PlaylistHeader({editCallback, isEditable, title}) {
+  const [name, setName] = useState(title);
   const [isNameFocused, setIsNamedFocused] = useState(false);
   const [isNameChangeLoading, setIsNameChangeLoading] = useState(false);
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Grid container direction="row" justifyContent="center" alignItems="center">
       <Grid item>
         {!isNameFocused ? (
           <Typography variant="h3" style={{ color: "white" }}>
@@ -31,39 +26,43 @@ function PlaylistHeader(props) {
           </Typography>
         ) : (
           <TextField
-            style={{input: { color: "white"}}}
+            style={{ input: { color: "white" } }}
             autoFocus
             // inputProps={{ className: classes.name }}
             value={name}
             onChange={(event) => setName(event.target.value)}
-            onBlur={(event) => setIsNamedFocused(false)}
+            // onBlur={(_) => setIsNamedFocused(false)}
           />
         )}
       </Grid>
-      <Grid item>
-        {isNameFocused ? (
-          <Button
-            disabled={isNameChangeLoading ? true : false}
-            variant="contained"
-            style={{ borderRadius: 200 }}
-            onClick={() => {
-              props.editCallback(name);
-              setIsNameChangeLoading(false);
-              setIsNamedFocused(false);
-            }}
-          >
-            {isNameChangeLoading ? <CircularProgress size={20} /> : <Done />}
-          </Button>
-        ) : (
-          <EditOutlined
-          
-            style={{ color: "white", cursor: "pointer", padding: 20 }}
-            onClick={() => {
-              setIsNamedFocused(true);
-            }}
-          />
-        )}
-      </Grid>
+      {isEditable ? (
+        <Grid item>
+          {isNameFocused ? (
+            <Button
+              disabled={isNameChangeLoading ? true : false}
+              variant="contained"
+              style={{ borderRadius: 200 }}
+              onClick={() => {
+                console.log("Button clicked")
+                editCallback(name);
+                setIsNameChangeLoading(false);
+                setIsNamedFocused(false);
+              }}
+            >
+              {isNameChangeLoading ? <CircularProgress size={20} /> : <Done />}
+            </Button>
+          ) : (
+            <EditOutlined
+              style={{ color: "white", cursor: "pointer", padding: 20 }}
+              onClick={() => {
+                setIsNamedFocused(true);
+              }}
+            />
+          )}
+        </Grid>
+      ) : (
+        <></>
+      )}
     </Grid>
   );
 }
