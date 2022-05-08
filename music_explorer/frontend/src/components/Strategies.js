@@ -131,7 +131,7 @@ function Strategies({
         setMapSelectMode("");
       }
     }
-    if(sourceGenre !== undefined && targetGenre !== undefined) {
+    if (sourceGenre !== undefined && targetGenre !== undefined) {
       setIsLoadingButtonDisabled(false);
     }
     setMapSelectMode("");
@@ -286,6 +286,14 @@ function Strategies({
                     justifyContent={"space-evenly"}
                     alignItems={"center"}
                   >
+                    <div style={{marginBottom: 20, padding: 10}}>
+                        <Typography color={"white"} sx={{  fontWeight: "bold" }}>
+                          Description
+                        </Typography>
+                        <Typography color={"white"}>
+                          {strategies[strategy].description}
+                        </Typography>
+                      </div>
                     {strategies[strategy].id == 3 ? (
                       <div>
                         <Typography padding={2} fontStyle={{ color: "white" }}>
@@ -293,31 +301,48 @@ function Strategies({
                           point and which unknown genre you would like to end up
                           at:
                         </Typography>
-                        <Chip
-                          icon={<Edit />}
-                          label={
-                            isSelectingSource
-                              ? "Select a source genre on map"
-                              : sourceGenre
-                              ? replace_special_characters(sourceGenre, false)
-                              : "Click to select source genre"
-                          }
-                          color={isSelectingSource ? "primary" : "success"}
-                          onClick={sourceClicked}
-                        />
+                        <Box
+                          padding={1}
+                          display={"flex"}
+                          flexDirection={"column"}
+                          // alignItems={"space-between"}
+                          justifyContent={"center"}
+                        >
+                          <Chip
+                          sx={{
+                            padding: 1,
+                            margin: 1,
+                          }}
+                            icon={<Edit />}
+                            label={
+                              isSelectingSource
+                                ? "Select a source genre on map"
+                                : sourceGenre
+                                ? replace_special_characters(sourceGenre, false)
+                                : "Click to select source genre"
+                            }
+                            color={isSelectingSource ? "primary" : "success"}
+                            onClick={sourceClicked}
+                          />
 
-                        <Chip
-                          icon={<Edit />}
-                          label={
-                            isSelectingTarget
-                              ? "Select a target genre on map"
-                              : targetGenre
-                              ? replace_special_characters(targetGenre, false)
-                              : "Click to select target genre"
-                          }
-                          color={isSelectingTarget ? "primary" : "success"}
-                          onClick={targetClicked}
-                        />
+                          <Chip
+                          sx={{
+                            padding: 1,
+                            margin: 1,
+                          }}
+                      
+                            icon={<Edit />}
+                            label={
+                              isSelectingTarget
+                                ? "Select a target genre on map"
+                                : targetGenre
+                                ? replace_special_characters(targetGenre, false)
+                                : "Click to select target genre"
+                            }
+                            color={isSelectingTarget ? "primary" : "success"}
+                            onClick={targetClicked}
+                          />
+                        </Box>
                       </div>
                     ) : (
                       <></>
@@ -370,14 +395,7 @@ function Strategies({
                         onChange={handleChangeGenresSlider}
                         aria-labelledby="genresSliderLabel"
                       />
-                      <div>
-                        <Typography color={"white"} sx={{ fontWeight: "bold" }}>
-                          Description
-                        </Typography>
-                        <Typography color={"white"}>
-                          {strategies[strategy].description}
-                        </Typography>
-                      </div>
+                      
                     </Box>
                   </Box>
                 ) : (
@@ -387,11 +405,14 @@ function Strategies({
             )}
 
             <Box
+              display={"flex"}
+              justifyContent={"center"}
               sx={{
-                position: "fixed",
-                bottom: 65,
-                right: 65,
-                paddingTop: 5,
+                marginBottom: 10,
+                // position: "fixed",
+                // bottom: 65,
+                // right: 65,
+                // paddingTop: 5,
               }}
             >
               <LoadingButton

@@ -324,7 +324,7 @@ function Graph({
       </Box>
 
       <Box
-        height={"80%"}
+        height={"70%"}
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"flex-start"}

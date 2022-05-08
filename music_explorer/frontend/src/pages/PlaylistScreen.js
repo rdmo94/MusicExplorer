@@ -24,8 +24,15 @@ function PlaylistScreen({ generatedPlaylist }) {
   const [currentSongPlaying, setCurrentSongPlaying] = useState(null);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [saveToSpotifyState, setSaveToSpotifyState] = useState("IDLE");
-  const [newlyCreatedPlaylist, setNewlyCreatedPlaylist] = useState(null);
-  const [playlistName, setPlaylistName] = useState(null);
+  const [newlyCreatedPlaylist, setNewlyCreatedPlaylist] = useLocalStorage(
+    "newlySavedPL",
+    null
+  );
+  const [playlistName, setPlaylistName] = useLocalStorage("playlistName", null);
+  const [isPlaylistnameEditable, setIsPlaylistnameEditable] = useLocalStorage(
+    "plnEditable",
+    true
+  );
 
   useEffect(() => {
     // let object = new Playlist(
@@ -53,10 +60,20 @@ function PlaylistScreen({ generatedPlaylist }) {
     // );
     //console.log(generatedPlaylist);
     let playlist = Playlist.fromObject(generatedPlaylist);
-    console.log(playlist)
+    console.log(playlist);
     //console.log(playlist);
     setPlaylist(playlist);
     setPlaylistTracks(playlist.tracks);
+    if (setIsPlaylistnameEditable === null) {
+      setIsPlaylistnameEditable(true);
+    }
+
+    if (newlyCreatedPlaylist === null) {
+      setNewlyCreatedPlaylist(null);
+    }
+    if (playlistName === null) {
+      setPlaylistName(null);
+    }
   }, [generatedPlaylist]);
 
   const saveToSpotifyStates = {
@@ -83,6 +100,7 @@ function PlaylistScreen({ generatedPlaylist }) {
         response.json().then((json) => {
           let _json = JSON.parse(json);
           setNewlyCreatedPlaylist(_json);
+          setIsPlaylistnameEditable(false);
         });
       } else {
         setSaveToSpotifyState("ERROR");
@@ -91,8 +109,13 @@ function PlaylistScreen({ generatedPlaylist }) {
   };
 
   function editTitleHandler(name) {
+    console.log(
+      "Setting new playlist name as ",
+      name,
+      " inside PlaylistScreen.js"
+    );
     setPlaylistName(name);
-
+    setIsPlaylistnameEditable(false);
     // var object = {
     //     "name": name,
     // }
@@ -116,12 +139,12 @@ function PlaylistScreen({ generatedPlaylist }) {
   }
 
   return (
-    <div style={{height: "100%", width: "100%"}}>
+    <div style={{ height: "100%", width: "100%" }}>
       <Box
         display={"flex"}
         justifyContent={"flex-end"}
         flexGrow={1}
-        style={{ position: "fixed", top: 0, right: 350, zIndex: 99 }}
+        style={{ position: "fixed", top: 20, right: 350, zIndex: 99 }}
       >
         <Button
           variant="contained"
@@ -163,7 +186,13 @@ function PlaylistScreen({ generatedPlaylist }) {
         )}
       </Box>
 
-      <Grid container direction="column" justifyContent="flex-start" alignItems={"center"} style={{height: "100%"}}>
+      <Grid
+        container
+        direction="column"
+        justifyContent="flex-start"
+        alignItems={"center"}
+        style={{ height: "100%", paddingTop: 75 }}
+      >
         {playlist ? (
           <Grid
             item
@@ -180,6 +209,7 @@ function PlaylistScreen({ generatedPlaylist }) {
               alignContent="center"
             >
               <PlaylistHeader
+                isEditable={isPlaylistnameEditable}
                 editCallback={editTitleHandler}
                 title={
                   newlyCreatedPlaylist
@@ -188,12 +218,14 @@ function PlaylistScreen({ generatedPlaylist }) {
                 }
               />
 
-              { <Grid item>
-                <SongsContainer
-                  tracks={playlistTracks}
-                  playSongCallback={setCurrentSongPlaying}
-                ></SongsContainer>
-              </Grid> }
+              {
+                <Grid item>
+                  <SongsContainer
+                    tracks={playlistTracks}
+                    playSongCallback={setCurrentSongPlaying}
+                  ></SongsContainer>
+                </Grid>
+              }
 
               {/* {playlistTracks.map((track) => {
                 return (

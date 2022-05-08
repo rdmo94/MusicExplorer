@@ -142,5 +142,5 @@ def get_all_genres_available() -> list[str]:
 
 # generate_vector_space_graph(load_word2vec_model())
 
-model = load_word2vec_model()
-print("hey")
+# model = load_word2vec_model()
+# print("hey")
