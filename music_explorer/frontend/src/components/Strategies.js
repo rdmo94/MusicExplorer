@@ -239,6 +239,7 @@ function Strategies({
               output={output}
               resetOutputCallback={() => {
                 setOutput(null);
+                updateStrategyOutputCallback(null)
               }}
             />
           </div>

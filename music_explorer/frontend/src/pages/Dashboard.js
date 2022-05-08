@@ -39,23 +39,27 @@ function Dashboard() {
 
   const [graphSelectViewMode, setGraphSelectViewMode] = useState("");
 
-  
-
   function handleUpdatePlaylistGenreMap(genreOccurrenceMap) {
     setPlaylistsGenreMap(genreOccurrenceMap);
   }
 
   function handleStrategyOutputChange(strategyOutput) {
-    var tempStrategyData = {};
-    tempStrategyData[strategyOutput["id"]] = strategyOutput["genres"];
-    setStrategyData(tempStrategyData);
-    setGeneratedPlaylist(strategyOutput["playlist"]);
+    if (strategyOutput) {
+      var tempStrategyData = {};
+      tempStrategyData[strategyOutput["id"]] = strategyOutput["genres"];
+      setStrategyData(tempStrategyData);
+      setGeneratedPlaylist(strategyOutput["playlist"]);
 
-    setShowGraph(false);
+      setShowGraph(false);
+    } else {
+      setStrategyData(null);
+      setGeneratedPlaylist(null)
+      setShowGraph(true);
+    }
   }
 
-  function handleNodeClick(node, event){
-    setLastClickedGenreNode(node)
+  function handleNodeClick(node, event) {
+    setLastClickedGenreNode(node);
   }
 
   return (
@@ -94,11 +98,11 @@ function Dashboard() {
           id={"graph"}
         >
           {generatedPlaylist == null || showGraph ? (
-            <Graph 
-            genreMap={playlistsGenreMap} 
-            strategyData={strategyData} 
-            graphNodeClickCallback={handleNodeClick} 
-            graphSelectViewMode={graphSelectViewMode}
+            <Graph
+              genreMap={playlistsGenreMap}
+              strategyData={strategyData}
+              graphNodeClickCallback={handleNodeClick}
+              graphSelectViewMode={graphSelectViewMode}
             />
           ) : (
             <PlaylistScreen
