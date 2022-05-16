@@ -43,6 +43,6 @@ def load_gml_graph(path) -> nx.Graph:
 #     G = 
 
 
-G = load_vector_graph_from_pickle_file(n_edges=6)
+#G = load_vector_graph_from_pickle_file(n_edges=6)
 
-print("hey")
+#print("hey")

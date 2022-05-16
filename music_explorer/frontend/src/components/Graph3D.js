@@ -97,7 +97,8 @@ function Graph3D({
     <ForceGraph3D
       ref={fgRef}
       onEngineStop={() => {
-        fgRef.current.zoomToFit(0,1, (n)=>true)
+        console.log("HEY")
+        fgRef.current.zoomToFit(20,5, (n)=>true)
       }}
       height={height}
       width={width}
@@ -112,7 +113,7 @@ function Graph3D({
       }}
       enableNodeDrag={false}
       nodeVisibility={(node) => getNodeVisibility(node)}
-      //nodeLabel={(node) => } //label when hovering
+      nodeLabel={(node) => getNodeLabel(node)} //label when hovering
       nodeVal={(node) => getNodeVal(node)}
       //zoom={0.2} //doesnt work.. zz
       linkColor={() => "#2ab04e"}
