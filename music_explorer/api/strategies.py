@@ -1,7 +1,7 @@
 import os
 import unidecode
 import random
-from .embeddings import load_vector_space_from_file, unpickle_pickle, get_all_genres_available
+from .embeddings import load_vector_space_from_file, unpickle_pickle
 from collections import defaultdict
 from .graph_util import load_gml_graph
 from .util import load_word2vec_model
@@ -22,7 +22,8 @@ def a_little_cautious_a_little_curious_closest_unfamiliar_genres(genre: str, use
 
 def random_choose_n_random_unfamiliar_genres(user_genres, n_genres=2) -> list[str]:
     '''Chooses n random unique genres not currently in the users collection of genres'''
-    all_genres = get_all_genres_available()
+    word2vec_model = load_vector_space_from_file()
+    all_genres = list(word2vec_model.wv.key_to_index.keys())
     unique_n_random_unfamiliar_genres = set()
     while len(unique_n_random_unfamiliar_genres) != n_genres:
         unique_genre = random.sample(all_genres, 1)[0]

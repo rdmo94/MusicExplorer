@@ -96,7 +96,7 @@ def generate_datapoints(n_components=2):
         outfile.close()
 
 def load_vector_space_from_file(filename="word_2_vec_model") -> gensim.models.Word2Vec:
-    return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), filename))
+    return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", filename))
 
 def unpickle_pickle() -> pd.DataFrame:
     unpickled:pd.DataFrame = pd.read_pickle(os.path.join(os.path.dirname(__file__), "data","vector_space_graph.pkl"))
@@ -104,7 +104,7 @@ def unpickle_pickle() -> pd.DataFrame:
     
 
 def get_all_genres_available() -> list[str]:
-    return list(get_index_to_genre())
+    return list(get_index_to_genre()) #TODO fix wrong genre format
 # w2v = create_Word2Vec_model()
 # w2v.save(os.path.join(os.path.dirname(__file__), "word_2_vec_model"))
 

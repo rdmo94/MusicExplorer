@@ -18,10 +18,12 @@ function Graph3D({
   height,
   width,
   nodeClickCallback,
-  selectViewMode,
+  selectViewMode
 }) {
+
+
   function getNodeVisibility(node) {
-    const min_node_weight = 10; //CONFIG
+    const min_node_weight = 100; //CONFIG
     if (selectViewMode == "source") {
       if (!(node.name in userGenreMap)) {
         return false;
@@ -31,6 +33,7 @@ function Graph3D({
         return false;
       }
     }
+    if (strategy_genres.includes(node.name)) return true;
     if (node.weight > min_node_weight) return true;
     else return false;
   }
@@ -87,21 +90,36 @@ function Graph3D({
     }
   }
 
+  const { useRef } = React;
+  const fgRef = useRef();
+
   return (
     <ForceGraph3D
+      ref={fgRef}
+      onEngineStop={() => {
+        fgRef.current.zoomToFit(0,1, (n)=>true)
+      }}
       height={height}
       width={width}
       backgroundColor={properties.backgroundColor}
       graphData={data}
+      onNodeClick={nodeClickCallback}
       nodeThreeObject={(node) => {
-        const sprite = getNodeLabel(node);
-        sprite.color = getNodeColor(node)
+        const sprite = new SpriteText(getNodeLabel(node));
+        sprite.color = getNodeColor(node);
         sprite.textHeight = 0.5;
         return sprite;
       }}
+      enableNodeDrag={false}
       nodeVisibility={(node) => getNodeVisibility(node)}
       //nodeLabel={(node) => } //label when hovering
       nodeVal={(node) => getNodeVal(node)}
+      //zoom={0.2} //doesnt work.. zz
+      linkColor={() => "#2ab04e"}
+      //zoomToFit={(1, 700, (_node) => true)}
+      linkOpacity={0.9}
+      linkWidth={0.2}
+      
     />
   );
 }
