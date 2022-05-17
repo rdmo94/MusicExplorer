@@ -40,10 +40,10 @@ function Graph3D({
 
   function getNodeVal(node) {
     const occurrence_divider = 8;
-    const weight_divider = 400;
-    const max_size = 4;
-    const min_size = 1;
-    const strategy_size = 6;
+    const weight_divider = 100;
+    const max_size = 1.0;
+    const min_size = 0.5;
+    const strategy_size = max_size+3;
 
     if (userGenreMap) {
       if (strategy_genres && strategy_genres.includes(node.name)) {
@@ -72,21 +72,22 @@ function Graph3D({
 
   function getNodeLabel(node) {
     return (
-      replace_special_characters(node.name, false) +
-      " [" +
-      getNodeVal(node).toString() +
-      "]"
+      replace_special_characters(node.name, false)//+
+      //  " [" +
+      //  getNodeVal(node, globalScale).toString() +
+      //  "]"
     ); //TODO remove last part - only for testing
   }
 
   function getNodeColor(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
       //console.log(node.name + " in " + strategy_genres)
-      return "blue";
+      return '#0258ad'; //blue
     } else if (userGenreMap && node.name in userGenreMap) {
-      return "green";
-    } else {
-      return "red";
+      return '#057a01'; //green
+    } 
+    else {
+      return '#5c5c5c'; //grey
     }
   }
 
@@ -108,7 +109,7 @@ function Graph3D({
       nodeThreeObject={(node) => {
         const sprite = new SpriteText(getNodeLabel(node));
         sprite.color = getNodeColor(node);
-        sprite.textHeight = 0.5;
+        sprite.textHeight = getNodeVal(node)//0.5;
         return sprite;
       }}
       enableNodeDrag={false}
@@ -116,7 +117,7 @@ function Graph3D({
       nodeLabel={(node) => getNodeLabel(node)} //label when hovering
       nodeVal={(node) => getNodeVal(node)}
       //zoom={0.2} //doesnt work.. zz
-      linkColor={() => "#2ab04e"}
+      linkColor={() => '#0258ad'}
       //zoomToFit={(1, 700, (_node) => true)}
       linkOpacity={0.9}
       linkWidth={0.2}
