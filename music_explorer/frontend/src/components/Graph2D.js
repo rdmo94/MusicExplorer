@@ -97,6 +97,14 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
     }
   }
 
+  function getNodeBackgroundFillStyle(node) {
+    if (strategy_genres && strategy_genres.includes(node.name)) {
+      return 'rgba(255, 255, 255, 0.8)'; //darker grey
+    } else {
+      return 'rgba(255, 255, 255, 0.1)'; //light grey
+    } 
+  }
+
   
   return (
     <ForceGraph2D
@@ -126,7 +134,7 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
 
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillStyle = getNodeBackgroundFillStyle(node);
         ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
         ctx.fillStyle = getNodeColor(node);
         ctx.fillText(label, node.x, node.y);
