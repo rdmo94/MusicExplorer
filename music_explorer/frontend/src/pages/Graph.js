@@ -10,7 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
 import { Typography } from "@material-ui/core";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
-import { styled } from "@mui/material";
+import { styled, CircularProgress, LinearProgress } from "@mui/material";
 
 const WhiteSelect = styled(Select)(({ theme }) => ({
   color: "white",
@@ -31,13 +31,13 @@ function Graph({
     "graphProperties",
     {
       backgroundColor: "white",
-      enableNodeDrag: false,
       nodeAutoColorBy: "",
     }
   );
   const [graphHeight, setGraphHeight] = useState();
   const [graphWidth, setGraphWidth] = useState();
   const graphRef = useRef(null);
+  const [graphLoaded, setGraphLoaded] = useState(false);
 
   //set links
   var links = [];
@@ -155,10 +155,12 @@ function Graph({
 
   //Different useEffect, as the one above gets called every time the graphRef changes
   useEffect(() => {
-
-    if (graphType){
-      var file = graphType == "3D" ? "static/graph_data_3d.json" : "static/graph_data_2d.json"
-      console.log("fetching new graph " + file)
+    if (graphType) {
+      var file =
+        graphType == "3D"
+          ? "static/graph_data_3d.json"
+          : "static/graph_data_2d.json";
+      console.log("fetching new graph " + file);
       fetch(file).then((response) =>
         response.json().then((data) => {
           //TODO check if data is ok
@@ -166,8 +168,6 @@ function Graph({
         })
       );
     }
-
-    
   }, [graphType]); //empty array to avoid multiple fetches
 
   let graph;
@@ -202,6 +202,7 @@ function Graph({
         width={graphWidth}
         nodeClickCallback={graphNodeClickCallback}
         selectViewMode={graphSelectViewMode}
+        graphIsLoadedCallback={setGraphLoaded}
       />
     );
   } else if (graphType == "3D") {
@@ -215,6 +216,7 @@ function Graph({
         width={graphWidth}
         nodeClickCallback={graphNodeClickCallback}
         selectViewMode={graphSelectViewMode}
+        graphIsLoadedCallback={setGraphLoaded}
       />
     );
   }
@@ -284,23 +286,6 @@ function Graph({
           </Grid>
 
           <Grid item>
-            <InputLabel sx={{ color: "white" }} id="enableNodeDragLabel">
-              enableNodeDrag
-            </InputLabel>
-            <Switch
-              sx={{ color: "white" }}
-              checked={localGraphProperties.enableNodeDrag}
-              id="enableNodeDrag"
-              name="enableNodeDrag"
-              onChange={(e) =>
-                setLocalGraphProperties({
-                  ...localGraphProperties,
-                  [e.target.id]: e.target.checked,
-                })
-              }
-            />
-          </Grid>
-          <Grid item>
             <InputLabel sx={{ color: "white" }} id="graph-type-label">
               Graph type
             </InputLabel>
@@ -329,6 +314,23 @@ function Graph({
         paddingTop={5}
       >
         {graph}
+        {graphLoaded ? (
+          ""
+        ) : (
+          <Box
+            height={"70%"}
+            flexDirection={"row"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            flexGrow={3}
+            paddingTop={3}
+          >
+            <div>
+              Graph is loading...
+              <LinearProgress />
+            </div>
+          </Box>
+        )}
       </Box>
     </Box>
   );

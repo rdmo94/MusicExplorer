@@ -94,33 +94,22 @@ function Strategies({
   const [userGenres, setUserGenres] = useState(selectedUserGenres);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingButtonDisabled, setIsLoadingButtonDisabled] = useState(true);
-  const [sourceGenre, setSourceGenre] = useState();
-  const [targetGenre, setTargetGenre] = useState();
-  //const [allGenres, setAllGenres] = useState();
+  const [sourceGenre, setSourceGenre] = useLocalStorage("selectedSource", null);
+  const [targetGenre, setTargetGenre] = useLocalStorage("selectedTarget", null);
   const [isSelectingSource, setIsSelectingSource] = useState(false);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
-  const [allGenres, setAllGenres] = useState();
   const [output, setOutput] = useLocalStorage("generatedOutput", null);
 
   useEffect(() => {
-    console.log(
-      "Setting selectedUserGernes in Strategies.js with value = ",
-      selectedUserGenres
-    );
-    fetch("api/get_all_genres").then((response) =>
-      response.json().then((json) => setAllGenres(JSON.parse(json).sort()))
-    );
-
     if (selectedUserGenres == null) {
       setUserGenres([]);
     } else {
       setUserGenres(selectedUserGenres);
     }
-    console.log("done rendering");
   }, [selectedUserGenres]);
 
   useEffect(() => {
-    if (lastSelectedNode) {
+    if (lastSelectedNode !== null) {
       if (isSelectingSource) {
         setSourceGenre(lastSelectedNode.name);
         setIsSelectingSource(false);
@@ -131,11 +120,14 @@ function Strategies({
         setMapSelectMode("");
       }
     }
-    if (sourceGenre !== undefined && targetGenre !== undefined) {
-      setIsLoadingButtonDisabled(false);
-    }
     setMapSelectMode("");
   }, [lastSelectedNode]);
+
+  useEffect(() => {
+    if (targetGenre != null && sourceGenre != null) {
+      setIsLoadingButtonDisabled(false);
+    }
+  }, [targetGenre, sourceGenre])
 
   const executeStrategy = () => {
     setIsLoading(true);
@@ -161,10 +153,6 @@ function Strategies({
       .then((response) =>
         response.json().then((data) => {
           updateStrategyOutputCallback(JSON.parse(data));
-          console.log(
-            "Setting out out with values: ",
-            JSON.parse(data)["genres"]
-          );
           setIsLoading(false);
           setOutput(JSON.parse(data));
         })
@@ -174,24 +162,10 @@ function Strategies({
       });
   };
 
-  const handleSourceChange = (event) => {
-    if (targetGenre) {
-      setIsLoadingButtonDisabled(false);
-    }
-    setSourceGenre(event.target.value);
-  };
-
-  const handleTargetChange = (event) => {
-    if (sourceGenre) {
-      setIsLoadingButtonDisabled(false);
-    }
-    setTargetGenre(event.target.value);
-  };
-
   const handleChangeSelect = (event) => {
     if (
       event.target.value != 3 ||
-      (sourceGenre !== undefined && targetGenre !== undefined)
+      (sourceGenre != null && targetGenre != null)
     ) {
       setIsLoadingButtonDisabled(false);
     } else {

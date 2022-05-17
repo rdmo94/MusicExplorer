@@ -22,7 +22,8 @@ import {
  * @param {List<String>} param.links List<genres>
  * @returns 
  */
-function Graph2D({ data, properties, userGenreMap, strategy_genres, height, width, nodeClickCallback, selectViewMode}) {
+function Graph2D({ data, properties, userGenreMap, strategy_genres, height, width, nodeClickCallback, selectViewMode, graphIsLoadedCallback}) {
+  console.log(data)
   function getNodeVisibility(node){
     const min_node_weight = 10 //CONFIG
     if (selectViewMode == "source"){
@@ -40,12 +41,15 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
     
   }
 
-  function getNodeVal(node) {
+  function getNodeVal(node, globalScale) {
+    const base_size = 10/globalScale;
+    const max_size = base_size+(10/globalScale)//4
+    const min_size = base_size//1
+    
     const occurrence_divider = 8
-    const weight_divider = 400
-    const max_size = 4
-    const min_size = 1
-    const strategy_size = 6
+    const weight_divider = 100
+    const strategy_size = base_size+(10/globalScale)//6
+
 
     if (userGenreMap) {
       if (strategy_genres && strategy_genres.includes(node.name)) {
@@ -74,23 +78,31 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
 
   function getNodeLabel(node) {
     return (
-      replace_special_characters(node.name, false) +
-      " [" +
-      getNodeVal(node).toString() +
-      "]"
+      replace_special_characters(node.name, false)//+
+      //  " [" +
+      //  getNodeVal(node, globalScale).toString() +
+      //  "]"
     ); //TODO remove last part - only for testing
   }
 
   function getNodeColor(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
       //console.log(node.name + " in " + strategy_genres)
-      return "blue";
+      return '#0258ad'; //blue
     } else if (userGenreMap && node.name in userGenreMap) {
-      return "green";
+      return '#057a01'; //green
     } 
     else {
-      return "red";
+      return '#5c5c5c'; //grey
     }
+  }
+
+  function getNodeBackgroundFillStyle(node) {
+    if (strategy_genres && strategy_genres.includes(node.name)) {
+      return 'rgba(255, 255, 255, 0.8)'; //darker grey
+    } else {
+      return 'rgba(255, 255, 255, 0.1)'; //light grey
+    } 
   }
 
   
@@ -98,22 +110,25 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
     <ForceGraph2D
       height={height}
       width={width}
-      backgroundColor={primaryGrey}
-      enableNodeDrag={properties.enableNodeDrag}
+      backgroundColor={'white'}//{primaryGrey}
+      enableNodeDrag={false}
       onNodeClick={nodeClickCallback}
       graphData={data}
+      onEngineStop={() => {
+        graphIsLoadedCallback(true)
+      }}
       //nodeAutoColorBy={node => node.name in userGenreMap}
       nodeVisibility={(node) => getNodeVisibility(node)}
       nodeColor={(node) => getNodeColor(node)}
       nodeLabel={(node) => getNodeLabel(node)} //label when hovering
-      nodeVal={(node) => getNodeVal(node)}
+      //nodeVal={(node) => getNodeVal(node)}
       
       //nodeVal={node => node.name in userGenreMap ? userGenreMap[node.name].value : 1}
       //nodeVal={100}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = getNodeLabel(node);
         // const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
-        const fontSize = (getNodeVal(node)); //higher is smaller?
+        const fontSize = (getNodeVal(node, globalScale)); //higher is smaller?
         ctx.font = `${fontSize}px Sans-Serif`;
         const textWidth = ctx.measureText(label).width;
         const bckgDimensions = [textWidth, fontSize].map(
@@ -122,16 +137,23 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
 
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
+        ctx.fillStyle = getNodeBackgroundFillStyle(node);
+        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
         ctx.fillStyle = getNodeColor(node);
         ctx.fillText(label, node.x, node.y);
 
         node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
       }}
+      nodePointerAreaPaint={(node, color, ctx) => {
+        ctx.fillStyle = color;
+        const bckgDimensions = node.__bckgDimensions;
+        bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+      }}
       minZoom={2}
       //zoom={0.2} //doesnt work.. zz
-      linkColor={() => '#2ab04e'}
+      linkColor={() => '#0258ad'}
       linkOpacity={0.9}
-      linkWidth={10}
+      linkWidth={8}
     />
   );
 }
