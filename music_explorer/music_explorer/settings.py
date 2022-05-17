@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+!myuus61@*fn+34kd6+0oijq4h@t8m6g5h0fcm2jrq!@^xkxn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['164.92.77.80','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['164.92.77.80','localhost', 'musicexplorer.dk','musicexplorer']
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
