@@ -8,6 +8,7 @@ GRAPH_SIZE = 5755
 
 
 def load_vector_graph_from_pickle_file(n_edges=GRAPH_SIZE) -> nx.Graph:
+    return None
     G = nx.Graph()
     vector_graph_dataframe = pd.read_pickle(os.path.join(os.path.dirname(__file__), "data", "vector_space_graph.pkl"))
 
@@ -43,6 +44,6 @@ def load_gml_graph(path) -> nx.Graph:
 #     G = 
 
 
-G = load_vector_graph_from_pickle_file(n_edges=6)
+#G = load_vector_graph_from_pickle_file(n_edges=6)
 
-print("hey")
+#print("hey")

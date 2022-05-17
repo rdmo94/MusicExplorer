@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Graph3D from "../components/Graph3D";
 import Graph2D from "../components/Graph2D";
-import GraphColorTest from "../components/GraphColorTest";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
@@ -27,7 +26,7 @@ function Graph({
   graphSelectViewMode,
 }) {
   const [data, setData] = useState();
-  const [graphType, setGraphType] = useLocalStorage("graphType", "");
+  const [graphType, setGraphType] = useLocalStorage("graphType", "2D");
   const [localGraphProperties, setLocalGraphProperties] = useLocalStorage(
     "graphProperties",
     {
@@ -156,13 +155,20 @@ function Graph({
 
   //Different useEffect, as the one above gets called every time the graphRef changes
   useEffect(() => {
-    fetch("static/graph_data_2d.json").then((response) =>
-      response.json().then((data) => {
-        //TODO check if data is ok
-        setData(data);
-      })
-    );
-  }, []); //empty array to avoid multiple fetches
+
+    if (graphType){
+      var file = graphType == "3D" ? "static/graph_data_3d.json" : "static/graph_data_2d.json"
+      console.log("fetching new graph " + file)
+      fetch(file).then((response) =>
+        response.json().then((data) => {
+          //TODO check if data is ok
+          setData(data);
+        })
+      );
+    }
+
+    
+  }, [graphType]); //empty array to avoid multiple fetches
 
   let graph;
   let headline;
@@ -190,15 +196,6 @@ function Graph({
       <Graph2D
         data={data}
         properties={localGraphProperties}
-        height={graphHeight}
-        width={graphWidth}
-      />
-    );
-  } else if (graphType == "3D") {
-    graph = (
-      <Graph3D
-        data={data}
-        properties={localGraphProperties}
         userGenreMap={genreMap}
         strategy_genres={strategy_genres}
         height={graphHeight}
@@ -207,9 +204,9 @@ function Graph({
         selectViewMode={graphSelectViewMode}
       />
     );
-  } else if (graphType == "GraphColorTest") {
+  } else if (graphType == "3D") {
     graph = (
-      <GraphColorTest
+      <Graph3D
         data={data}
         properties={localGraphProperties}
         userGenreMap={genreMap}
@@ -315,7 +312,6 @@ function Graph({
                 setGraphType(input.target.value);
               }}
             >
-              <MenuItem value={"GraphColorTest"}>GraphColorTest</MenuItem>
               <MenuItem value={"2D"}>2D</MenuItem>
               <MenuItem value={"3D"}>3D</MenuItem>
             </WhiteSelect>
