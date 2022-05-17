@@ -122,10 +122,17 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
 
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
         ctx.fillStyle = getNodeColor(node);
         ctx.fillText(label, node.x, node.y);
 
         node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
+      }}
+      nodePointerAreaPaint={(node, color, ctx) => {
+        ctx.fillStyle = color;
+        const bckgDimensions = node.__bckgDimensions;
+        bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
       }}
       minZoom={2}
       //zoom={0.2} //doesnt work.. zz
