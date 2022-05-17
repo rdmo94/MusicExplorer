@@ -13,7 +13,7 @@ def load_similarity_matrix() -> dict:
 
 def parse_track_data() -> dict:
         genre_playlist_dict = {}
-        path = os.path.join(os.getcwd(), "music_explorer", "api", "data", "genre_tracks.json")
+        path = os.path.join(os.path.dirname(__file__), "data", "genre_tracks.json")
         with open(path) as genre_playlist_file:
             genre_playlist_dict = json.load(genre_playlist_file)
             return genre_playlist_dict
