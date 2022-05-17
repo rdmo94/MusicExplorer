@@ -55,88 +55,79 @@ def furthest_or_closest_genres_old(user_genres: list[str], n_genres=2, furthest:
     return genres_in_descending_distance_order[:n_genres]
 
 def furthest_or_closest_genres(user_genres: list[str], n_genres=2, furthest:bool=True) -> list[str]:
-    #load word_2_vec model
+    # Load word_2_vec model
     w2v_model = load_word2vec_model()
-
-    #convert user_genres to word_2_vec indexes
-    # user_genre_indexes = []
-    # for user_genre in user_genres:
-    #     user_genre_indexes.append(w2v_model.wv.key_to_index[user_genre])
-
+    # Instantiate dict mapping unkown from genres to the shortest distance to them
     genre_to_shortest_distance: dict[str,float] = {}
-
-    for known_genre in user_genres: #for all unknown genres
-        #lookup distance to all other genres
-        distances = w2v_model.wv.distances(known_genre)
-        genre_to_distance = dict()
-         
+    for known_genre in user_genres:
+        # Look up distances to all other genres in the vector space
+        distances = w2v_model.wv.distances(known_genre)         
         for index, distance in enumerate(distances):
+            # Get genre from the word2vec model based on index
             genre = w2v_model.wv.index_to_key[index]
-            #add distances to map
+            # Add/update the shortest distance to the current genre
             if genre in genre_to_shortest_distance:
                 if distance < genre_to_shortest_distance[genre]:
                     genre_to_shortest_distance[genre] = distance
             else:
                 genre_to_shortest_distance[genre] = distance
-        
+
+    # Sort the shortest distances based on the parameter "furthest"
+    # If furthest == True, then the sorted output is in descending order and vice versa
     sorted_by_distance = dict(sorted(genre_to_shortest_distance.items(), key=lambda item: item[1], reverse=furthest))
-    genres_in_descending_distance_order = list(sorted_by_distance.keys())
-    return genres_in_descending_distance_order[:n_genres]
+    sorted_by_distance_as_list_of_genres = list(sorted_by_distance.keys())
+    # Returning only "n-genres" of the sorted list, as defined by the user
+    return sorted_by_distance_as_list_of_genres[:n_genres]
 
 def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, target_genre, n_genres=2):
-    # Load graph
+    # Load NetworkX graph
     G = load_gml_graph(os.path.join(os.path.dirname(__file__), "data", "networkx_graph.gml"))
-
+    # Load word_2_vec model
+    w2v_model = load_word2vec_model()
     # Find path from source to target genre
     shortest_path:list[str] = nx.shortest_path(G, source=source_genre, target=target_genre)
 
-    #load word_2_vec model
-    w2v_model = load_word2vec_model()
-
     while len(shortest_path) != n_genres:
-        #genre_pair_to_distance:dict[tuple[str,str], float] = {}
+        # Instantiate list holding two genres and the distance between them
         genre_pair_distance:list[(str,str,float)] = []
+        # Add the distance between every pair in the path
         for index, genre in enumerate(shortest_path):
-            #check distance between every pair
             if index <= len(shortest_path)-2:
-                #genre_pair_to_distance[(genre, shortest_path[index+1])] = distance
                 distance = w2v_model.wv.distance(genre, shortest_path[index+1])
                 genre_pair_distance.append((genre, shortest_path[index+1], distance))
 
         if len(shortest_path) > n_genres:
-            #if remove then find shortest distance
+            # Length is too long - a genre needs to be removed from the path
+            # Find shortest path segment
             shortest_tuple = min(genre_pair_distance, key=lambda t: t[2])
             index_of_shortest_distance = genre_pair_distance.index(shortest_tuple)
 
             if index_of_shortest_distance == 0:
-                #if first index remove next index
+                # If first index remove next index
                 del shortest_path[1]
             elif index_of_shortest_distance == len(genre_pair_distance)-1:
-                #if last index remove previous index
+                # If last index remove previous index
                 del shortest_path[len(shortest_path)-2]
             else:
-                #check previous and next distance
-                #left = index 0
-                #right = index 1
+                # Check the distances to each of their neighbours
+                # and remove the genre associated with the shortest
                 left_distance = genre_pair_distance[index_of_shortest_distance-1]
                 right_distance = genre_pair_distance[index_of_shortest_distance+1]
-
+                
                 if left_distance[2] < right_distance[2]:
-                    print("Removing ", left_distance[1], " from shortest path!")
                     shortest_path.remove(left_distance[1])
                 else:
-                    print("Removing ", right_distance[0], " from shortest path!")
                     shortest_path.remove(right_distance[0])
         else:
-            #if add then find longest distance
+            # Length is too short - a genre needs to be added to the path
+            # Find longest path segement
             longest_tuple = max(genre_pair_distance, key=lambda t: t[2])
-            most_similar = w2v_model.wv.most_similar(positive=[longest_tuple[0], longest_tuple[1]], topn=51) # Must correspond with the max limit of n_genres in the frontend +1
-            print("Adding genre ", most_similar[0], " to shortest path")
+            # Find the most similar genres to the genres sharing the longest path segment
+            # topn = the max limit for genres in the path
+            most_similar = w2v_model.wv.most_similar(positive=[longest_tuple[0], longest_tuple[1]], topn=51)
+            # Add the most similar genre in between the two genres
             for similar in most_similar:
                 if similar[0] not in shortest_path:
                     shortest_path.insert(shortest_path.index(longest_tuple[1]), similar[0])
                     break
-
-                
-    
     return shortest_path
