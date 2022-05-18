@@ -7,6 +7,7 @@ import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
+
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
 import {
   styled,
@@ -25,6 +26,16 @@ const WhiteSelect = styled(Select)(({ theme }) => ({
   },
   borderColor: "white",
 }));
+
+const WhiteSlider = styled(Slider) (({theme}) => ({
+  "& .MuiSlider-markLabel": {
+    color: "white"
+  },
+  "& .MuiSlider-markLabelActive": {
+    color: "white"
+  }
+}));
+
 function Graph({
   genreMap,
   strategyData,
@@ -335,13 +346,13 @@ function Graph({
         >
           Graph properties
         </Typography>
-        <Grid container direction="row" justifyContent={"space-between"}>
+        <Grid container direction="row" justifyContent={"space-between"} paddingLeft={5}>
           <Grid item>
             <InputLabel sx={{ color: "white" }} id="genrePopularity">
               Show genres by popularity
             </InputLabel>
             <Box sx={{ width: 300 }}>
-              <Slider
+              <WhiteSlider
                 id="genrePopularity"
                 name="genrePopularity"
                 defaultValue={5}
