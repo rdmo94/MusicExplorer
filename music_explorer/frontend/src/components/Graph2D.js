@@ -11,7 +11,14 @@ import {
   ForceGraphAR,
   GraphData,
 } from "react-force-graph";
-import { styled, CircularProgress, LinearProgress, Slider, Box, Typography } from "@mui/material";
+import {
+  styled,
+  CircularProgress,
+  LinearProgress,
+  Slider,
+  Box,
+  Typography,
+} from "@mui/material";
 
 /**
  *
@@ -31,7 +38,7 @@ function Graph2D({
   height,
   width,
   nodeClickCallback,
-  selectViewMode
+  selectViewMode,
 }) {
   const [graphLoaded, setGraphLoaded] = useState(false);
 
@@ -112,16 +119,16 @@ function Graph2D({
   function getNodeBackgroundFillStyle(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
       return "rgba(255, 255, 255, 0.9)"; //less transparent white
-    } else if (userGenreMap && (node.name in userGenreMap)) {
+    } else if (userGenreMap && node.name in userGenreMap) {
       return "rgba(255, 255, 255, 0.9)";
     } else {
       return "rgba(255, 255, 255, 0.05)"; //transparent white
     }
   }
 
-  function nodeClickCallbackFix(node){
+  function nodeClickCallbackFix(node) {
     if (selectViewMode == "source" || selectViewMode == "target") {
-      nodeClickCallback(node)
+      nodeClickCallback(node);
     }
   }
 
@@ -135,7 +142,7 @@ function Graph2D({
         onNodeClick={nodeClickCallbackFix}
         graphData={data}
         onEngineStop={() => {
-          setGraphLoaded(true)
+          setGraphLoaded(true);
         }}
         //nodeAutoColorBy={node => node.name in userGenreMap}
         nodeVisibility={(node) => getNodeVisibility(node)}
@@ -162,7 +169,7 @@ function Graph2D({
             node.x - bckgDimensions[0] / 2,
             node.y - bckgDimensions[1] / 2,
             ...bckgDimensions
-            );
+          );
           ctx.fillStyle = getNodeColor(node);
           ctx.fillText(label, node.x, node.y);
 
@@ -187,31 +194,29 @@ function Graph2D({
         linkDirectionalParticles={1}
         linkDirectionalParticleColor={"black"}
       />
-        {graphLoaded ? (
-          ""
-        ) : (
-          <Box
-            backgroundColor={"rgba(0, 0, 0, 0.4)"}
-            borderRadius={200}
-            position={"fixed"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            flexGrow={3}
-            paddingTop={1}
-            paddingLeft={3}
-            paddingRight={3}
-            paddingBottom={1}
-            bottom={30}
-          >
-            <div>
-              <Typography style={{ color: "white" }}>
-                Graph is loading...
-              </Typography>
-              <LinearProgress />
-            </div>
-          </Box>
-        )}
+      {graphLoaded ? (
+        ""
+      ) : (
+        <Box
+          backgroundColor={"rgba(0, 0, 0, 0.4)"}
+          borderRadius={"0 0 20px 20px"}
+          flexDirection={"row"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          paddingTop={1}
+          paddingLeft={3}
+          paddingRight={3}
+          paddingBottom={1}
+          bottom={30}
+        >
+          <div>
+            <Typography style={{ color: "white" }}>
+              Graph is loading...
+            </Typography>
+            <LinearProgress />
+          </div>
+        </Box>
+      )}
     </div>
   );
 }
