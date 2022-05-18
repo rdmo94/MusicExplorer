@@ -103,7 +103,7 @@ function Graph2D({
       //console.log(node.name + " in " + strategy_genres)
       return "#0258ad"; //blue
     } else if (userGenreMap && node.name in userGenreMap) {
-      return "#057a01"; //green
+      return "#08bd02"; //green
     } else {
       return "#5c5c5c"; //grey
     }
@@ -111,9 +111,11 @@ function Graph2D({
 
   function getNodeBackgroundFillStyle(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
-      return "rgba(255, 255, 255, 0.8)"; //darker grey
+      return "rgba(255, 255, 255, 0.9)"; //less transparent white
+    } else if (node.name in userGenreMap) {
+      return "rgba(255, 255, 255, 0.9)";
     } else {
-      return "rgba(255, 255, 255, 0.1)"; //light grey
+      return "rgba(255, 255, 255, 0.05)"; //transparent white
     }
   }
 
@@ -128,7 +130,7 @@ function Graph2D({
       <ForceGraph2D
         height={height}
         width={width}
-        backgroundColor={"white"} //{primaryGrey}
+        backgroundColor={properties.backgroundColor} //{primaryGrey}
         enableNodeDrag={false}
         onNodeClick={nodeClickCallbackFix}
         graphData={data}
@@ -150,7 +152,7 @@ function Graph2D({
           ctx.font = `${fontSize}px Sans-Serif`;
           const textWidth = ctx.measureText(label).width;
           const bckgDimensions = [textWidth, fontSize].map(
-            (n) => n + fontSize * 0.2
+            (n) => n + fontSize * 0.5 //0.2
           ); // some padding
 
           ctx.textAlign = "center";
@@ -160,7 +162,7 @@ function Graph2D({
             node.x - bckgDimensions[0] / 2,
             node.y - bckgDimensions[1] / 2,
             ...bckgDimensions
-          );
+            );
           ctx.fillStyle = getNodeColor(node);
           ctx.fillText(label, node.x, node.y);
 
