@@ -18,7 +18,8 @@ function Graph3D({
   height,
   width,
   nodeClickCallback,
-  selectViewMode
+  selectViewMode,
+  graphIsLoadedCallback
 }) {
 
 
@@ -98,8 +99,8 @@ function Graph3D({
     <ForceGraph3D
       ref={fgRef}
       onEngineStop={() => {
-        console.log("HEY")
         fgRef.current.zoomToFit(20,5, (n)=>true)
+        graphIsLoadedCallback(true)
       }}
       height={height}
       width={width}

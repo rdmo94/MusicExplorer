@@ -22,7 +22,7 @@ import {
  * @param {List<String>} param.links List<genres>
  * @returns 
  */
-function Graph2D({ data, properties, userGenreMap, strategy_genres, height, width, nodeClickCallback, selectViewMode}) {
+function Graph2D({ data, properties, userGenreMap, strategy_genres, height, width, nodeClickCallback, selectViewMode, graphIsLoadedCallback}) {
   console.log(data)
   function getNodeVisibility(node){
     const min_node_weight = 10 //CONFIG
@@ -111,9 +111,12 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
       height={height}
       width={width}
       backgroundColor={'white'}//{primaryGrey}
-      enableNodeDrag={properties.enableNodeDrag}
+      enableNodeDrag={false}
       onNodeClick={nodeClickCallback}
       graphData={data}
+      onEngineStop={() => {
+        graphIsLoadedCallback(true)
+      }}
       //nodeAutoColorBy={node => node.name in userGenreMap}
       nodeVisibility={(node) => getNodeVisibility(node)}
       nodeColor={(node) => getNodeColor(node)}
