@@ -370,7 +370,7 @@ function Graph({
 
           <Grid item>
             <InputLabel sx={{ color: "white" }} id="backgroundColorLabal">
-              backgroundColor
+              Background color
             </InputLabel>
             <WhiteSelect
               labelId="backgroundColorLabal"
