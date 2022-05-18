@@ -52,6 +52,9 @@ function Dashboard() {
 
       setShowGraph(false);
     } else {
+      localStorage.removeItem("playlistName");
+      localStorage.removeItem("newlySavedPL");
+      localStorage.removeItem("plnEditable");
       setStrategyData(null);
       setGeneratedPlaylist(null)
       setShowGraph(true);
