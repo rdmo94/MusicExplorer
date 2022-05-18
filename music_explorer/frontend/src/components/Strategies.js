@@ -216,6 +216,7 @@ function Strategies({
                 setOutput(null);
                 setSourceGenre(null);
                 setTargetGenre(null);
+                setIsLoadingButtonDisabled(true);
                 updateStrategyOutputCallback(null);
               }}
             />
