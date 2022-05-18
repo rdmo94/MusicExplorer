@@ -111,6 +111,16 @@ function Graph3D({
     } 
   }
 
+  function getNodeBackgroundFillStyle(node) {
+    if (strategy_genres && strategy_genres.includes(node.name)) {
+      return "rgba(255, 255, 255, 0.9)"; //less transparent white
+    } else if (node.name in userGenreMap) {
+      return "rgba(255, 255, 255, 0.9)";
+    } else {
+      return "rgba(255, 255, 255, 0.07)"; //transparent white
+    }
+  }
+
   const { useRef } = React;
   const fgRef = useRef();
 
@@ -134,7 +144,7 @@ function Graph3D({
           sprite.strokeWidth = 1;
           sprite.strokeColor = "lightgrey";
           //sprite.borderWidth = 0.01
-          //sprite.backgroundColor = 'rgba(0,0,0,0.1)';
+          sprite.backgroundColor = getNodeBackgroundFillStyle(node);
           
           return sprite;
         }}
