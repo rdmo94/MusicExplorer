@@ -14,9 +14,10 @@ import {
 } from "@mui/material";
 import { useLocalStorage } from "../Util";
 import { primaryGreen } from "../Colors";
+import { useRef } from "react";
 
 function Playlists({ updateUserGenreMap }) {
-  const [listHeight, setListHeight] = useState();
+  const [listHeight, setListHeight] = useState(60);
   const [loadingPlaylists, setLoadingPlaylists] = useState(false);
   const [loadingGenres, setLoadingGenres] = useState(false);
   const [playlists, setPlaylists] = useState([]);
@@ -24,12 +25,13 @@ function Playlists({ updateUserGenreMap }) {
     "selectedPlaylists",
     []
   );
+  const playlistRef = useRef(null);
 
   useEffect(() => {
-    let availableSizeElement = document.getElementById("playlist");
-    if (availableSizeElement) {
-      setListHeight(availableSizeElement.clientHeight * 0.6);
-    }
+    // let availableSizeElement = document.getElementById("playlist");
+    // if (availableSizeElement) {
+    //   setListHeight(availableSizeElement.clientHeight * 0.6);
+    // }
     setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
       response.json().then((json) => {
@@ -38,6 +40,14 @@ function Playlists({ updateUserGenreMap }) {
       })
     );
   }, []);
+
+  useEffect(() => {
+    let availableSizeElement = document.getElementById("playlist");
+    if (availableSizeElement) {
+      console.log("Height available ", availableSizeElement.clientHeight)
+      setListHeight(availableSizeElement.clientHeight * 0.6);
+    }
+  }, [playlistRef]);
 
   /**
    *
@@ -103,7 +113,7 @@ function Playlists({ updateUserGenreMap }) {
             <List
               style={{
                 width: "100%",
-                maxHeight: "70vh", //TODO fix to fit screen
+                maxHeight: listHeight,
                 overflow: "auto",
               }}
             >
@@ -155,44 +165,44 @@ function Playlists({ updateUserGenreMap }) {
           </Grid>
         </Grid>
       </List>
-        <Box
-          style={{
-            // position: "fixed",
-            // bottom: 10,
-            // paddingTop: 10,
-            // paddingBottom: 10,
-            width: 350,
-          }}
-          flexDirection="row"
-          justifyContent="space-evenly"
-          alignItems="center"
-          display={"flex"}
+      <Box
+        style={{
+          // position: "fixed",
+          // bottom: 10,
+          // paddingTop: 10,
+          // paddingBottom: 10,
+          width: 350,
+        }}
+        flexDirection="row"
+        justifyContent="space-evenly"
+        alignItems="center"
+        display={"flex"}
+      >
+        <LoadingButton
+          size="small"
+          onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
+          endIcon={<DownloadIcon />}
+          loading={loadingGenres}
+          loadingPosition="end"
+          variant="contained"
+          style={{ borderRadius: 200, backgroundColor: primaryGreen }}
+          disabled={selectedPlaylists.length == 0 ? true : false}
         >
-          <LoadingButton
-            size="small"
-            onClick={() => getSelectedPlaylistGenreMap(selectedPlaylists)}
-            endIcon={<DownloadIcon />}
-            loading={loadingGenres}
-            loadingPosition="end"
-            variant="contained"
-            style={{ borderRadius: 200, backgroundColor: primaryGreen }}
-            disabled={selectedPlaylists.length == 0 ? true : false}
-          >
-            Fetch Genres
-          </LoadingButton>
+          Fetch Genres
+        </LoadingButton>
 
-          <Button
-            variant="outlined"
-            style={{
-              borderRadius: 200,
-              borderColor: primaryGreen,
-              color: primaryGreen,
-            }}
-            onClick={() => resetPlaylistGenreMap()}
-          >
-            Clear
-          </Button>
-        </Box>
+        <Button
+          variant="outlined"
+          style={{
+            borderRadius: 200,
+            borderColor: primaryGreen,
+            color: primaryGreen,
+          }}
+          onClick={() => resetPlaylistGenreMap()}
+        >
+          Clear
+        </Button>
+      </Box>
     </Box>
   );
 }

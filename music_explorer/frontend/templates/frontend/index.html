@@ -12,14 +12,14 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}" />
 
     <body class="container">
-        <script>
+        {% comment %} <script>
             $(document).ready(function () {
                 var tHeight = $(window.top).height();
                 alert("Visible screen height is " + tHeight + "px");
                 $("#graph").height(tHeight);
 
             });
-        </script>
+        </script> {% endcomment %}
         <div id="main" class="container">
             <div id="app" class="container"/>
             </div>

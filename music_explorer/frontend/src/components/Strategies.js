@@ -35,7 +35,8 @@ import { styled } from "@mui/system";
 import {
   CheckCircleOutlineIcon,
   RadioButtonUncheckedIcon,
-  Edit,
+  FmdGoodOutlined,
+  CircleOutlined,
 } from "@mui/icons-material";
 
 import StrategyOutput from "./StrategyOutput";
@@ -57,25 +58,25 @@ function Strategies({
     new Strategy(
       0,
       "Random",
-      "The Random strategy finds a number of randomly chosen genres that does not exist in your personal music collection, based on the playlists you have chosen. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
+      "The Random strategy finds a number of randomly chosen genres that does not exist in your personal music collection, based on the playlists you have chosen. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders below.",
       "random"
     ),
     new Strategy(
       1,
       "Take me away",
-      "Take me away will look at the genres that is currently present in the playlists you have selected. Then the algorithm will select a number of unknown genres, that are as far away from your taste in genres (based on the selected playlists). How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
+      "Take me away will look at the genres that is currently present in the playlists you have selected. Then the algorithm will select a number of unknown genres, that are as far away from your taste in genres (based on the selected playlists). How many genres and how many songs per genres you would like to explore can be adjusted with the sliders below.",
       "tma"
     ),
     new Strategy(
       2,
       "A little curious a little cautious",
-      "A little curious, a little cautious will look at the genres of the playlists you have chosen and find a number of unknown genres, that are as close as possible to your current taste. This method of exploration is for the one who does not want to move too far away from what they like. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
+      "A little curious, a little cautious will look at the genres of the playlists you have chosen and find a number of unknown genres, that are as close as possible to your current taste. This method of exploration is for the one who does not want to move too far away from what they like. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders below.",
       "alc"
     ),
     new Strategy(
       3,
       "Smooth transition",
-      "Smooth transition will help you explore genres along the way from a starting genre, that you alreadt have in the playlists you have selected, to an unknown genre of your choice. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders above.",
+      "Smooth transition will help you explore genres along the way from a starting genre, that you alreadt have in the playlists you have selected, to an unknown genre of your choice. How many genres and how many songs per genres you would like to explore can be adjusted with the sliders below.",
       "st"
     ),
   ];
@@ -127,7 +128,8 @@ function Strategies({
     if (targetGenre != null && sourceGenre != null) {
       setIsLoadingButtonDisabled(false);
     }
-  }, [targetGenre, sourceGenre])
+  }, [targetGenre, sourceGenre]);
+
 
   const executeStrategy = () => {
     setIsLoading(true);
@@ -198,7 +200,7 @@ function Strategies({
   }
 
   return (
-    <Box className="main" style={{ paddingTop: 100, height: "100%" }}>
+    <Box className="main" style={{ height: "100%" }}>
       <List style={{ overflow: "auto", maxHeight: "100%" }}>
         <Typography
           color={"white"}
@@ -213,7 +215,7 @@ function Strategies({
               output={output}
               resetOutputCallback={() => {
                 setOutput(null);
-                updateStrategyOutputCallback(null)
+                updateStrategyOutputCallback(null);
               }}
             />
           </div>
@@ -261,14 +263,14 @@ function Strategies({
                     justifyContent={"space-evenly"}
                     alignItems={"center"}
                   >
-                    <div style={{marginBottom: 20, padding: 10}}>
-                        <Typography color={"white"} sx={{  fontWeight: "bold" }}>
-                          Description
-                        </Typography>
-                        <Typography color={"white"}>
-                          {strategies[strategy].description}
-                        </Typography>
-                      </div>
+                    <div style={{ marginBottom: 20, padding: 10 }}>
+                      <Typography color={"white"} sx={{ fontWeight: "bold" }}>
+                        Description
+                      </Typography>
+                      <Typography color={"white"}>
+                        {strategies[strategy].description}
+                      </Typography>
+                    </div>
                     {strategies[strategy].id == 3 ? (
                       <div>
                         <Typography padding={2} fontStyle={{ color: "white" }}>
@@ -284,14 +286,17 @@ function Strategies({
                           justifyContent={"center"}
                         >
                           <Chip
-                          sx={{
-                            padding: 1,
-                            margin: 1,
-                          }}
-                            icon={<Edit />}
+                            sx={{
+                              padding: 1,
+                              margin: 1,
+                              backgroundColor: isSelectingSource
+                                ? "#1876d2"
+                                : primaryGreen,
+                            }}
+                            icon={<CircleOutlined />}
                             label={
                               isSelectingSource
-                                ? "Select a source genre on map"
+                                ? "Selecting a source genre on graph..."
                                 : sourceGenre
                                 ? replace_special_characters(sourceGenre, false)
                                 : "Click to select source genre"
@@ -301,15 +306,17 @@ function Strategies({
                           />
 
                           <Chip
-                          sx={{
-                            padding: 1,
-                            margin: 1,
-                          }}
-                      
-                            icon={<Edit />}
+                            sx={{
+                              padding: 1,
+                              margin: 1,
+                              backgroundColor: isSelectingTarget
+                                ? "#1876d2"
+                                : primaryGreen,
+                            }}
+                            icon={<FmdGoodOutlined />}
                             label={
                               isSelectingTarget
-                                ? "Select a target genre on map"
+                                ? "Selecting a target genre on map..."
                                 : targetGenre
                                 ? replace_special_characters(targetGenre, false)
                                 : "Click to select target genre"
@@ -370,7 +377,6 @@ function Strategies({
                         onChange={handleChangeGenresSlider}
                         aria-labelledby="genresSliderLabel"
                       />
-                      
                     </Box>
                   </Box>
                 ) : (

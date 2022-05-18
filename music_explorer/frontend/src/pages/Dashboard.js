@@ -63,7 +63,7 @@ function Dashboard() {
   }
 
   return (
-    <Box className="container">
+    <Box className="container" height={"100%"}>
       {generatedPlaylist ? (
         <Box
           display="flex"
