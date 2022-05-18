@@ -35,7 +35,6 @@ function Graph({
   const [graphHeight, setGraphHeight] = useState();
   const [graphWidth, setGraphWidth] = useState();
   const graphRef = useRef(null);
-  const [graphLoaded, setGraphLoaded] = useState(false);
 
   //set links
   var links = [];
@@ -51,7 +50,7 @@ function Graph({
       links = Object.values(strategyData)[0];
     }
   }
-
+  
   if (genreMap) {
     user_genres = Object.keys(genreMap);
   }
@@ -158,10 +157,8 @@ function Graph({
         graphType == "3D"
           ? "static/graph_data_3d.json"
           : "static/graph_data_2d.json";
-      console.log("fetching new graph " + file);
       fetch(file).then((response) =>
         response.json().then((data) => {
-          //TODO check if data is ok
           setData(data);
         })
       );
@@ -173,7 +170,7 @@ function Graph({
 
   //updates the properties of the graph
   const changeHandler = (e) => {
-    console.log(e.target);
+    //console.log(e.target);
     //setGraphProperties({ ...graphProperties, [e.target.name]: e.target.value });
     setLocalGraphProperties({
       ...localGraphProperties,
@@ -200,7 +197,6 @@ function Graph({
         width={graphWidth}
         nodeClickCallback={graphNodeClickCallback}
         selectViewMode={graphSelectViewMode}
-        graphIsLoadedCallback={setGraphLoaded}
       />
     );
   } else if (graphType == "3D") {
@@ -214,7 +210,6 @@ function Graph({
         width={graphWidth}
         nodeClickCallback={graphNodeClickCallback}
         selectViewMode={graphSelectViewMode}
-        graphIsLoadedCallback={setGraphLoaded}
       />
     );
   }
@@ -398,29 +393,6 @@ function Graph({
         flexGrow={1}
       >
         {graph}
-        {graphLoaded ? (
-          ""
-        ) : (
-          <Box
-            backgroundColor={"rgba(0, 0, 0, 0.4)"}
-            borderRadius={200}
-            position={"fixed"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            flexGrow={3}
-            paddingTop={1}
-            paddingLeft={3}
-            paddingRight={3}
-            paddingBottom={1}
-            bottom={30}
-          >
-            <div>
-              <Typography style={{color: "white"}}>Graph is loading...</Typography>
-              <LinearProgress />
-            </div>
-          </Box>
-        )}
       </Box>
     </Box>
   );
