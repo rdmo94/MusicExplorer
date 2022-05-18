@@ -180,7 +180,10 @@ function Graph2D({
         //zoom={0.2} //doesnt work.. zz
         linkColor={() => "#ccc900"}
         linkOpacity={0.9}
-        linkWidth={10}
+        linkWidth={6}
+        linkCurvature={0.1}
+        linkDirectionalParticles={1}
+        linkDirectionalParticleColor={"black"}
       />
         {graphLoaded ? (
           ""
