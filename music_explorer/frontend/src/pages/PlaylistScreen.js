@@ -191,22 +191,24 @@ function PlaylistScreen({ generatedPlaylist }) {
         direction="column"
         justifyContent="flex-start"
         alignItems={"center"}
+        id={"songContainer"}
         style={{ height: "100%", paddingTop: 75 }}
       >
         {playlist ? (
           <Grid
+
             item
             container
             direction="column"
             justifyContent="center"
-            alignContent="center"
+            alignContent="flex-start"
           >
             <Grid
               item
               container
               direction="column"
               justifyContent="center"
-              alignContent="center"
+              alignContent="flex-start"
             >
               <PlaylistHeader
                 isEditable={isPlaylistnameEditable}

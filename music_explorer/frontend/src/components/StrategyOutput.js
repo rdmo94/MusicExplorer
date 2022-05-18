@@ -23,8 +23,8 @@ function StrategyOutput({ output, resetOutputCallback }) {
   return (
     <Box height={"100%"} display={"flex"} flexDirection={"column"}>
       {output !== null ? (
-        <div style={{ paddingLeft: 25 }}>
-          <Typography variant="h5" color={"white"}>
+        <div style={{ }}>
+          <Typography variant="h5" color={"white"} style={{paddingLeft: 20}}>
             Discorered genres:
           </Typography>
           <List sx={{ overflow: "auto", height: "70vh", width: "100%" }}>

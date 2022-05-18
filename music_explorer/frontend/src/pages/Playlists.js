@@ -104,7 +104,7 @@ function Playlists({ updateUserGenreMap }) {
         >
           <Grid item>
             <Typography
-              variant="h3"
+              variant="h4"
               style={{ color: "white", fontWeight: "bold", paddingLeft: 20 }}
             >
               My playlists
@@ -127,7 +127,7 @@ function Playlists({ updateUserGenreMap }) {
                   <CircularProgress />
                 </Grid>
               ) : (
-                <Grid container direction="column" paddingLeft={2}>
+                <Grid container direction="column" >
                   {playlists.map((playlist) => {
                     let playlistName = Object.values(playlist)[0];
                     let playlistId = Object.keys(playlist)[0];
@@ -142,7 +142,8 @@ function Playlists({ updateUserGenreMap }) {
                           sx={{ color: "white" }}
                           control={
                             <Checkbox
-                              sx={{ color: "white" }}
+
+                              sx={{ color: "white", }}
                               checked={playlistAlreadyChecked}
                               onChange={(event) =>
                                 selectedPlaylistsHandler(
@@ -171,7 +172,7 @@ function Playlists({ updateUserGenreMap }) {
           // bottom: 10,
           // paddingTop: 10,
           // paddingBottom: 10,
-          width: 350,
+          width: 250,
         }}
         flexDirection="row"
         justifyContent="space-evenly"

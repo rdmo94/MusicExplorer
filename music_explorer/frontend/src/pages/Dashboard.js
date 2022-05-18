@@ -67,7 +67,7 @@ function Dashboard() {
       {generatedPlaylist ? (
         <Box
           display="flex"
-          style={{ padding: 10, position: "fixed", top: 10, left: 350 }}
+          style={{ padding: 10, position: "fixed", top: 10, left: 250 }}
         >
           <Button
             variant="contained"
@@ -85,7 +85,7 @@ function Dashboard() {
         <></>
       )}
       <Grid container direction={"row"} id={"playlist"} height={"100%"}>
-        <Box width={350} display={"flex"} flexDirection={"column"} height={"100%"}>
+        <Box width={250} display={"flex"} flexDirection={"column"} height={"100%"}>
           <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
         </Box>
 
@@ -114,7 +114,7 @@ function Dashboard() {
         </Box>
         {/* </Box> */}
 
-        <Box width={350} display={"flex"} flexDirection={"column"} height={"100%"}>
+        <Box width={250} display={"flex"} flexDirection={"column"} height={"100%"}>
           <Strategies
             selectedUserGenres={playlistsGenreMap}
             updateStrategyOutputCallback={handleStrategyOutputChange}

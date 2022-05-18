@@ -9,7 +9,7 @@ const styles = makeStyles(() => {});
 const Header = () => (
   <div className="header">
     <Link href={"/"}>
-      <img  src={logo} className="headerText" height={50}/>
+      <img  src={logo} className="headerText" height={35}/>
     </Link>
   </div>
 );

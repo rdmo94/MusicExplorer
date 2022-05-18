@@ -4,6 +4,9 @@ import { Button, Grid, Typography, Box, List } from "@material-ui/core";
 import { millisToMinutesAndSeconds, replace_special_characters } from "../Util";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
 import Song from "../models/Song.js";
+import { useState } from "react";
+import { useRef } from "react";
+
 
 /**
  *
@@ -12,8 +15,17 @@ import Song from "../models/Song.js";
  * @returns
  */
 function SongsContainer({ tracks, playSongCallback }) {
+  const songContainerRef = useRef(null);
+  const [listHeight, setListHeight] = useState();
+  useEffect(() => {
+    let availableSizeElement = document.getElementById("songContainer");
+    if (availableSizeElement) {
+      console.log("Height available ", availableSizeElement.clientHeight)
+      setListHeight(availableSizeElement.clientHeight * 0.79);
+    }
+  }, [songContainerRef]);
   return (
-    <List style={{ overflow: "auto", height: "90vh" }}>
+    <List style={{ overflow: "auto", maxHeight: listHeight}}>
       {console.log("tracks", tracks)}
       {tracks.map((track, index) => {
         return (

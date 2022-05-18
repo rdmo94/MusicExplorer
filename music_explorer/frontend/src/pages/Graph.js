@@ -147,8 +147,8 @@ function Graph({
   useEffect(() => {
     let availableSizeElement = document.getElementById("graph");
     if (availableSizeElement) {
-      setGraphHeight(availableSizeElement.clientHeight / 1.5);
-      setGraphWidth(availableSizeElement.clientWidth / 2);
+      setGraphHeight(availableSizeElement.clientHeight / 1.4);
+      setGraphWidth(availableSizeElement.clientWidth / 1.6);
     }
   }, [graphRef]);
 
@@ -233,7 +233,7 @@ function Graph({
       <Box
         display="flex"
         flexDirection={"column"}
-        alignItems={"flex-start"}
+        alignItems={"center"}
         justifyContent={"flex-start"}
         style={{
           borderRadius: 30,
@@ -246,7 +246,7 @@ function Graph({
       >
         <Typography
           variant={"h4"}
-          style={{ color: "white", paddingBottom: 10 }}
+          style={{ color: "white", paddingBottom: 10, fontWeight: "bold" }}
         >
           Graph properties
         </Typography>

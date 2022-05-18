@@ -130,7 +130,6 @@ function Strategies({
     }
   }, [targetGenre, sourceGenre]);
 
-
   const executeStrategy = () => {
     setIsLoading(true);
     const requestBody = {
@@ -200,12 +199,12 @@ function Strategies({
   }
 
   return (
-    <Box className="main" style={{ height: "100%" }}>
-      <List style={{ overflow: "auto", height: "96%" }}>
+    <Box className="main" style={{ height: "100%", width: "100%"}}>
+      <List style={{ overflow: "auto", height: "96%", width: "100%" }}>
         <Typography
           color={"white"}
           variant="h3"
-          style={{ fontWeight: "bold", paddingLeft: 25 }}
+          style={{ fontWeight: "bold", paddingLeft: 20 }}
         >
           Strategy
         </Typography>
@@ -222,18 +221,18 @@ function Strategies({
         ) : (
           <div>
             {userGenres == null || Object.keys(userGenres).length == 0 ? (
-              <Typography color={"white"} padding={2}>
+              <Typography color={"white"} paddingLeft={3} paddingTop={3} paddingBottom={3}>
                 Please select one or more of your playlists in the panel to the
                 left.
               </Typography>
             ) : (
               <Box
-                sx={{ display: "flex", paddingTop: 5 }}
+                sx={{ display: "flex", paddingTop: 5, }}
                 flexDirection="column"
                 alignItems="center"
               >
                 <FormControl
-                  sx={{ color: "white", minWidth: 300, borderColor: "white" }}
+                  sx={{ color: "white", maxWidth: 200, minWidth: 200, borderColor: "white" }}
                 >
                   <InputLabel id="label-id" sx={{ color: "white" }}>
                     Select strategy...
@@ -257,13 +256,13 @@ function Strategies({
                 </FormControl>
                 {userGenres != null && strategy != null ? (
                   <Box
-                    padding={2}
                     display={"flex"}
                     flexDirection={"column"}
                     justifyContent={"space-evenly"}
                     alignItems={"center"}
+                    padding={2}
                   >
-                    <div style={{ marginBottom: 20, padding: 10 }}>
+                    <div style={{ marginBottom: 20}}>
                       <Typography color={"white"} sx={{ fontWeight: "bold" }}>
                         Description
                       </Typography>
@@ -272,68 +271,67 @@ function Strategies({
                       </Typography>
                     </div>
                     {strategies[strategy].id == 3 ? (
-                      <div>
-                        <Typography padding={2} fontStyle={{ color: "white" }}>
+                      <Box
+                        display={"flex"}
+                        flexDirection={"column"}
+                        // alignItems={"space-between"}
+                        justifyContent={"center"}
+                      >
+                        <Typography fontStyle={{ color: "white" }}>
                           Please select one of your own genres as a starting
                           point and which unknown genre you would like to end up
                           at:
                         </Typography>
-                        <Box
-                          padding={1}
-                          display={"flex"}
-                          flexDirection={"column"}
-                          // alignItems={"space-between"}
-                          justifyContent={"center"}
-                        >
-                          <Chip
-                            sx={{
-                              padding: 1,
-                              margin: 1,
-                              backgroundColor: isSelectingSource
-                                ? "#1876d2"
-                                : primaryGreen,
-                            }}
-                            icon={<CircleOutlined />}
-                            label={
-                              isSelectingSource
-                                ? "Selecting a source genre on graph..."
-                                : sourceGenre
-                                ? replace_special_characters(sourceGenre, false)
-                                : "Click to select source genre"
-                            }
-                            color={isSelectingSource ? "primary" : "success"}
-                            onClick={sourceClicked}
-                          />
+                        <Chip
+                          sx={{
+                            maxWidth: 200,
+                            padding: 1,
+                            marginTop: 1,
+                            backgroundColor: isSelectingSource
+                              ? "#1876d2"
+                              : primaryGreen,
+                          }}
+                          icon={<CircleOutlined style={{fontSize: 10}}/>}
+                          label={
+                            isSelectingSource
+                              ? "Selecting..."
+                              : sourceGenre
+                              ? replace_special_characters(sourceGenre, false)
+                              : "Select source genre"
+                          }
+                          color={isSelectingSource ? "primary" : "success"}
+                          onClick={sourceClicked}
+                        />
 
-                          <Chip
-                            sx={{
-                              padding: 1,
-                              margin: 1,
-                              backgroundColor: isSelectingTarget
-                                ? "#1876d2"
-                                : primaryGreen,
-                            }}
-                            icon={<FmdGoodOutlined />}
-                            label={
-                              isSelectingTarget
-                                ? "Selecting a target genre on map..."
-                                : targetGenre
-                                ? replace_special_characters(targetGenre, false)
-                                : "Click to select target genre"
-                            }
-                            color={isSelectingTarget ? "primary" : "success"}
-                            onClick={targetClicked}
-                          />
-                        </Box>
-                      </div>
+                        <Chip
+                          sx={{
+                            maxWidth: 200,
+                            padding: 1,
+                            marginTop: 1,
+                            backgroundColor: isSelectingTarget
+                              ? "#1876d2"
+                              : primaryGreen,
+                          }}
+                          icon={<FmdGoodOutlined style={{fontSize: 12}}/>}
+                          label={
+                            isSelectingTarget
+                              ? "Selecting..."
+                              : targetGenre
+                              ? replace_special_characters(targetGenre, false)
+                              : "Select target genre"
+                          }
+                          color={isSelectingTarget ? "primary" : "success"}
+                          onClick={targetClicked}
+                        />
+                      </Box>
                     ) : (
                       <></>
                     )}
-                    <Typography color={"white"} width={300}>
+                    <Typography color={"white"}>
                       {"Number of genres collected: " +
                         Object.keys(selectedUserGenres).length}
                     </Typography>
-                    <Box width={300} flex="center" paddingTop={5}>
+                    <Box flex="center" paddingTop={2}>
                       <Typography
                         color={"white"}
                         id="songsSliderLabel"
@@ -416,7 +414,7 @@ function Strategies({
                 <Box
                   flexDirection="column"
                   alignItems="center"
-                  sx={{ display: "flex", paddingLeft: 10, paddingRight: 10, }}
+                  sx={{ display: "flex", paddingLeft: 5, paddingRight: 5 }}
                 >
                   {isLoading ? (
                     <></>
