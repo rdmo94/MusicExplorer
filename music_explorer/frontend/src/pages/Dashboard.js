@@ -84,14 +84,15 @@ function Dashboard() {
       ) : (
         <></>
       )}
-      <Grid container direction={"row"} height={"100%"} id={"playlist"}>
-        <Box width={350} display={"flex"} flexDirection={"column"}>
+      <Grid container direction={"row"} id={"playlist"} height={"100%"}>
+        <Box width={350} display={"flex"} flexDirection={"column"} height={"100%"}>
           <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
         </Box>
 
         {/* <Box display={"flex"} flexDirection={"column"} flexGrow={1}> */}
         <Box
           display={"flex"}
+          height={"100%"}
           flexGrow={1}
           flexDirection={"row"}
           justifyContent={"center"}
@@ -113,7 +114,7 @@ function Dashboard() {
         </Box>
         {/* </Box> */}
 
-        <Box width={350} display={"flex"} flexDirection={"column"}>
+        <Box width={350} display={"flex"} flexDirection={"column"} height={"100%"}>
           <Strategies
             selectedUserGenres={playlistsGenreMap}
             updateStrategyOutputCallback={handleStrategyOutputChange}

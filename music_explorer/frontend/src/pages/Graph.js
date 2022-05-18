@@ -8,9 +8,8 @@ import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
-import { Typography } from "@material-ui/core";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
-import { styled, CircularProgress, LinearProgress } from "@mui/material";
+import { styled, CircularProgress, LinearProgress, Typography } from "@mui/material";
 
 const WhiteSelect = styled(Select)(({ theme }) => ({
   color: "white",
@@ -148,8 +147,8 @@ function Graph({
   useEffect(() => {
     let availableSizeElement = document.getElementById("graph");
     if (availableSizeElement) {
-      setGraphHeight(availableSizeElement.clientHeight / 2);
-      setGraphWidth(availableSizeElement.clientWidth / 2.1);
+      setGraphHeight(availableSizeElement.clientHeight / 1.5);
+      setGraphWidth(availableSizeElement.clientWidth / 2);
     }
   }, [graphRef]);
 
@@ -234,8 +233,8 @@ function Graph({
       <Box
         display="flex"
         flexDirection={"column"}
-        alignItems={"center"}
-        justifyContent={"space-evenly"}
+        alignItems={"flex-start"}
+        justifyContent={"flex-start"}
         style={{
           borderRadius: 30,
           margin: 20,
@@ -305,28 +304,33 @@ function Graph({
       </Box>
 
       <Box
-        height={"70%"}
+        height={"60%"}
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"flex-start"}
         alignItems={"center"}
         flexGrow={1}
-        paddingTop={5}
       >
         {graph}
         {graphLoaded ? (
           ""
         ) : (
           <Box
-            height={"70%"}
-            flexDirection={"row"}
+            backgroundColor={"rgba(0, 0, 0, 0.4)"}
+            borderRadius={200}
+            position={"fixed"}
+            flexDirection={"column"}
             justifyContent={"center"}
             alignItems={"center"}
             flexGrow={3}
-            paddingTop={3}
+            paddingTop={1}
+            paddingLeft={3}
+            paddingRight={3}
+            paddingBottom={1}
+            bottom={30}
           >
             <div>
-              Graph is loading...
+              <Typography style={{color: "white"}}>Graph is loading...</Typography>
               <LinearProgress />
             </div>
           </Box>

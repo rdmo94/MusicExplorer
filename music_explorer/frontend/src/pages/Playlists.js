@@ -102,10 +102,10 @@ function Playlists({ updateUserGenreMap }) {
           justifyContent="space-between"
           height={"100%"}
         >
-          <Grid item padding={2}>
+          <Grid item>
             <Typography
               variant="h3"
-              style={{ color: "white", fontWeight: "bold" }}
+              style={{ color: "white", fontWeight: "bold", paddingLeft: 20 }}
             >
               My playlists
             </Typography>

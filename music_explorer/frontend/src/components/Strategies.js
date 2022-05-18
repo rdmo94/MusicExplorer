@@ -201,7 +201,7 @@ function Strategies({
 
   return (
     <Box className="main" style={{ height: "100%" }}>
-      <List style={{ overflow: "auto", maxHeight: "100%" }}>
+      <List style={{ overflow: "auto", height: "96%" }}>
         <Typography
           color={"white"}
           variant="h3"
@@ -389,7 +389,8 @@ function Strategies({
               display={"flex"}
               justifyContent={"center"}
               sx={{
-                marginBottom: 10,
+                marginBottom: 3,
+                marginTop: 1,
                 // position: "fixed",
                 // bottom: 65,
                 // right: 65,
@@ -415,7 +416,7 @@ function Strategies({
                 <Box
                   flexDirection="column"
                   alignItems="center"
-                  sx={{ display: "flex", paddingLeft: 10, paddingRight: 10 }}
+                  sx={{ display: "flex", paddingLeft: 10, paddingRight: 10, }}
                 >
                   {isLoading ? (
                     <></>
