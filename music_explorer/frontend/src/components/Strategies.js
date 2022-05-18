@@ -91,7 +91,7 @@ function Strategies({
 
   const [strategy, setStrategy] = useLocalStorage("selectedStrategy", null);
   const [numberOfSongsPerGenre, setNumberOfSongsPerGenre] = useState(1);
-  const [numberOfGenresToExplore, setNumberOfGenreToExplore] = useState(1);
+  const [numberOfGenresToExplore, setNumberOfGenreToExplore] = useState(10);
   const [userGenres, setUserGenres] = useState(selectedUserGenres);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingButtonDisabled, setIsLoadingButtonDisabled] = useState(true);
