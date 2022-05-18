@@ -22,8 +22,9 @@ def select_n_random_tracks(n_songs: int, chosen_genres: list[str]) -> dict:
         genre_tracks = parse_track_data()
         generated_playlist = {}
         for random_genre in chosen_genres:
-            generated_playlist[random_genre] = random.sample(
-                genre_tracks[random_genre], n_songs)
+            if random_genre in genre_tracks.keys():
+                generated_playlist[random_genre] = random.sample(
+                    genre_tracks[random_genre], n_songs)
         return generated_playlist
 
 def reverse_genre_to_track_ids_dict(genre_to_tracks:dict[str,list[str]]) -> dict[str,str]:
