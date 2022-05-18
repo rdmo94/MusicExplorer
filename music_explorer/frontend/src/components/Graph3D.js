@@ -129,8 +129,11 @@ function Graph3D({
       <ForceGraph3D
         ref={fgRef}
         onEngineStop={() => {
-          fgRef.current.zoomToFit(400);
+          fgRef.current.zoomToFit(200);
           setGraphLoaded(true);
+        }}
+        onEngineTick={() => {
+          setGraphLoaded(false);
         }}
         height={height}
         width={width}
@@ -162,6 +165,7 @@ function Graph3D({
         linkCurvature={0.1}
         linkDirectionalParticles={1}
       />
+
       {graphLoaded ? (
         ""
       ) : (
