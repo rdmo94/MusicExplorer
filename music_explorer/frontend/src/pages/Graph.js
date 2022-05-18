@@ -8,7 +8,15 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
-import { styled, CircularProgress, LinearProgress, Slider, Box, Typography } from "@mui/material";
+import {
+  styled,
+  CircularProgress,
+  LinearProgress,
+  Slider,
+  Box,
+  Typography,
+} from "@mui/material";
+import { Circle, HorizontalRule } from "@mui/icons-material";
 
 const WhiteSelect = styled(Select)(({ theme }) => ({
   color: "white",
@@ -50,7 +58,7 @@ function Graph({
       links = Object.values(strategyData)[0];
     }
   }
-  
+
   if (genreMap) {
     user_genres = Object.keys(genreMap);
   }
@@ -221,75 +229,75 @@ function Graph({
     },
     {
       value: 10,
-      label: ""
+      label: "",
     },
     {
       value: 20,
-      label: ""
+      label: "",
     },
     {
       value: 30,
-      label: ""
+      label: "",
     },
     {
       value: 40,
-      label: ""
+      label: "",
     },
     {
       value: 50,
-      label: ""
+      label: "",
     },
     {
       value: 60,
-      label: ""
+      label: "",
     },
     {
       value: 70,
-      label: ""
+      label: "",
     },
     {
       value: 80,
-      label: ""
+      label: "",
     },
     {
       value: 90,
-      label: ""
+      label: "",
     },
     {
       value: 100,
-      label: ""
+      label: "",
     },
     {
       value: 200,
-      label: ""
+      label: "",
     },
     {
       value: 300,
-      label: ""
+      label: "",
     },
     {
       value: 400,
-      label: ""
+      label: "",
     },
     {
       value: 500,
-      label: ""
+      label: "",
     },
     {
       value: 600,
-      label: ""
+      label: "",
     },
     {
       value: 700,
-      label: ""
+      label: "",
     },
     {
       value: 800,
-      label: ""
+      label: "",
     },
     {
       value: 900,
-      label: ""
+      label: "",
     },
     {
       value: 1000,
@@ -393,6 +401,37 @@ function Graph({
         flexGrow={1}
       >
         {graph}
+        <Box
+          display={"flex"}
+          width={"100%"}
+          flexDirection={"row"}
+          flexGrow={1}
+          justifyContent={"space-evenly"}
+          alignItems={"flex-start"}
+        >
+          {/* "#0258ad"; //blue
+    
+      "#057a01"; //green
+ 
+      "#5c5c5c";//grey */}
+
+          <Box display={"flex"} flexDirection={"row"} >
+            <Circle style={{color: "#5c5c5c"}} />
+            <Typography style={{color: "white"}}> = Unknown genres</Typography>
+          </Box>
+          <Box display={"flex"} flexDirection={"row"}>
+            <Circle style={{color:"#057a01"}} />
+            <Typography style={{color: "white"}}> = Your genres</Typography>
+          </Box>
+          <Box display={"flex"} flexDirection={"row"}>
+            <Circle style={{color: "#0258ad"}} />
+            <Typography style={{color: "white"}}> = Discovered genres</Typography>
+          </Box>
+          <Box display={"flex"} flexDirection={"row"}>
+            <HorizontalRule style={{color: "#ccc900"}} />
+            <Typography style={{color: "white"}}> = Smooth transition segment</Typography>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

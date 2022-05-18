@@ -35,6 +35,7 @@ function PlaylistScreen({ generatedPlaylist }) {
   );
 
   useEffect(() => {
+    console.log("changes to generated playlist: ", generatedPlaylist);
     // let object = new Playlist(
     //   "0DIvpjaOZNK0Qqb5bEm2lf",
     //   "New playlist",
@@ -59,21 +60,22 @@ function PlaylistScreen({ generatedPlaylist }) {
     //   ]
     // );
     //console.log(generatedPlaylist);
-    let playlist = Playlist.fromObject(generatedPlaylist);
-    console.log(playlist);
-    //console.log(playlist);
-    setPlaylist(playlist);
-    setPlaylistTracks(playlist.tracks);
-    if (setIsPlaylistnameEditable === null) {
+    if (generatedPlaylist === null) {
       setIsPlaylistnameEditable(true);
+      setNewlyCreatedPlaylist(null);
+      setPlaylistName(null);
+    } else {
+      let playlist = Playlist.fromObject(generatedPlaylist);
+      console.log(playlist);
+      //console.log(playlist);
+      setPlaylist(playlist);
+      setPlaylistTracks(playlist.tracks);
     }
 
-    if (newlyCreatedPlaylist === null) {
-      setNewlyCreatedPlaylist(null);
-    }
-    if (playlistName === null) {
-      setPlaylistName(null);
-    }
+    // if (newlyCreatedPlaylist === null) {
+    // }
+    // if (playlistName === null) {
+    // }
   }, [generatedPlaylist]);
 
   const saveToSpotifyStates = {
@@ -115,7 +117,7 @@ function PlaylistScreen({ generatedPlaylist }) {
       " inside PlaylistScreen.js"
     );
     setPlaylistName(name);
-    setIsPlaylistnameEditable(false);
+    // setIsPlaylistnameEditable(false);
     // var object = {
     //     "name": name,
     // }
@@ -196,7 +198,6 @@ function PlaylistScreen({ generatedPlaylist }) {
       >
         {playlist ? (
           <Grid
-
             item
             container
             direction="column"
@@ -214,8 +215,8 @@ function PlaylistScreen({ generatedPlaylist }) {
                 isEditable={isPlaylistnameEditable}
                 editCallback={editTitleHandler}
                 title={
-                  newlyCreatedPlaylist
-                    ? newlyCreatedPlaylist.name
+                  playlistName != null
+                    ? playlistName
                     : "New playlist"
                 }
               />
