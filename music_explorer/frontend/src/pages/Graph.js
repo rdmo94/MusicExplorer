@@ -7,6 +7,7 @@ import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
+import { primaryGreen } from "../Colors";
 
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
 import {
@@ -27,13 +28,13 @@ const WhiteSelect = styled(Select)(({ theme }) => ({
   borderColor: "white",
 }));
 
-const WhiteSlider = styled(Slider) (({theme}) => ({
+const WhiteSlider = styled(Slider)(({ theme }) => ({
   "& .MuiSlider-markLabel": {
-    color: "white"
+    color: "white",
   },
   "& .MuiSlider-markLabelActive": {
-    color: "white"
-  }
+    color: "white",
+  },
 }));
 
 function Graph({
@@ -346,13 +347,19 @@ function Graph({
         >
           Graph properties
         </Typography>
-        <Grid container direction="row" justifyContent={"space-between"} paddingLeft={5}>
+        <Grid
+          container
+          direction="row"
+          justifyContent={"space-between"}
+          paddingLeft={5}
+        >
           <Grid item>
             <InputLabel sx={{ color: "white" }} id="genrePopularity">
               Show genres by popularity
             </InputLabel>
             <Box sx={{ width: 300 }}>
               <WhiteSlider
+                sx={{ color: primaryGreen }}
                 id="genrePopularity"
                 name="genrePopularity"
                 defaultValue={5}
@@ -426,21 +433,30 @@ function Graph({
  
       "#5c5c5c";//grey */}
 
-          <Box display={"flex"} flexDirection={"row"} >
-            <Circle style={{color: "#5c5c5c"}} />
-            <Typography style={{color: "white"}}> = Unknown genres</Typography>
+          <Box display={"flex"} flexDirection={"row"}>
+            <Circle style={{ color: "#5c5c5c" }} />
+            <Typography style={{ color: "white" }}>
+              {" "}
+              = Unknown genres
+            </Typography>
           </Box>
           <Box display={"flex"} flexDirection={"row"}>
-            <Circle style={{color:"#057a01"}} />
-            <Typography style={{color: "white"}}> = Your genres</Typography>
+            <Circle style={{ color: "#057a01" }} />
+            <Typography style={{ color: "white" }}> = Your genres</Typography>
           </Box>
           <Box display={"flex"} flexDirection={"row"}>
-            <Circle style={{color: "#0258ad"}} />
-            <Typography style={{color: "white"}}> = Discovered genres</Typography>
+            <Circle style={{ color: "#0258ad" }} />
+            <Typography style={{ color: "white" }}>
+              {" "}
+              = Discovered genres
+            </Typography>
           </Box>
           <Box display={"flex"} flexDirection={"row"}>
-            <HorizontalRule style={{color: "#ccc900"}} />
-            <Typography style={{color: "white"}}> = Smooth transition segment</Typography>
+            <HorizontalRule style={{ color: "#ccc900" }} />
+            <Typography style={{ color: "white" }}>
+              {" "}
+              = Smooth transition segment
+            </Typography>
           </Box>
         </Box>
       </Box>
