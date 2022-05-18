@@ -23,23 +23,23 @@ import {
  * @returns 
  */
 function Graph2D({ data, properties, userGenreMap, strategy_genres, height, width, nodeClickCallback, selectViewMode, graphIsLoadedCallback}) {
-  console.log(data)
+
+
   function getNodeVisibility(node){
-    const min_node_weight = 10 //CONFIG
-    if (selectViewMode == "source"){
+    const min_node_weight = properties.genrePopularity
+    if (strategy_genres.includes(node.name)) return true;
+    if (node.weight < min_node_weight) return false;
+    else if (selectViewMode == "source"){
       if (!(node.name in userGenreMap)){
         return false;
       }
     } else if (selectViewMode == "target"){
-      if (node.name in userGenreMap){
-        return false;
-      }
-    }
-    if (strategy_genres.includes(node.name)) return true;
-    if (node.weight > min_node_weight) return true;
-    else return false;
-    
-  }
+        if (node.name in userGenreMap){
+          return false;
+        }
+      } else {return true}
+    } 
+
 
   function getNodeVal(node, globalScale) {
     const base_size = 10/globalScale;
@@ -153,7 +153,7 @@ function Graph2D({ data, properties, userGenreMap, strategy_genres, height, widt
       //zoom={0.2} //doesnt work.. zz
       linkColor={() => '#0258ad'}
       linkOpacity={0.9}
-      linkWidth={8}
+      linkWidth={1}
     />
   );
 }
