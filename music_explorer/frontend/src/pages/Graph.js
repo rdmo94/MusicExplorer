@@ -189,13 +189,20 @@ function Graph({
   let headline;
 
   //updates the properties of the graph
-  const changeHandler = (e) => {
-    //console.log(e.target);
-    //setGraphProperties({ ...graphProperties, [e.target.name]: e.target.value });
-    setLocalGraphProperties({
-      ...localGraphProperties,
-      [e.target.name]: e.target.value,
-    });
+  const changeHandler = (e, value) => {
+    if (value) {
+      //slider
+      setLocalGraphProperties({
+        ...localGraphProperties,
+        ["genrePopularity"]: value,
+      });
+    } else {
+      setLocalGraphProperties({
+        ...localGraphProperties,
+        [e.target.name]: e.target.value,
+      });
+    }
+    
   };
 
   //Dynamic headline
@@ -369,7 +376,8 @@ function Graph({
                 step={null}
                 valueLabelDisplay="auto"
                 marks={marks}
-                onChange={changeHandler}
+                onChangeCommitted={changeHandler}
+                //onChange={changeHandler}
                 value={localGraphProperties.genrePopularity}
               />
             </Box>
