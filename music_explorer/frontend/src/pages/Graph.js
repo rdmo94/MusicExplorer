@@ -2,14 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Graph3D from "../components/Graph3D";
 import Graph2D from "../components/Graph2D";
 import Grid from "@mui/material/Grid";
-import { Box } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
-import { styled, CircularProgress, LinearProgress, Typography } from "@mui/material";
+import { styled, CircularProgress, LinearProgress, Slider, Box, Typography } from "@mui/material";
 
 const WhiteSelect = styled(Select)(({ theme }) => ({
   color: "white",
@@ -30,7 +29,7 @@ function Graph({
     "graphProperties",
     {
       backgroundColor: "white",
-      nodeAutoColorBy: "",
+      genrePopularity: 0,
     }
   );
   const [graphHeight, setGraphHeight] = useState();
@@ -220,6 +219,89 @@ function Graph({
     );
   }
 
+  const marks = [
+    {
+      value: 0,
+      label: "All genres",
+    },
+    {
+      value: 10,
+      label: ""
+    },
+    {
+      value: 20,
+      label: ""
+    },
+    {
+      value: 30,
+      label: ""
+    },
+    {
+      value: 40,
+      label: ""
+    },
+    {
+      value: 50,
+      label: ""
+    },
+    {
+      value: 60,
+      label: ""
+    },
+    {
+      value: 70,
+      label: ""
+    },
+    {
+      value: 80,
+      label: ""
+    },
+    {
+      value: 90,
+      label: ""
+    },
+    {
+      value: 100,
+      label: ""
+    },
+    {
+      value: 200,
+      label: ""
+    },
+    {
+      value: 300,
+      label: ""
+    },
+    {
+      value: 400,
+      label: ""
+    },
+    {
+      value: 500,
+      label: ""
+    },
+    {
+      value: 600,
+      label: ""
+    },
+    {
+      value: 700,
+      label: ""
+    },
+    {
+      value: 800,
+      label: ""
+    },
+    {
+      value: 900,
+      label: ""
+    },
+    {
+      value: 1000,
+      label: "Most popular",
+    },
+  ];
+
   return (
     <Box className="container" style={{ width: "100%" }}>
       {/* <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
@@ -252,20 +334,24 @@ function Graph({
         </Typography>
         <Grid container direction="row" justifyContent={"space-between"}>
           <Grid item>
-            <InputLabel sx={{ color: "white" }} id="nodeAutoColorBy">
-              nodeAutoColorBy
+            <InputLabel sx={{ color: "white" }} id="genrePopularity">
+              Show genres by popularity
             </InputLabel>
-            <WhiteSelect
-              labelId="nodeAutoColorBy"
-              id="nodeAutoColorBy"
-              name="nodeAutoColorBy"
-              value={localGraphProperties.nodeAutoColorBy}
-              onChange={changeHandler}
-            >
-              <MenuItem value={"fy"}>fy</MenuItem>
-              <MenuItem value={"fx"}>fx</MenuItem>
-              <MenuItem value={"test"}>test</MenuItem>
-            </WhiteSelect>
+            <Box sx={{ width: 300 }}>
+              <Slider
+                id="genrePopularity"
+                name="genrePopularity"
+                defaultValue={5}
+                //getAriaValueText={valuetext}
+                min={0}
+                max={1000}
+                step={null}
+                valueLabelDisplay="auto"
+                marks={marks}
+                onChange={changeHandler}
+                value={localGraphProperties.genrePopularity}
+              />
+            </Box>
           </Grid>
 
           <Grid item>
