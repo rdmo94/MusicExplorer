@@ -1,5 +1,5 @@
 import React from "react";
-import {useState} from "react";
+import { useState } from "react";
 import SpriteText from "three-spritetext";
 import { graph_data_prettyfier, replace_special_characters } from "../Util";
 
@@ -72,8 +72,8 @@ function Graph3D({
         else return min_size;
       } else {
         //determine size based on weight
-        if ((node.weight / weight_divider) > min_size) {
-          if ((node.weight / weight_divider) > max_size) {
+        if (node.weight / weight_divider > min_size) {
+          if (node.weight / weight_divider > max_size) {
             return max_size;
           } else {
             return node.weight / weight_divider;
@@ -105,16 +105,16 @@ function Graph3D({
     }
   }
 
-  function nodeClickCallbackFix(node){
+  function nodeClickCallbackFix(node) {
     if (selectViewMode == "source" || selectViewMode == "target") {
-      nodeClickCallback(node)
-    } 
+      nodeClickCallback(node);
+    }
   }
 
   function getNodeBackgroundFillStyle(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
       return "rgba(255, 255, 255, 0.9)"; //less transparent white
-    } else if (node.name in userGenreMap) {
+    } else if (userGenreMap && node.name in userGenreMap) {
       return "rgba(255, 255, 255, 0.9)";
     } else {
       return "rgba(255, 255, 255, 0.07)"; //transparent white
@@ -129,8 +129,8 @@ function Graph3D({
       <ForceGraph3D
         ref={fgRef}
         onEngineStop={() => {
-          fgRef.current.zoomToFit(400)
-          setGraphLoaded(true)
+          fgRef.current.zoomToFit(400);
+          setGraphLoaded(true);
         }}
         height={height}
         width={width}
@@ -145,7 +145,7 @@ function Graph3D({
           sprite.strokeColor = "lightgrey";
           //sprite.borderWidth = 0.01
           sprite.backgroundColor = getNodeBackgroundFillStyle(node);
-          
+
           return sprite;
         }}
         enableNodeDrag={false}
@@ -167,12 +167,10 @@ function Graph3D({
       ) : (
         <Box
           backgroundColor={"rgba(0, 0, 0, 0.4)"}
-          borderRadius={200}
-          position={"fixed"}
-          flexDirection={"column"}
+          borderRadius={"0 0 20px 20px"}
+          flexDirection={"row"}
           justifyContent={"center"}
           alignItems={"center"}
-          flexGrow={3}
           paddingTop={1}
           paddingLeft={3}
           paddingRight={3}
