@@ -214,6 +214,8 @@ function Strategies({
               output={output}
               resetOutputCallback={() => {
                 setOutput(null);
+                setSourceGenre(null);
+                setTargetGenre(null);
                 updateStrategyOutputCallback(null);
               }}
             />
