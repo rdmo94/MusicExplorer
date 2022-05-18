@@ -112,7 +112,7 @@ function Graph2D({
   function getNodeBackgroundFillStyle(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
       return "rgba(255, 255, 255, 0.9)"; //less transparent white
-    } else if (node.name in userGenreMap) {
+    } else if (userGenreMap && (node.name in userGenreMap)) {
       return "rgba(255, 255, 255, 0.9)";
     } else {
       return "rgba(255, 255, 255, 0.05)"; //transparent white
