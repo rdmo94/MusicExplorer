@@ -67,11 +67,12 @@ def furthest_or_closest_genres(user_genres: list[str], n_genres=2, furthest:bool
             # Get genre from the word2vec model based on index
             genre = w2v_model.wv.index_to_key[index]
             # Add/update the shortest distance to the current genre
-            if genre in genre_to_shortest_distance:
-                if distance < genre_to_shortest_distance[genre]:
-                    genre_to_shortest_distance[genre] = distance
-            else:
-                genre_to_shortest_distance[genre] = distance
+            if genre not in user_genres:
+                if genre in genre_to_shortest_distance:
+                    if distance < genre_to_shortest_distance[genre]:
+                        genre_to_shortest_distance[genre] = distance
+                else:
+                    genre_to_shortest_distance[genre] = distance 
 
     # Sort the shortest distances based on the parameter "furthest"
     # If furthest == True, then the sorted output is in descending order and vice versa

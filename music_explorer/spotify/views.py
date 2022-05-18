@@ -10,7 +10,7 @@ from api.models import User
 
 class AuthURL(APIView):
     def get(self, request, fornat=None):
-        scopes = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-modify-private playlist-modify-public',
+        scopes = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-modify-private playlist-modify-public playlist-read-collaborative user-read-private user-library-read',
 
         url = Request('GET', 'https://accounts.spotify.com/authorize', params={
             'scope': scopes,

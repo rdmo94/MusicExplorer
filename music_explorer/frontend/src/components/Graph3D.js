@@ -99,7 +99,7 @@ function Graph3D({
       //console.log(node.name + " in " + strategy_genres)
       return "#0258ad"; //blue
     } else if (userGenreMap && node.name in userGenreMap) {
-      return "#057a01"; //green
+      return "#08bd02"; //green
     } else {
       return "#5c5c5c"; //grey
     }
@@ -147,6 +147,10 @@ function Graph3D({
         //zoomToFit={(1, 700, (_node) => true)}
         linkOpacity={0.9}
         linkWidth={0.2}
+        // linkDirectionalArrowLength={1}
+        // linkDirectionalArrowRelPos={2}
+        linkCurvature={0.1}
+        linkDirectionalParticles={1}
       />
       {graphLoaded ? (
         ""
