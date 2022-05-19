@@ -127,6 +127,7 @@ function Graph3D({
   return (
     <div>
       <ForceGraph3D
+        backgroundColor={properties.backgroundColor}
         ref={fgRef}
         onEngineStop={() => {
           fgRef.current.zoomToFit(200);
@@ -137,7 +138,6 @@ function Graph3D({
         }}
         height={height}
         width={width}
-        backgroundColor={properties.backgroundColor}
         graphData={data}
         onNodeClick={nodeClickCallbackFix}
         nodeThreeObject={(node) => {
