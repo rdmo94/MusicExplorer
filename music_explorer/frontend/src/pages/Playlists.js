@@ -21,6 +21,7 @@ function Playlists({ updateUserGenreMap }) {
   const [loadingPlaylists, setLoadingPlaylists] = useState(false);
   const [loadingGenres, setLoadingGenres] = useState(false);
   const [playlists, setPlaylists] = useState([]);
+  const [selectAll, setSelectAll] = useState(true);
   const [selectedPlaylists, setSelectedPlaylists] = useLocalStorage(
     "selectedPlaylists",
     []
@@ -34,12 +35,24 @@ function Playlists({ updateUserGenreMap }) {
     // }
     setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
-      response.json().then((json) => {
-        setLoadingPlaylists(false);
-        setPlaylists(JSON.parse(json));
-      })
+    response.json().then((json) => {
+      setLoadingPlaylists(false);
+      setPlaylists(JSON.parse(json));
+    })
     );
+    
   }, []);
+
+  useEffect(() => {
+    console.log(selectedPlaylists.length)
+    console.log(playlists.length)
+    console.log(selectedPlaylists.length === playlists.length)
+    if(selectedPlaylists.length === playlists.length) {
+      setSelectAll(false);
+    } else {
+      setSelectAll(true);
+    }
+  }, [selectedPlaylists])
 
   useEffect(() => {
     let availableSizeElement = document.getElementById("playlist");
@@ -68,6 +81,16 @@ function Playlists({ updateUserGenreMap }) {
         return JSON.parse(json);
       })
     );
+  }
+
+  function selectOrDeselectAllPlaylists() {
+    const _selectAll = selectAll;
+    if(_selectAll) {
+      setSelectedPlaylists(playlists.map((playlist) => Object.keys(playlist)[0]));
+    } else {
+      setSelectedPlaylists([]);
+    }
+    setSelectAll(!_selectAll);
   }
 
   function resetPlaylistGenreMap() {
@@ -101,6 +124,7 @@ function Playlists({ updateUserGenreMap }) {
           direction="column"
           justifyContent="space-between"
           height={"100%"}
+          width={"100%"}
         >
           <Grid item>
             <Typography
@@ -115,6 +139,7 @@ function Playlists({ updateUserGenreMap }) {
                 width: "100%",
                 maxHeight: listHeight,
                 overflow: "auto",
+                maxWidth: 250,
               }}
             >
               {loadingPlaylists ? (
@@ -142,7 +167,6 @@ function Playlists({ updateUserGenreMap }) {
                           sx={{ color: "white" }}
                           control={
                             <Checkbox
-
                               sx={{ color: "white", }}
                               checked={playlistAlreadyChecked}
                               onChange={(event) =>
@@ -166,6 +190,17 @@ function Playlists({ updateUserGenreMap }) {
           </Grid>
         </Grid>
       </List>
+      <Button
+          variant="contained"
+          style={{
+            margin: 5,
+            borderRadius: 200,
+            backgroundColor: primaryGreen,
+          }}
+          onClick={() => selectOrDeselectAllPlaylists()}
+        >
+          {selectAll ? "SELECT ALL" : "DESELECT ALL"}
+        </Button>
       <Box
         style={{
           // position: "fixed",

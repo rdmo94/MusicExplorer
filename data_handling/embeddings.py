@@ -39,7 +39,7 @@ def load_word2vec_model() -> gensim.models.Word2Vec:
     return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word_2_vec_model"))
 
 def create_tsne_model(vectors, n_components=2, learning_rate='auto', init='random', verbose=0):
-    return TSNE(n_components=n_components, early_exaggeration=12, perplexity=40, learning_rate=300, init='random').fit_transform(vectors)
+    return TSNE(n_components=n_components, early_exaggeration=12, perplexity=5, learning_rate='auto', init='random', n_iter=5000).fit_transform(vectors)
 
 
 
