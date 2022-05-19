@@ -165,7 +165,7 @@ function Graph({
   useEffect(() => {
     let availableSizeElement = document.getElementById("graph");
     if (availableSizeElement) {
-      setGraphHeight(availableSizeElement.clientHeight / 1.4);
+      setGraphHeight(availableSizeElement.clientHeight / 1.5);
       setGraphWidth(availableSizeElement.clientWidth / 1.6);
     }
   }, [graphRef]);
