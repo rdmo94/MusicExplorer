@@ -193,6 +193,7 @@ function Graph({
   const changeHandler = (e, value) => {
     if (value) {
       //slider
+
       setLocalGraphProperties({
         ...localGraphProperties,
         ["genrePopularity"]: value,
@@ -203,7 +204,6 @@ function Graph({
         [e.target.name]: e.target.value,
       });
     }
-    
   };
 
   //Dynamic headline
@@ -393,7 +393,7 @@ function Graph({
               id="backgroundColor"
               name="backgroundColor"
               value={localGraphProperties.backgroundColor}
-              onChange={changeHandler}
+              onChange={(e) => changeHandler(e)}
             >
               <MenuItem value={"white"}>white</MenuItem>
               <MenuItem value={"black"}>black</MenuItem>
