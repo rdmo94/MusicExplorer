@@ -141,13 +141,12 @@ class GetPlaylistGenresView(APIView):
 
             # 0) For each playlist: //TODO check if empty
             for playlist_id in request.data:
+
                 tracks = get_all_playlist_tracks(sp, playlist_id)
-                artists = self.get_track_artists(tracks)
+                artists = self.get_track_artists(filter(lambda x: x["track"] is not None, tracks))
                 genres = self.get_artist_genres(spotify=sp, artists=artists)
-                
                 #filter genres not in word_2_vec_model (intersection)
                 genres = self.lists_intersection(genres, model_genres)
-
                 current_playlist_ocurrence_dict = self.get_occurence_dict(
                     genres)
                 genre_ocurrences = self.combine_occurence_dicts(
