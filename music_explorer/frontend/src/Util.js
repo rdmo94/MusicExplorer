@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function graph_data_prettyfier(text) {
   //TODO function that prettyfies genres by replacing correct characters, uppercases etc
@@ -60,8 +61,7 @@ export function replace_special_characters(text, toWord2VecFormat) {
       .toLowerCase()
       .replace(/(^\w{1})|(\s{1}\w{1})/g, (match) => match.toUpperCase());
   } else {
-    text = text
-      .toLowerCase()
+    text = text.toLowerCase();
   }
 
   return text;
@@ -105,4 +105,32 @@ export function useLocalStorage(key, initialValue) {
     }
   };
   return [storedValue, setValue];
+}
+
+export function logout() {
+  console.log("logout called");
+  localStorage.clear();
+  sessionStorage.clear();
+  fetch("/spotify/logout").then((response) => {
+    const url = "https://www.spotify.com/logout/";
+    const spotifyLogoutWindow = window.open(
+      url,
+      "Spotify Logout",
+      "width=700,height=500,top=40,left=40"
+    );
+    setTimeout(() => {
+      spotifyLogoutWindow.close();
+      window.location.reload(false);
+    }, 500);
+  });
+
+  // var cookies = document.cookie;
+
+  // for (var i = 0; i < cookies.split(";").length; ++i)
+  // {
+  //     var myCookie = cookies[i];
+  //     var pos = myCookie.indexOf("=");
+  //     var name = pos > -1 ? myCookie.substr(0, pos) : myCookie;
+  //     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  // }
 }
