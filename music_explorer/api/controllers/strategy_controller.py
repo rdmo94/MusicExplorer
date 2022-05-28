@@ -54,6 +54,7 @@ def get_genre_to_tracks_dict(request, genre_track_ids:dict[str,list[str]]):
 
 class RandomStrategy(APIView):
     def post(self, request, format=None):
+        id = RANDOM
         json_data = request.data
         n_genres = json_data["n_genres"]
         n_songs_per_genre = json_data["n_songs_genre"]
@@ -61,28 +62,22 @@ class RandomStrategy(APIView):
         random_genres_chosen = stg.random_choose_n_random_unfamiliar_genres(
             user_genres=user_genres, n_genres=n_genres)
         genre_tracks = select_n_random_tracks(n_songs=n_songs_per_genre, chosen_genres=random_genres_chosen)
-        
-        id = RANDOM
-
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=genre_tracks)
         if genre_to_tracks_dict is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-
         return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : random_genres_chosen, "id" : id}),
                         status=status.HTTP_200_OK)
 
 
 class TakeMeAwayStrategy(APIView):
     def post(self, request, format=None):
+        id = TAKE_ME_AWAY
         json_data = request.data
         n_genres = json_data["n_genres"]
         n_songs_per_genre = json_data["n_songs_genre"]
         user_genres = json_data["user_genres"]
         genres = stg.furthest_or_closest_genres(user_genres=user_genres, n_genres=n_genres, furthest=True)
         path_tracks = select_n_random_tracks(n_songs=n_songs_per_genre, chosen_genres=genres)
-        
-        id = TAKE_ME_AWAY
-
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
         if genre_to_tracks_dict is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -92,15 +87,13 @@ class TakeMeAwayStrategy(APIView):
 
 class ALittleCuriousStrategy(APIView):
     def post(self, request, format=None):
+        id = ALCALC
         json_data = request.data
         n_genres = json_data["n_genres"]
         n_songs_per_genre = json_data["n_songs_genre"]
         user_genres = json_data["user_genres"]
         genres = stg.furthest_or_closest_genres(user_genres=user_genres, n_genres=n_genres, furthest=False)
         path_tracks = select_n_random_tracks(n_songs=n_songs_per_genre, chosen_genres=genres)
-        
-        id = ALCALC
-
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
         if genre_to_tracks_dict is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -110,6 +103,7 @@ class ALittleCuriousStrategy(APIView):
 
 class SmoothTransitionRandomStrategy(APIView):
     def post(self, request, format=None):
+        id = SMOOTH_T
         json_data = request.data
         n_genres = json_data["n_genres"]
         n_songs_per_genre = json_data["n_songs_genre"]
@@ -117,22 +111,8 @@ class SmoothTransitionRandomStrategy(APIView):
         target_genre = json_data["target_genre"]
         path_genres = stg.smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre=source_genre, target_genre=target_genre, n_genres=n_genres)
         path_tracks = select_n_random_tracks(n_songs=n_songs_per_genre, chosen_genres=path_genres)
-        id = SMOOTH_T
-
         genre_to_tracks_dict = get_genre_to_tracks_dict(request=request, genre_track_ids=path_tracks)
         if genre_to_tracks_dict is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        # for genre, tracks in path_tracks.items():
-        #     genres.append(genre)
-        #     for track in tracks:
-        #         sp_request = HttpRequest()
-        #         sp_request.method = "GET"
-        #         sp_request.session = request.session
-        #         # track_reponse = requests.get(f"http://127.0.0.1:8000/spotify/track/{track}")
-        #         track_reponse = track_controller.TrackView.as_view()(sp_request, track)
-        #         if track_reponse.status_code != 200:
-        #             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        #         else:
-        #             playlist.append({genre: track_reponse.data})
         return Response(data=json.dumps({"playlist" : genre_to_tracks_dict, "genres" : path_genres, "id" : id}),
                         status=status.HTTP_200_OK)
