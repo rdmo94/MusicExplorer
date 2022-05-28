@@ -47,12 +47,12 @@ function Playlists({ updateUserGenreMap }) {
     console.log(selectedPlaylists.length)
     console.log(playlists.length)
     console.log(selectedPlaylists.length === playlists.length)
-    if(selectedPlaylists.length === playlists.length) {
+    if(selectedPlaylists.length == playlists.length && playlists.length != 0) {
       setSelectAll(false);
     } else {
       setSelectAll(true);
     }
-  }, [selectedPlaylists])
+  }, [playlists, selectedPlaylists])
 
   useEffect(() => {
     let availableSizeElement = document.getElementById("playlist");
