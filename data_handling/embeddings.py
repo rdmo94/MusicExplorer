@@ -5,13 +5,14 @@ from gensim.test.utils import datapath
 from gensim import utils
 import gensim.models
 import os
+import sklearn
 from sklearn.manifold import TSNE
 import numpy as np
 import matplotlib.pyplot as plt
 import json
 import pandas as pd
 from similarity_matrix import get_genre_to_index
-
+from sklearn.decomposition import PCA
 
 class GenreCorpus:
     """An iterator that yields sentences (lists of str)."""
@@ -24,10 +25,10 @@ class GenreCorpus:
             # assume there's one document per line, tokens separated by whitespace
             yield utils.simple_preprocess(line, min_len=1, max_len=99)
 
-def create_Word2Vec_model(vector_size=50, window=99, min_count=0, sg=1) -> gensim.models.Word2Vec:
+def create_Word2Vec_model(vector_size=200, window=99, min_count=0, sg=1) -> gensim.models.Word2Vec:
     sentences = GenreCorpus()
     model = gensim.models.Word2Vec(
-    sentences=sentences, vector_size=vector_size, window=window, min_count=min_count, sg=sg)
+    sentences=sentences, vector_size=vector_size, window=window, min_count=min_count, sg=sg, epochs=10, negative=10)
     return model
 
 def save_word2vec_model(model:gensim.models.Word2Vec):
@@ -39,9 +40,10 @@ def load_word2vec_model() -> gensim.models.Word2Vec:
     return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word_2_vec_model"))
 
 def create_tsne_model(vectors, n_components=2, learning_rate='auto', init='random', verbose=0):
-    return TSNE(n_components=n_components, early_exaggeration=12, perplexity=5, learning_rate='auto', init='random', n_iter=5000).fit_transform(vectors)
+    return TSNE(n_components=n_components, early_exaggeration=12, perplexity=60, learning_rate=150, init='pca', n_iter=5000).fit_transform(vectors)
 
-
+def create_pca_model(vectors, n_components=2):
+    return PCA(n_components=n_components, svd_solver='full').fit_transform(vectors)
 
 # Old - too slow. Size was approx. 1.35 GB
 def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
@@ -127,6 +129,7 @@ def load_vector_space_dict_fron_json_file() -> dict:
 
 def get_all_genres_available() -> list[str]:
     return list(get_genre_to_index().keys())
+
 
 
 # model = create_Word2Vec_model(min_count=1, sg=0)
