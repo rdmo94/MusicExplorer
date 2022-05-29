@@ -125,18 +125,19 @@ function Graph({
   }
 
   function reorderData() {
+    //renders strategy genres first and user genres last
     if (data) {
-      if (strategy_genres) {
-        for (var i = 0; i < strategy_genres.length; i++) {
-          var strategy_genre = strategy_genres[i];
-          var indexOfGenre = getNodeIndexOfGenre(strategy_genre);
-          moveIndexToEndOfNodes(indexOfGenre);
-        }
-      }
       if (user_genres) {
         for (var i = 0; i < user_genres.length; i++) {
           var user_genre = user_genres[i];
           var indexOfGenre = getNodeIndexOfGenre(user_genre);
+          moveIndexToEndOfNodes(indexOfGenre);
+        }
+      }
+      if (strategy_genres) {
+        for (var i = 0; i < strategy_genres.length; i++) {
+          var strategy_genre = strategy_genres[i];
+          var indexOfGenre = getNodeIndexOfGenre(strategy_genre);
           moveIndexToEndOfNodes(indexOfGenre);
         }
       }
