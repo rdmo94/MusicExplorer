@@ -45,6 +45,7 @@ function Graph({
 }) {
   const [data, setData] = useState();
   const [graphType, setGraphType] = useLocalStorage("graphType", "2D");
+  const [sliderValue, setSliderValue] = useLocalStorage("popularitySliderValue", 0);
   const [localGraphProperties, setLocalGraphProperties] = useLocalStorage(
     "graphProperties",
     {
@@ -188,6 +189,10 @@ function Graph({
 
   let graph;
   let headline;
+
+  const changeHandlerSlider = (e, value) => {
+    setSliderValue(value);
+  }; 
 
   //updates the properties of the graph
   const changeHandler = (e, value) => {
@@ -370,7 +375,7 @@ function Graph({
                 sx={{ color: primaryGreen }}
                 id="genrePopularity"
                 name="genrePopularity"
-                defaultValue={5}
+                defaultValue={0}
                 //getAriaValueText={valuetext}
                 min={0}
                 max={1000}
@@ -378,8 +383,8 @@ function Graph({
                 valueLabelDisplay="auto"
                 marks={marks}
                 onChangeCommitted={changeHandler}
-                //onChange={changeHandler}
-                value={localGraphProperties.genrePopularity}
+                onChange={changeHandlerSlider}
+                value={sliderValue}
               />
             </Box>
           </Grid>
