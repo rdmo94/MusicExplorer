@@ -32,9 +32,7 @@ def create_Word2Vec_model(vector_size=200, window=99, min_count=0, sg=0) -> gens
     return model
 
 def save_word2vec_model(model:gensim.models.Word2Vec):
-    # with open(os.path.join(os.path.dirname(__file__), "data", "word2vec_model"), "w") as outfile:
-        model.save(os.path.join(os.path.dirname(__file__), "data", "word2vec_model"))
-    # outfile.close()
+    model.save(os.path.join(os.path.dirname(__file__), "data", "word2vec_model"))
 
 def load_word2vec_model() -> gensim.models.Word2Vec:
     return gensim.models.Word2Vec.load(os.path.join(os.path.dirname(__file__), "data", "word_2_vec_model"))
@@ -61,12 +59,9 @@ def generate_vector_space_graph(word2vec_model: gensim.models.Word2Vec):
                 distances.append({innerWord : word2vec_model.wv.distance(word, innerWord)})
             graph[word] = distances
         file.close()
-        
-    # with open(os.path.join(script_dir, "data", "vector_graph"), 'w') as fp:
         dataframe = pd.DataFrame.from_dict(graph)
         dataframe.to_pickle(os.path.join(script_dir, "data", "vector_space_graph.pkl"))
-        # json.dump(graph, fp)
-        # fp.close()
+    
 
 def get_x_y_coordinates_from_tsne_model(tsne_model, n_components=2):
     index_to_genre = load_index_to_genre_word2vec()
@@ -129,20 +124,3 @@ def load_vector_space_dict_fron_json_file() -> dict:
 
 def get_all_genres_available() -> list[str]:
     return list(get_genre_to_index().keys())
-
-
-
-# model = create_Word2Vec_model(min_count=1, sg=0)
-# save_word2vec_model(model)
-
-# generate_index_to_genre_word2vec()
-# tsne_model_2d = create_tsne_model(model)
-# tsne_model_3d = create_tsne_model(model, n_components=3)
-
-# generate_datapoints()
-# generate_datapoints(n_components=3)
-
-# generate_vector_space_graph(load_word2vec_model())
-
-# model = load_word2vec_model()
-# print("hey")

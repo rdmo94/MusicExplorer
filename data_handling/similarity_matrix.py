@@ -8,11 +8,9 @@ import numpy as np
 import itertools
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file, convert_string_to_unicode
-# import spotify.spotify_scraper
 
 def get_genre_to_index() -> dict:
     return read_json_file(os.path.join(os.path.dirname(__file__), "data","genre_to_index_word2vec.json"))
-
 
 def get_index_to_genre():
     return read_json_file(os.path.join("data_handling", "data","index_to_genre.json"))
@@ -39,6 +37,7 @@ def generate_similarity_matrix():
 def get_unique_pairs_in_list(elements: list[str]) -> list[tuple[str, str]]:
     return list(itertools.combinations(elements, 2))
 
+# Not used
 def generate_matrix_old():
     genre_genres_dict = parse_genre_genres()
 
@@ -63,9 +62,6 @@ def generate_matrix_old():
     dataframe.to_json("./matrix.json")
 
 def get_matrix() -> pd.DataFrame:
-
     matrix_dict = read_json_file(os.path.join(os.path.dirname(__file__), "data", "matrix.json"))
     df = pd.DataFrame.from_dict(matrix_dict, orient="index")
     return df
-
-# generate_similarity_matrix()

@@ -1,3 +1,5 @@
+### This file contains code from the beginning used for fetching data from Spotify
+
 from asyncore import read
 import logging
 from operator import index, indexOf
@@ -21,9 +23,6 @@ class Playlist:
         self.id = id
         self.genre = genre
 
-    # def fromJson(json):
-
-
 def fetchPlaylists():
     spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
         client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
@@ -41,7 +40,6 @@ def fetchPlaylists():
                     pairs[i["name"]] = i["id"]
             except Exception as e:
                 continue
-                # playlists = spotify.user_playlists("thesoundsofspotify", limit=50,)
         json.dump(pairs, outfile, ensure_ascii=False)
 
 

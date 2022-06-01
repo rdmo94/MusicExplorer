@@ -27,15 +27,6 @@ def generate_graph_data_2d():
         f.close()
     # go through the co-occurrence matrix to form the links
     links = []
-    # with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
-    #     for index, line in enumerate(file.readlines()):
-        
-    #         line_in_sections = line.split(",")
-    #         x = int(line_in_sections[0].replace(",", ""))
-    #         y= int(line_in_sections[1].replace(",", "").strip())
-    #         if x < len(nodes) and y < len(nodes):
-    #             links.append({"source" : x, "target": y})
-
     graph_data = {}
     graph_data["nodes"] = nodes
     graph_data["links"] = links
@@ -65,15 +56,6 @@ def generate_graph_data_3d():
         f.close()
     # go through the co-occurrence matrix to form the links
     links = []
-    # with open(os.path.join("data_handling/data", "matrix_txt.txt"), "r") as file: 
-    #     for index, line in enumerate(file.readlines()):
-        
-    #         line_in_sections = line.split(",")
-    #         x = int(line_in_sections[0].replace(",", ""))
-    #         y= int(line_in_sections[1].replace(",", "").strip())
-    #         if x < len(nodes) and y < len(nodes):
-    #             links.append({"source" : x, "target": y}) 
-
     graph_data = {}
     graph_data["nodes"] = nodes
     graph_data["links"] = links
@@ -133,11 +115,3 @@ def genre_formatter(genre: str) -> str:
     genre = genre.replace("9", "qqqeninqqq")
     genre = genre.replace("0", "qqqorezqqq")
     return genre
-             
-
-# generate_graph_data_2d()
-# generate_graph_data_3d()
-
-# parse_artist_genres_and_convert_to_word2vec_readable()
-# parse_artist_genre_sentences_and_convert_to_word2vec_readable()
-

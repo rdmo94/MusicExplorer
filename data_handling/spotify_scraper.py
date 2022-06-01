@@ -102,10 +102,6 @@ def scrape_all_artists_genres():
         chunk_dict = get_multiple_artists_genres(g)
         for artist_id, genres in chunk_dict.items():
             write_artist_genres_to_file(artist_id=artist_id, genres=genres)
-        
-
-    genre_genres_dict = parse_genre_genres()
-    print("brother")
 
 
 def write_artist_genres_to_file(artist_id:str, genres:list[str]) -> None:
@@ -125,7 +121,7 @@ def parse_genre_genres() -> dict[str,list[str]]:
         data = json.load(file)
         for genre, genres in data.items():
             genre = convert_string_to_unicode(genre)
-            genres = list(map(convert_string_to_unicode, genres)) # remove shit characters from genres
+            genres = list(map(convert_string_to_unicode, genres))
             while genre.lower() in genres:
                 genres.remove(genre.lower())
             genre_genres_dict[genre] = genres
@@ -133,11 +129,10 @@ def parse_genre_genres() -> dict[str,list[str]]:
     
     return genre_genres_dict
 
-def convert_string_to_unicode(fucked_string:str) -> str:
+def convert_string_to_unicode(special_char_string:str) -> str:
     import unidecode
-    unfucked_string = unidecode.unidecode(fucked_string)
-    # unfucked_string = unfucked_string.replace("'","")
-    return unfucked_string
+    normalised_string = unidecode.unidecode(special_char_string)
+    return normalised_string
 
 
 def split_list(list:list[str], max_list_size) -> list[list]:
@@ -235,7 +230,6 @@ def get_playlist_artists(playlist_id) -> list[str]:
 
     return list(set(artist_ids)) #removes duplicates
 
-
 def get_artist_genres(artist_id:str) -> list[str]:
     artist = spotify.artist(artist_id=artist_id)
     artist_genres = artist['genres']
@@ -310,9 +304,3 @@ def genre_formatter(genre: str) -> str:
     genre = genre.replace("9", "qqqeninqqq")
     genre = genre.replace("0", "qqqorezqqq")
     return genre
-
-# normalize_genre_playlists()
-
-# nomralize_genre_playlists_and_save_to_json()
-
-# main()
