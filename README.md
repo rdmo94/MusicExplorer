@@ -1,5 +1,5 @@
-# MusicExplorer
-Master Thesis project 2022
+# MusicXplorer
+Master Thesis project 2022 - Sean Wachs & Rasmus Dilling Møller
 
 # Folder contents
 
@@ -33,7 +33,6 @@ The application folder for the API handling Spotify specific requests.
 go to /frontend and run 'npm install' to install all npm packages
 install python requirements with 'pip install -r requirements.txt'
 cd /music_explorer
-Change the redirect uri to 127.0.0.1:8000 in /spotify/credentials.py before running locally
 
 ## Backend
 python manage.py runserver
