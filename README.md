@@ -1,5 +1,5 @@
-# MusicExplorer
-Master Thesis project 2022
+# MusicXplorer
+Master Thesis project 2022 - Sean Wachs & Rasmus Dilling Møller
 
 # Folder contents
 
