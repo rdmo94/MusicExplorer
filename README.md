@@ -39,9 +39,13 @@ pip install -r requirements.txt
 ## Backend
 - From the /music_explorer subdirectory run the following command:
 ```
+python manage.py migrate
+```
+To initalize database migrations, and
+
+```
 python manage.py runserver
 ```
-
 to start the server.
 
 ## Frontend
