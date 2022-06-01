@@ -30,6 +30,8 @@ The application folder for the API handling Spotify specific requests.
 - A file containing the 3D coordinates for all genres being visualised
 
 # How to run
+go to /frontend and run 'npm install' to install all npm packages
+install python requirements with 'pip install -r requirements.txt'
 cd /music_explorer
 Change the redirect uri to 127.0.0.1:8000 in /spotify/credentials.py before running locally
 
