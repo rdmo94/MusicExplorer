@@ -43,7 +43,6 @@ function PlaylistHeader({editCallback, isEditable, title}) {
               variant="contained"
               style={{ borderRadius: 200 }}
               onClick={() => {
-                console.log("Button clicked")
                 editCallback(name);
                 setIsNameChangeLoading(false);
                 setIsNamedFocused(false);

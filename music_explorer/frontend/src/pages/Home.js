@@ -7,7 +7,6 @@ import "../../static/css/styles.css";
 import Login from "./Login";
 import { createTheme } from "@mui/material";
 function Home() {
-  //let navigate = Navigate()
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
@@ -48,13 +47,6 @@ function Home() {
 
   return (
      <div className="main">{isAuthenticated === true ? <Dashboard /> : isAuthenticated === false ? <Login/> : <></>}</div>
-  
-    // <div>
-
-    // <h1>Homes page</h1>
-    // <Button variant="contained" onClick={isAuthenticated ? logoutSpotify : getSpotifyLoginUrl} >{isAuthenticated? "Logout": "Login"}</Button>
-    // {/* <Button variant="contained" onClick={getSpotifyLoginUrl} >{"Login"}</Button> */}
-    // </div>
   );
 }
 

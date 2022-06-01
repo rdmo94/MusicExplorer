@@ -20,13 +20,11 @@ function SongsContainer({ tracks, playSongCallback }) {
   useEffect(() => {
     let availableSizeElement = document.getElementById("songContainer");
     if (availableSizeElement) {
-      console.log("Height available ", availableSizeElement.clientHeight)
       setListHeight(availableSizeElement.clientHeight * 0.79);
     }
   }, [songContainerRef]);
   return (
     <List style={{ overflow: "auto", maxHeight: listHeight}}>
-      {console.log("tracks", tracks)}
       {tracks.map((track, index) => {
         return (
           <Grid item key={index}>
@@ -81,7 +79,6 @@ function SongsContainer({ tracks, playSongCallback }) {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    {/*console.log(track)*/}
                     <Typography style={{ color: "white" }}>
                       {track.artists.map((artist, index) =>
                         index + 1 != track.artists.length

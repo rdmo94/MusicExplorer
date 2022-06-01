@@ -123,14 +123,4 @@ export function logout() {
       window.location.reload(false);
     }, 500);
   });
-
-  // var cookies = document.cookie;
-
-  // for (var i = 0; i < cookies.split(";").length; ++i)
-  // {
-  //     var myCookie = cookies[i];
-  //     var pos = myCookie.indexOf("=");
-  //     var name = pos > -1 ? myCookie.substr(0, pos) : myCookie;
-  //     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-  // }
 }

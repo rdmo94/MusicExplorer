@@ -89,14 +89,10 @@ function Graph3D({
 
   function getNodeLabel(node) {
     return replace_special_characters(node.name, false); //+
-    //  " [" +
-    //  getNodeVal(node, globalScale).toString() +
-    //  "]" //TODO remove last part - only for testing
   }
 
   function getNodeColor(node) {
     if (strategy_genres && strategy_genres.includes(node.name)) {
-      //console.log(node.name + " in " + strategy_genres)
       return "#0258ad"; //blue
     } else if (userGenreMap && node.name in userGenreMap) {
       return "#08bd02"; //green
@@ -146,7 +142,6 @@ function Graph3D({
           sprite.textHeight = getNodeVal(node);
           sprite.strokeWidth = 1;
           sprite.strokeColor = "lightgrey";
-          //sprite.borderWidth = 0.01
           sprite.backgroundColor = getNodeBackgroundFillStyle(node);
 
           return sprite;
@@ -155,13 +150,9 @@ function Graph3D({
         nodeVisibility={(node) => getNodeVisibility(node)}
         nodeLabel={(node) => getNodeLabel(node)} //label when hovering
         nodeVal={(node) => getNodeVal(node)}
-        //zoom={0.2} //doesnt work.. zz
         linkColor={() => "#ccc900"}
-        //zoomToFit={(1, 700, (_node) => true)}
         linkOpacity={0.9}
         linkWidth={0.2}
-        // linkDirectionalArrowLength={1}
-        // linkDirectionalArrowRelPos={2}
         linkCurvature={0.1}
         linkDirectionalParticles={1}
       />

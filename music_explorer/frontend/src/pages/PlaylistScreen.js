@@ -6,15 +6,10 @@ import {
   Button,
   CircularProgress,
   Box,
-  TextField,
-  List,
 } from "@material-ui/core";
 import { Done, ErrorOutline } from "@material-ui/icons";
 import Playlist from "../models/Playlist";
-import Song from "../models/Song";
-import PropTypes from "prop-types";
 import { primaryGreen } from "../Colors";
-import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
 import { Icon } from "@iconify/react";
 import { useLocalStorage } from "../Util";
 import PlaylistHeader from "../components/PlaylistHeader";
@@ -41,16 +36,9 @@ function PlaylistScreen({ generatedPlaylist }) {
       setPlaylistName(null);
     } else {
       let playlist = Playlist.fromObject(generatedPlaylist);
-      console.log(playlist);
-      //console.log(playlist);
       setPlaylist(playlist);
       setPlaylistTracks(playlist.tracks);
     }
-
-    // if (newlyCreatedPlaylist === null) {
-    // }
-    // if (playlistName === null) {
-    // }
   }, [generatedPlaylist]);
 
   const saveToSpotifyStates = {
@@ -64,14 +52,12 @@ function PlaylistScreen({ generatedPlaylist }) {
 
   const saveToSpotifyHandler = (_) => {
     setSaveToSpotifyState("LOADING");
-    console.log("playlistname", playlistName);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ playlistTracks, name: playlistName }),
     };
     fetch("/spotify/playlist/save", requestOptions).then((response) => {
-      console.log("actually called fetch");
       if (response.status == 201) {
         setSaveToSpotifyState("SUCCESS");
         response.json().then((json) => {
@@ -86,33 +72,7 @@ function PlaylistScreen({ generatedPlaylist }) {
   };
 
   function editTitleHandler(name) {
-    console.log(
-      "Setting new playlist name as ",
-      name,
-      " inside PlaylistScreen.js"
-    );
     setPlaylistName(name);
-    // setIsPlaylistnameEditable(false);
-    // var object = {
-    //     "name": name,
-    // }
-    // const requestOptions = {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ object }),
-    // };
-    // fetch(`/spotify/playlist/${newlyCreatedPlaylist.id}`, requestOptions).then((response) => {
-    // console.log("actually called fetch");
-    // if (response.status == 201) {
-    //   setSaveToSpotifyState("SUCCESS");
-    //   response.json().then((json) => {
-    //     setNewlyCreatedPlaylist(JSON.parse(json));
-    //     console.log(JSON.parse(json));
-    //   });
-    // } else {
-    //   setSaveToSpotifyState("ERROR");
-    // }
-    // });
   }
 
   return (
@@ -204,19 +164,6 @@ function PlaylistScreen({ generatedPlaylist }) {
                   ></SongsContainer>
                 </Grid>
               }
-
-              {/* {playlistTracks.map((track) => {
-                return (
-                  <Grid item>
-                    <SongContainer
-                      track={track}
-                      playSongCallback={() => {
-                        setCurrentSongPlaying(track.id);
-                      }}
-                    ></SongContainer>
-                  </Grid>
-                );
-              })} */}
             </Grid>
 
             {currentSongPlaying != null ? (

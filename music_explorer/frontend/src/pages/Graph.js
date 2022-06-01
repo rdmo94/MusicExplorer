@@ -3,17 +3,14 @@ import Graph3D from "../components/Graph3D";
 import Graph2D from "../components/Graph2D";
 import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
-import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
 import { primaryGreen } from "../Colors";
 
-import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
+import { primaryGrey } from "../Colors";
 import {
   styled,
-  CircularProgress,
-  LinearProgress,
   Slider,
   Box,
   Typography,
@@ -84,21 +81,12 @@ function Graph({
     data.links = genreIdLinks;
   }
 
-  //console.log("links", links)
-  //console.log("genre links", links)
-  //console.log("genreIdLinks", genreIdLinks)
-  //console.log("data", data)
-  // console.log("links from graphcolortest", links)
-  // console.log("genreIdLinks from graphcolortest", genreIdLinks)
-  //console.log("new data", data)
-
   function convert_genre_list_to_graph_links(genreList) {
     var graphReadableLinks = [];
     for (var i = 0; i < genreList.length - 1; i++) {
       var link = { source: genreList[i], target: genreList[i + 1] };
       graphReadableLinks.push(link);
     }
-    //console.log(graphReadableLinks)
     return graphReadableLinks;
   }
 
@@ -107,7 +95,6 @@ function Graph({
       for (var i = 0; i < genre_nodes.length; i++) {
         if (genre_nodes[i].name == genre) return genre_nodes[i].id;
       }
-      //console.log(genre + "'s id was not found... :/")
       return null;
     }
 
@@ -119,7 +106,6 @@ function Graph({
         var newLink = { source: newLinkSource, target: newLinkTarget };
         newLinks.push(newLink);
       } else {
-        //console.log("could not find id links from " + links[i].source + " to " + links[i].target)
       }
     }
     return newLinks;
@@ -198,7 +184,6 @@ function Graph({
   const changeHandler = (e, value) => {
     if (value) {
       //slider
-
       setLocalGraphProperties({
         ...localGraphProperties,
         ["genrePopularity"]: value,
@@ -332,14 +317,6 @@ function Graph({
 
   return (
     <Box className="container" style={{ width: "100%" }}>
-      {/* <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-        <Typography
-          variant={"h3"}
-          style={{ fontWeight: "bold", color: "white" }}
-        >
-          {headline}
-        </Typography>
-      </Box> */}
       <Box
         display="flex"
         flexDirection={"column"}

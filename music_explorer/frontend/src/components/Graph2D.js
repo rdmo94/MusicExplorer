@@ -146,17 +146,11 @@ function Graph2D({
         onEngineStop={() => {
           setGraphLoaded(true);
         }}
-        //nodeAutoColorBy={node => node.name in userGenreMap}
         nodeVisibility={(node) => getNodeVisibility(node)}
         nodeColor={(node) => getNodeColor(node)}
         nodeLabel={(node) => getNodeLabel(node)} //label when hovering
-        //nodeVal={(node) => getNodeVal(node)}
-
-        //nodeVal={node => node.name in userGenreMap ? userGenreMap[node.name].value : 1}
-        //nodeVal={100}
         nodeCanvasObject={(node, ctx, globalScale) => {
           const label = getNodeLabel(node);
-          // const fontSize = (getNodeVal(node) * 12) / globalScale; //higher is smaller?
           const fontSize = getNodeVal(node, globalScale); //higher is smaller?
           ctx.font = `${fontSize}px Sans-Serif`;
           const textWidth = ctx.measureText(label).width;
@@ -188,7 +182,6 @@ function Graph2D({
             );
         }}
         minZoom={0.8}
-        //zoom={0.2} //doesnt work.. zz
         linkColor={() => "#ccc900"}
         linkOpacity={0.9}
         linkWidth={6}

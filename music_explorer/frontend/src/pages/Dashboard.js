@@ -8,15 +8,6 @@ import { useLocalStorage } from "../Util";
 import "../../static/css/styles.css";
 import { primaryGreen } from "../Colors";
 
-//grid components style
-//const useStyles = makeStyles((theme) => ({
-//  paper: {
-//    padding: theme.spacing(1),
-//    textAlign: "center",
-//    color: theme.palette.text.secondary,
-//  },
-//}));
-
 function Dashboard() {
   const [playlistsGenreMap, setPlaylistsGenreMap] = useLocalStorage(
     "playlistsGenreMap",
@@ -91,8 +82,6 @@ function Dashboard() {
         <Box width={250} display={"flex"} flexDirection={"column"} height={"100%"}>
           <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
         </Box>
-
-        {/* <Box display={"flex"} flexDirection={"column"} flexGrow={1}> */}
         <Box
           display={"flex"}
           height={"100%"}
@@ -126,55 +115,6 @@ function Dashboard() {
           />
         </Box>
       </Grid>
-
-      {/* <Box display="flex">
-        <Container disableGutters={true}>
-          <Box
-            sx={{
-              bgcolor: "#d9d9d9",
-              width: "350px",
-              height: "100vh",
-              position: "fixed",
-              left: 0,
-              borderRight: "2px solid",
-            }}
-          >
-            <Playlists updateUserGenreMap={handleUpdatePlaylistGenreMap} />
-          </Box>
-        </Container>
-        <Container disableGutters={true}>
-          <Box sx={{ bgcolor: "#d9d9d9", height: "100vh", width: "auto" }}>
-            {generatedPlaylist == null || showGraph ? (
-              <Graph genreMap={playlistsGenreMap} />
-            ) : (
-              <PlaylistScreen generatedPlaylist={generatedPlaylist} />
-            )}
-          </Box>
-        </Container>
-        <Container disableGutters={true}>
-          {
-            <Box
-              sx={{
-                bgcolor: "#d9d9d9",
-                width: "350px",
-                height: "100vh",
-                position: "fixed",
-                right: 0,
-                borderLeft: "2px solid",
-              }}
-            >
-              {
-                <Strategies
-                  selectedUserGenres={playlistsGenreMap}
-                  updateGeneratedPlaylistCallback={
-                    handleGeneratedPlaylistChange
-                  }
-                />
-              }
-            </Box>
-          }
-        </Container>
-      </Box> */}
     </Box>
   );
 }

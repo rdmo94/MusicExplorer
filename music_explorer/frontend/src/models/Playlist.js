@@ -31,10 +31,7 @@ class Playlist {
         playlist.tracks.push(Song.fromJSON(song, genres[i]))
       }
     }
-    
-    // Object.values(list)[0].map((track) => {
-    //   return Song.fromJSON(track, Object.keys(list)[0]);
-    // });
+  
     return playlist;
   }
 }

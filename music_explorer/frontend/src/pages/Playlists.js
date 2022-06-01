@@ -29,10 +29,6 @@ function Playlists({ updateUserGenreMap }) {
   const playlistRef = useRef(null);
 
   useEffect(() => {
-    // let availableSizeElement = document.getElementById("playlist");
-    // if (availableSizeElement) {
-    //   setListHeight(availableSizeElement.clientHeight * 0.6);
-    // }
     setLoadingPlaylists(true);
     fetch("/spotify/get_playlists").then((response) =>
     response.json().then((json) => {

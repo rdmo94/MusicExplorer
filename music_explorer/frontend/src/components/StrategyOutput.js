@@ -72,7 +72,6 @@ function StrategyOutput({ output, resetOutputCallback }) {
         <></>
       )}
     </Box>
-    // <></>
   );
 }
 

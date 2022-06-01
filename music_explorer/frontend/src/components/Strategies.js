@@ -5,36 +5,23 @@ import {
   MenuItem,
   InputLabel,
   Box,
-  Grid,
-  Button,
   Slider,
-  CircularProgress,
-  ToggleButton,
-  TextField,
   Chip,
-  FilledInput,
-  InputAdornment,
-  OutlinedInput,
   List,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { display } from "@mui/system";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   primaryGreen,
-  primaryGrey,
   primaryGreyDark,
   primaryGreyLight,
 } from "../Colors";
 import Strategy from "../models/Strategy";
 import { useLocalStorage } from "../Util";
-import { makeStyles } from "@mui/styles";
 import { replace_special_characters } from "../Util";
 import { styled } from "@mui/system";
 import {
-  CheckCircleOutlineIcon,
-  RadioButtonUncheckedIcon,
   FmdGoodOutlined,
   CircleOutlined,
 } from "@mui/icons-material";
@@ -392,10 +379,6 @@ function Strategies({
               sx={{
                 marginBottom: 3,
                 marginTop: 1,
-                // position: "fixed",
-                // bottom: 65,
-                // right: 65,
-                // paddingTop: 5,
               }}
             >
               <LoadingButton
