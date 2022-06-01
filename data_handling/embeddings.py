@@ -25,7 +25,7 @@ class GenreCorpus:
             # assume there's one document per line, tokens separated by whitespace
             yield utils.simple_preprocess(line, min_len=1, max_len=99)
 
-def create_Word2Vec_model(vector_size=200, window=99, min_count=0, sg=1) -> gensim.models.Word2Vec:
+def create_Word2Vec_model(vector_size=200, window=99, min_count=0, sg=0) -> gensim.models.Word2Vec:
     sentences = GenreCorpus()
     model = gensim.models.Word2Vec(
     sentences=sentences, vector_size=vector_size, window=window, min_count=min_count, sg=sg, epochs=10, negative=10)

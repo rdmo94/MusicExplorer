@@ -65,9 +65,11 @@ function Graph2D({
   }
 
   function getNodeVal(node, globalScale) {
-    const base_size = 10 / globalScale;
-    const max_size = base_size + 10 / globalScale; //4
-    const min_size = base_size; //1
+    // globalScale *= 0.5;
+    const base_size = 12 / globalScale;
+    // const max_size = base_size + 10 / globalScale; //4
+    const max_size = base_size * 1.8
+    const min_size = base_size * 0.8; //1
 
     const occurrence_divider = 8;
     const weight_divider = 100;
@@ -185,7 +187,7 @@ function Graph2D({
               ...bckgDimensions
             );
         }}
-        minZoom={2}
+        minZoom={0.8}
         //zoom={0.2} //doesnt work.. zz
         linkColor={() => "#ccc900"}
         linkOpacity={0.9}
