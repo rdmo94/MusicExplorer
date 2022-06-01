@@ -30,15 +30,25 @@ The application folder for the API handling Spotify specific requests.
 - A file containing the 3D coordinates for all genres being visualised
 
 # How to run
-go to /frontend and run 'npm install' to install all npm packages
-install python requirements with 'pip install -r requirements.txt'
-cd /music_explorer
+-  Install python requirements with the following command:
+```
+pip install -r requirements.txt
+``` 
+-  Go to the /frontend subdirectory and run 'npm install' to install all npm packages.
 
 ## Backend
+- From the /music_explorer subdirectory run the following command:
+```
 python manage.py runserver
+```
+
+to start the server.
 
 ## Frontend
-cd /frontend
+- Navigatate to the /frontend subdirectory and run the following command:
+```
 npm run build
+```
+to start the frontend server.
 
-Navigate to 127.0.0.1:8000 in your browser
+#Navigate to the address 127.0.0.1:8000 in your browser
