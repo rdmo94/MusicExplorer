@@ -41,7 +41,7 @@ pip install -r requirements.txt
 ```
 python manage.py migrate
 ```
-To initalize database migrations, and
+To initalize a database with migrations, and
 
 ```
 python manage.py runserver
