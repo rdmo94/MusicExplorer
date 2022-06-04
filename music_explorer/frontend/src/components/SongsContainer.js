@@ -1,10 +1,11 @@
 import React from "react";
 import { useEffect } from "react";
-import { Button, Grid, Typography, Box, List } from "@material-ui/core";
+import { Button, Grid, Typography, Box, List, Icon, IconButton } from "@material-ui/core";
 import { millisToMinutesAndSeconds, replace_special_characters } from "../Util";
 import { primaryGrey, primaryGreyDark, primaryGreyLight } from "../Colors";
 import Song from "../models/Song.js";
 import { useState } from "react";
+import {Autorenew} from "@material-ui/icons"
 import { useRef } from "react";
 
 
@@ -14,18 +15,26 @@ import { useRef } from "react";
  * @param {*} playSongCallback
  * @returns
  */
-function SongsContainer({ tracks, playSongCallback }) {
+function SongsContainer({ tracks, playSongCallback, renewSongCallback }) {
   const songContainerRef = useRef(null);
   const [listHeight, setListHeight] = useState();
+  const [playlistTracks, setPlaylistTracks] = useState([]);
   useEffect(() => {
     let availableSizeElement = document.getElementById("songContainer");
     if (availableSizeElement) {
       setListHeight(availableSizeElement.clientHeight * 0.79);
     }
   }, [songContainerRef]);
+
+  useEffect(() => {
+    setPlaylistTracks(tracks);
+    console.log("ThEY ChAnGeD!!")
+  }, [tracks]);
+  
+
   return (
     <List style={{ overflow: "auto", maxHeight: listHeight}}>
-      {tracks.map((track, index) => {
+      {playlistTracks.map((track, index) => {
         return (
           <Grid item key={index}>
             <Box
@@ -70,7 +79,7 @@ function SongsContainer({ tracks, playSongCallback }) {
                   item
                   justifyContent={"center"}
                   alignItems={"flex-start"}
-                  xs={10}
+                  xs={8}
                   style={{padding: 15}}
                 >
                   <Grid item>
@@ -92,6 +101,11 @@ function SongsContainer({ tracks, playSongCallback }) {
                       Genre: {replace_special_characters(track.genre, false)}
                     </Typography>
                   </Grid>
+                </Grid>
+                <Grid item >
+                  <IconButton style={{marginRight: 30}} onClick={() => renewSongCallback(track)}>
+                    <Autorenew style={{ color: "white" }} />
+                  </IconButton>
                 </Grid>
                 <Grid item xs>
                   <Typography style={{ color: "white" }}>

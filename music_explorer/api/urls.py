@@ -1,5 +1,6 @@
 from django.urls import path
 
+
 from .controllers.matrix_controller import GetSimilarityMatrixView
 
 from .controllers.genre_controller import GetAllGenresView
@@ -7,6 +8,7 @@ from .controllers.genre_controller import GetAllGenresView
 from .controllers.strategy_controller import ALittleCuriousStrategy, RandomStrategy, SmoothTransitionRandomStrategy, TakeMeAwayStrategy
 from .views import UserView
 from .views import CreateUserView
+from .controllers.track_controller import RenewSongView
 
 urlpatterns = [
     path('get_user', UserView.as_view()),
@@ -17,5 +19,6 @@ urlpatterns = [
     path('st', SmoothTransitionRandomStrategy.as_view()),
     path('get_all_genres', GetAllGenresView.as_view()),
     path('get_matrix', GetSimilarityMatrixView.as_view()),
+    path('renew_song', RenewSongView.as_view()),
 
 ]

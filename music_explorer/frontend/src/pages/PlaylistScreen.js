@@ -13,6 +13,7 @@ import { primaryGreen } from "../Colors";
 import { Icon } from "@iconify/react";
 import { useLocalStorage } from "../Util";
 import PlaylistHeader from "../components/PlaylistHeader";
+import Song from "../models/Song";
 
 function PlaylistScreen({ generatedPlaylist }) {
   const [playlist, setPlaylist] = useState();
@@ -74,6 +75,32 @@ function PlaylistScreen({ generatedPlaylist }) {
   function editTitleHandler(name) {
     setPlaylistName(name);
   }
+
+  const renewSongHandler = (track) => {
+    const requestBody = {
+      track: track,
+    };
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    };
+
+    fetch("api/renew_song", requestOptions)
+      .then((response) =>
+        response.json().then((data) => {
+          const newTrack = Song.fromJSON(data[0], track.genre);
+          playlistTracks[playlistTracks.indexOf(track)] = newTrack;
+          setPlaylistTracks([...playlistTracks]);
+          const currentPlaylist = JSON.parse(window.localStorage.getItem("generatedPlaylist"));
+          const genreSongsWithOldTrackRemoved = currentPlaylist[track.genre].filter(x => x.id != track.id);
+          genreSongsWithOldTrackRemoved.push(data[0]);
+          currentPlaylist[track.genre] = genreSongsWithOldTrackRemoved
+          window.localStorage.setItem("generatedPlaylist", JSON.stringify(currentPlaylist))
+        })
+      );
+  };
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
@@ -161,6 +188,7 @@ function PlaylistScreen({ generatedPlaylist }) {
                   <SongsContainer
                     tracks={playlistTracks}
                     playSongCallback={setCurrentSongPlaying}
+                    renewSongCallback={renewSongHandler}
                   ></SongsContainer>
                 </Grid>
               }

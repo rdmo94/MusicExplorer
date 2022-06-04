@@ -15,6 +15,7 @@ class Song {
      * @returns {Song}
      */
     static fromJSON(jsonObject, genre) {
+        console.log("From Song.fromJSON: ", jsonObject, genre);
         let song = new Song();
         song.id = jsonObject["id"];
         song.title = jsonObject["name"];
