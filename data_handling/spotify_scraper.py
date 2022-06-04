@@ -20,6 +20,9 @@ spotify:Spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCreden
 scraped_genres = []
 artists_genres_dict = {}
 
+def open_sqlite():
+    print("hey")
+
 def main():
     genre_sentences = []
     multi_genre_senteces = []
