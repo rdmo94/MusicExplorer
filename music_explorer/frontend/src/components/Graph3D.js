@@ -30,6 +30,7 @@ function Graph3D({
   nodeClickCallback,
   selectViewMode,
   graphIsLoadedCallback,
+  nodeClickStartMusicPlayback,
 }) {
   const [graphLoaded, setGraphLoaded] = useState(false);
 
@@ -104,6 +105,8 @@ function Graph3D({
   function nodeClickCallbackFix(node) {
     if (selectViewMode == "source" || selectViewMode == "target") {
       nodeClickCallback(node);
+    } else {
+      nodeClickStartMusicPlayback(node);
     }
   }
 

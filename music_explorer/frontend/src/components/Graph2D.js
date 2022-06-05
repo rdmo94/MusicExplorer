@@ -39,6 +39,7 @@ function Graph2D({
   width,
   nodeClickCallback,
   selectViewMode,
+  nodeClickStartMusicPlayback,
 }) {
   const [graphLoaded, setGraphLoaded] = useState(false);
 
@@ -131,6 +132,8 @@ function Graph2D({
   function nodeClickCallbackFix(node) {
     if (selectViewMode == "source" || selectViewMode == "target") {
       nodeClickCallback(node);
+    } else {
+      nodeClickStartMusicPlayback(node);
     }
   }
 

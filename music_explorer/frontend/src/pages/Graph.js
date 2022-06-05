@@ -9,12 +9,7 @@ import { useLocalStorage } from "../Util";
 import { primaryGreen } from "../Colors";
 
 import { primaryGrey } from "../Colors";
-import {
-  styled,
-  Slider,
-  Box,
-  Typography,
-} from "@mui/material";
+import { styled, Slider, Box, Typography } from "@mui/material";
 import { Circle, HorizontalRule } from "@mui/icons-material";
 
 const WhiteSelect = styled(Select)(({ theme }) => ({
@@ -42,7 +37,10 @@ function Graph({
 }) {
   const [data, setData] = useState();
   const [graphType, setGraphType] = useLocalStorage("graphType", "2D");
-  const [sliderValue, setSliderValue] = useLocalStorage("popularitySliderValue", 0);
+  const [sliderValue, setSliderValue] = useLocalStorage(
+    "popularitySliderValue",
+    0
+  );
   const [localGraphProperties, setLocalGraphProperties] = useLocalStorage(
     "graphProperties",
     {
@@ -52,6 +50,7 @@ function Graph({
   );
   const [graphHeight, setGraphHeight] = useState();
   const [graphWidth, setGraphWidth] = useState();
+  const [currentSongPlaying, setCurrentSongPlaying] = useLocalStorage("currentGenrePlaying", null);
   const graphRef = useRef(null);
 
   //set links
@@ -178,7 +177,18 @@ function Graph({
 
   const changeHandlerSlider = (e, value) => {
     setSliderValue(value);
-  }; 
+  };
+
+  const nodeClickStartMusicPlayback = (node) => {
+    console.log(node.name)
+    fetch(`api/get_random_song/${node.name}`).then((response) => {
+      console.log(response);
+      response.json().then((data) => {
+        console.log(data);
+        setCurrentSongPlaying(data.id)
+      });
+    });
+  };
 
   //updates the properties of the graph
   const changeHandler = (e, value) => {
@@ -215,6 +225,7 @@ function Graph({
         width={graphWidth}
         nodeClickCallback={graphNodeClickCallback}
         selectViewMode={graphSelectViewMode}
+        nodeClickStartMusicPlayback={nodeClickStartMusicPlayback}
       />
     );
   } else if (graphType == "3D") {
@@ -228,6 +239,7 @@ function Graph({
         width={graphWidth}
         nodeClickCallback={graphNodeClickCallback}
         selectViewMode={graphSelectViewMode}
+        nodeClickStartMusicPlayback={nodeClickStartMusicPlayback}
       />
     );
   }
@@ -451,6 +463,25 @@ function Graph({
           </Box>
         </Box>
       </Box>
+      {currentSongPlaying != null ? (
+        <iframe
+          style={{
+            borderRadius: 12,
+            position: "fixed",
+            bottom: 30,
+            left: "50%",
+            marginLeft: -150,
+          }}
+          src={`https://open.spotify.com/embed/track/${currentSongPlaying}?utm_source=generator`}
+          width="300"
+          height={"80"}
+          frameBorder={"0"}
+          allowFullScreen={""}
+          allow={"autoplay"}
+        ></iframe>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }

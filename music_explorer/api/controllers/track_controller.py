@@ -33,3 +33,21 @@ class RenewSongView(APIView):
         
         return Response(data=newTrack,status=status.HTTP_200_OK)
 
+class GetRandomSongByGenre(APIView):
+    def get(self, request, genre:str,  format=None):
+        track_data = parse_track_data()
+        tracks_for_genre: List = track_data[genre]
+        newTrackId = random.sample(tracks_for_genre, 1)
+        sp_request = HttpRequest()
+        sp_request.method = "GET"
+        sp_request.session = request.session
+        
+        get_track_response = sp_track_controller.TrackView.as_view()(sp_request, newTrackId)
+
+        if get_track_response.status_code == 200:
+            newTrack = get_track_response.data[0]
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(data=newTrack,status=status.HTTP_200_OK)
+
