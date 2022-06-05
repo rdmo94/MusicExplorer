@@ -7,6 +7,7 @@ from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import logging
 from os.path import exists
 import sys
+import sqlite3
 logging.basicConfig(filename='logfile.log', encoding='utf-8', level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler())
 
@@ -15,19 +16,107 @@ logging.getLogger('spotipy').setLevel(logging.WARNING)
 app1 = ["97246a4390bf4516b9177ae13269fe86", "b0546fc6e15e4db4ab491455c724dd19"]
 app2 = ["70ab3a9f4a844dda8202f7946bd2dba2", "145ff4ea82f648bab973af480e4371b2"]
 app3 = ["0e8f0b0bd124410492a05cb32e00db06", "f2c636adb70449c2a985f04a15026774"]
+app4 = ["49c8efc8a3904b44b9f78c8670bab933", "3eb720535fda431eac3371897dfd7915"]
 
-spotify:Spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=app2[0], client_secret=app2[1]))
+os.environ['SPOTIPY_CLIENT_ID'] = "97246a4390bf4516b9177ae13269fe86"
+os.environ['SPOTIPY_CLIENT_SECRET'] = "b0546fc6e15e4db4ab491455c724dd19"
+#export SPOTIPY_CLIENT_ID='your-spotify-client-id'
+#export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+#client_id=app4[0], client_secret=app4[1]
+
+spotify:Spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials() 
+    #proxies={
+   #'http': 'http://lum-customer-c_c304ebd4-zone-static-route_err-block-country-dk:takeoff!@zproxy.lum-superproxy.io:22225',
+   # 'https': 'http://lum-customer-c_c304ebd4-zone-static-route_err-block-country-dk:takeoff!@zproxy.lum-superproxy.io:22225'}
+   )
 scraped_genres = []
 artists_genres_dict = {}
 
+def scrape_all_artists_genres():
+    #create list with ALL artists
+
+    #write artists to file
+    #with open(os.path.join("data_handling","data", "artists.txt"), "w") as new_file:
+    #    for g in all_artists:
+    #        new_file.write(g + "\n")
+
+    #get all current scraped artists
+    already_scraped_artists = os.listdir(os.path.join("data_handling","data", "artist_genres"))
+    already_scraped_artists = [word.replace('.json','') for word in already_scraped_artists]
+
+    #get artists to scrape 
+    all_artists = []
+    with open(os.path.join("data_handling","data", "artists_new.txt")) as f:
+        all_artists = f.readlines()
+        all_artists = [word.replace('\n','') for word in all_artists]
+        all_artists = list(set(all_artists))
+        print(":)")
+
+    already_set = set(already_scraped_artists)
+    all_set = set(all_artists)
+    all_artists = list(all_set-already_set)
+
+    #for e in already_scraped_artists:
+    #    try:
+    #        all_artists.remove(e)
+    #    except Exception as e:
+    #        logging.debug(str(e))
+
+
+    #split list of artists into chunks of 50
+    artist_chunks = split_list(all_artists, 50)
+
+    #scrape genres for all artists and add
+    for g in artist_chunks:
+        chunk_dict = get_multiple_artists_genres(g)
+        for artist_id, genres in chunk_dict.items():
+            write_artist_genres_to_file(artist_id=artist_id, genres=genres)
+
+def scrape_artist_genres_to_json_files() -> None:
+    #get already scraped genres from folder
+    scraped_artists = get_genres_from_folder(os.path.join("data_handling", "data", "artist_genres"))
+
+    # get all files
+    
+
+    #read all genres and artists
+    counter = len(scraped_genres)
+    for f in files:
+        genre_genres = []
+        genre = f.replace(".json","")
+        genre_artists_dict = read_json_file(os.path.join("genre_artists", f))
+        if genre not in scraped_genres:
+            try:
+                artist_ids = list(genre_artists_dict.values())[0]
+                artist_ids_lists = split_list(list=artist_ids, max_list_size=50)
+
+                for artist_id_list in artist_ids_lists:
+                    artist_genres = get_multiple_artists_genres(artist_ids=artist_id_list)
+                    genre_genres.extend(artist_genres)
+                
+                file_name = os.path.join("genre_genres", genre)
+                write_dict_to_file(file_name, {genre:genre_genres})
+                print(genre + " genres scraped! " + str(counter)+"/"+str(len(files)))
+                counter = counter+1
+            except Exception as e:
+                print(str(e))
+        else:
+            print(genre + " genres ALREADY scraped")
+
 def open_sqlite():
-    print("hey")
+    unique_artists = set()
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__),"data", "spotify.sqlite"))
+    cursor = conn.execute("SELECT id from artists")
+    for row in cursor:
+        #print("ID = ", row[0])
+        #print("NAME = ", row[1], "\n")
+        unique_artists.add(row[0])
 
 def main():
     genre_sentences = []
     multi_genre_senteces = []
     
-    data = read_json_file(os.path.join(os.path.dirname(__file__),"data", "artists_genres_old.json"))
+    data = read_json_file(os.path.join(os.path.dirname(__file__),"data", "artists_genres.json"))
     for artist_id, genres in data.items():
         sentence = ""
         for genre in genres:
@@ -56,7 +145,7 @@ def main():
             pairs = (n*(n-1)/2)
             pairs_counter = pairs_counter + pairs
     
-    with open(os.path.join("data_handling", "data", "artists_genre_sentences.txt"), "w") as new_file:
+    with open(os.path.join("data_handling", "data", "artists_genre_sentences_NEW.txt"), "w") as new_file:
         for l in multi_genre_senteces:
             new_file.write(l + "\n")
 
@@ -67,44 +156,19 @@ def convert_artist_genres_files_to_one_file():
     #read all files
     all_artist_files = os.listdir(os.path.join("data_handling","data", "artist_genres"))
     all_artist_genres_dict = {}
+    counter = 0
 
     for file in all_artist_files:
         if "DS_Store" not in file:
+            counter = counter+1
             content = read_json_file(os.path.join("data_handling","data", "artist_genres", file))
-            all_artist_genres_dict.update(content)
+            for key, value in content.items():
+                if value:
+                    if len(value) > 1:
+                        all_artist_genres_dict.update(content)
     
     with open(os.path.join("data_handling", "data", "artists_genres.json"), "w") as new_file:
         new_file.write(json.dumps(all_artist_genres_dict))
-
-def scrape_all_artists_genres():
-     #create list with ALL artists
-    all_artists = get_artists_from_folder(os.path.join("data_handling","data", "genre_artists"))
-
-    #write artists to file
-    with open(os.path.join("data_handling","data", "artists.txt"), "w") as new_file:
-        for g in all_artists:
-            new_file.write(g + "\n")
-
-    #get all current scraped artists
-    already_scraped_artists = os.listdir(os.path.join("data_handling","data", "artist_genres"))
-    already_scraped_artists = [word.replace('.json','') for word in already_scraped_artists]
-
-    for e in already_scraped_artists:
-        logging.debug(str(len(all_artists)))
-        try:
-            all_artists.remove(e)
-        except Exception as e:
-            logging.debug(str(e))
-
-
-    #split list of artists into chunks of 50
-    artist_chunks = split_list(all_artists, 50)
-
-    #scrape genres for all artists and add
-    for g in artist_chunks:
-        chunk_dict = get_multiple_artists_genres(g)
-        for artist_id, genres in chunk_dict.items():
-            write_artist_genres_to_file(artist_id=artist_id, genres=genres)
 
 
 def write_artist_genres_to_file(artist_id:str, genres:list[str]) -> None:
@@ -141,36 +205,7 @@ def convert_string_to_unicode(special_char_string:str) -> str:
 def split_list(list:list[str], max_list_size) -> list[list]:
     return [list[i:i + max_list_size] for i in range(0, len(list), max_list_size)] 
 
-def scrape_artist_genres_to_json_files() -> None:
-    #get already scraped genres from folder
-    scraped_genres = get_genres_from_folder("genre_genres")
 
-    # get all files
-    files = os.listdir("genre_artists/")
-
-    #read all genres and artists
-    counter = len(scraped_genres)
-    for f in files:
-        genre_genres = []
-        genre = f.replace(".json","")
-        genre_artists_dict = read_json_file(os.path.join("genre_artists", f))
-        if genre not in scraped_genres:
-            try:
-                artist_ids = list(genre_artists_dict.values())[0]
-                artist_ids_lists = split_list(list=artist_ids, max_list_size=50)
-
-                for artist_id_list in artist_ids_lists:
-                    artist_genres = get_multiple_artists_genres(artist_ids=artist_id_list)
-                    genre_genres.extend(artist_genres)
-                
-                file_name = os.path.join("genre_genres", genre)
-                write_dict_to_file(file_name, {genre:genre_genres})
-                print(genre + " genres scraped! " + str(counter)+"/"+str(len(files)))
-                counter = counter+1
-            except Exception as e:
-                print(str(e))
-        else:
-            print(genre + " genres ALREADY scraped")
 
 def scrape_genres_to_json_files():
     #get already scraped genres from folder
@@ -242,8 +277,11 @@ def get_multiple_artists_genres(artist_ids:list[str]) -> list[str]:
     artists_genres_dict = {}
     artists = spotify.artists(artists=artist_ids)
     for artist in artists['artists']:
-        if artist['genres']:
-            artists_genres_dict[artist['id']] = artist['genres']
+        if artist:
+            if artist['genres']:
+                artists_genres_dict[artist['id']] = artist['genres']
+            else:
+                artists_genres_dict[artist['id']] = []
     return artists_genres_dict
     
 def scrape_tracks_from_playlists(spotify:Spotify) -> list[str]:
@@ -307,3 +345,8 @@ def genre_formatter(genre: str) -> str:
     genre = genre.replace("9", "qqqeninqqq")
     genre = genre.replace("0", "qqqorezqqq")
     return genre
+
+main()
+convert_artist_genres_files_to_one_file()
+scrape_all_artists_genres()
+#open_sqlite()
