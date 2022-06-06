@@ -9,15 +9,16 @@ import itertools
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_scraper import parse_genre_genres, scrape_genres_to_json_files, scrape_artist_genres_to_json_files, read_json_file, convert_string_to_unicode
 
-def get_genre_to_index() -> dict:
-    return read_json_file(os.path.join(os.path.dirname(__file__), "data","genre_to_index_word2vec.json"))
+def get_genre_to_index(extended:str="") -> dict:
+    return read_json_file(os.path.join(os.path.dirname(__file__), "data",f"genre_to_index_word2vec{extended}.json"))
 
 def get_index_to_genre():
     return read_json_file(os.path.join("data_handling", "data","index_to_genre.json"))
 
-def generate_similarity_matrix():
-    artist_genres = read_json_file(os.path.join("data_handling", "data","artists_genres_word2vec_compatible.json"))
-    genre_to_index = get_genre_to_index()
+def generate_similarity_matrix(extended:str=""):
+    artist_genres = read_json_file(os.path.join("data_handling", "data",f"artists_genres_word2vec_compatible{extended}.json"))
+    # artist_genres = read_json_file(os.path.join("data_handling", "data","artists_genres_NEW.json"))
+    genre_to_index = get_genre_to_index(extended=extended)
     matrix = np.zeros([len(list(genre_to_index.keys())),len(list(genre_to_index.keys()))])
 
     for artist, genres in artist_genres.items():
@@ -32,7 +33,7 @@ def generate_similarity_matrix():
                     continue
 
     dataframe = pd.DataFrame(data=matrix, columns=list(genre_to_index.keys()), index=list(genre_to_index.keys()))
-    dataframe.to_json(os.path.join(os.path.dirname(__file__), "data", "matrix.json"))
+    dataframe.to_json(os.path.join(os.path.dirname(__file__), "data", f"matrix{extended}.json"))
 
 def get_unique_pairs_in_list(elements: list[str]) -> list[tuple[str, str]]:
     return list(itertools.combinations(elements, 2))
