@@ -42,10 +42,16 @@ function Graph2D({
   nodeClickStartMusicPlayback,
 }) {
   const [graphLoaded, setGraphLoaded] = useState(false);
+  console.log(properties)
 
   function getNodeVisibility(node) {
     const min_node_weight = properties.genrePopularity;
     if (strategy_genres.includes(node.name)) return true;
+
+    if (properties.genreFilter){
+      if (node.name.includes(properties.genreFilter)) return true;
+      else return false;
+    }
 
     if (node.weight < min_node_weight) return false;
     else if (selectViewMode == "source") {

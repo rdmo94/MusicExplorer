@@ -7,9 +7,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLocalStorage } from "../Util";
 import { primaryGreen } from "../Colors";
+import SearchIcon from '@mui/icons-material/Search';
 
 import { primaryGrey } from "../Colors";
-import { styled, Slider, Box, Typography } from "@mui/material";
+import { styled, Slider, Box, Typography, TextField, Button } from "@mui/material";
 import { Circle, HorizontalRule } from "@mui/icons-material";
 
 const WhiteSelect = styled(Select)(({ theme }) => ({
@@ -46,11 +47,16 @@ function Graph({
     {
       backgroundColor: "white",
       genrePopularity: 0,
+      genreFilter: "",
     }
   );
   const [graphHeight, setGraphHeight] = useState();
+  const [localGenreFilter, setLocalGenreFilter] = useState();
   const [graphWidth, setGraphWidth] = useState();
-  const [currentSongPlaying, setCurrentSongPlaying] = useLocalStorage("currentGenrePlaying", null);
+  const [currentSongPlaying, setCurrentSongPlaying] = useLocalStorage(
+    "currentGenrePlaying",
+    null
+  );
   const graphRef = useRef(null);
 
   //set links
@@ -150,6 +156,7 @@ function Graph({
   reorderData();
 
   useEffect(() => {
+    console.log("graphref useEffect")
     let availableSizeElement = document.getElementById("graph");
     if (availableSizeElement) {
       setGraphHeight(availableSizeElement.clientHeight / 1.5);
@@ -159,6 +166,7 @@ function Graph({
 
   //Different useEffect, as the one above gets called every time the graphRef changes
   useEffect(() => {
+    console.log("graphType useEffect")
     if (graphType) {
       var file =
         graphType == "3D"
@@ -180,12 +188,12 @@ function Graph({
   };
 
   const nodeClickStartMusicPlayback = (node) => {
-    console.log(node.name)
+    console.log(node.name);
     fetch(`api/get_random_song/${node.name}`).then((response) => {
       console.log(response);
       response.json().then((data) => {
         console.log(data);
-        setCurrentSongPlaying(data.id)
+        setCurrentSongPlaying(data.id);
       });
     });
   };
@@ -242,6 +250,23 @@ function Graph({
         nodeClickStartMusicPlayback={nodeClickStartMusicPlayback}
       />
     );
+  }
+
+  function handleLocalFilterChange(e){
+    console.log("updating local genreFilter")
+    setLocalGenreFilter(e.target.value)
+  }
+
+  //document.getElementById('genreFilter').value = localGraphProperties.genreFilter
+  
+  function updateGenreFilter(){
+    console.log("updating global genreFilter")
+    var value = document.getElementById('genreFilter').value
+
+    setLocalGraphProperties({
+      ...localGraphProperties,
+      ['genreFilter']: value,
+    });
   }
 
   const marks = [
@@ -379,6 +404,25 @@ function Graph({
           </Grid>
 
           <Grid item>
+            <InputLabel sx={{ color: "white" }} id="genreFilter-label">
+              Filter genres
+            </InputLabel>
+            <Box sx={{ width: 300 }}>
+              <TextField
+                id="genreFilter"
+                //label="Outlined"
+                variant="standard"
+                //defaultValue={localGraphProperties.genreFilter}
+                defaultValue={localGraphProperties.genreFilter}
+                //onChange={handleLocalFilterChange}
+              />
+              <Button onClick={() => updateGenreFilter()} variant="contained" size="small">
+                APPLY
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item>
             <InputLabel sx={{ color: "white" }} id="backgroundColorLabal">
               Background color
             </InputLabel>
@@ -386,6 +430,7 @@ function Graph({
               labelId="backgroundColorLabal"
               id="backgroundColor"
               name="backgroundColor"
+              size="small"
               value={localGraphProperties.backgroundColor}
               onChange={(e) => changeHandler(e)}
             >
@@ -402,6 +447,7 @@ function Graph({
               defaultValue={graphType}
               labelId="graph-type-label"
               id="graph-type"
+              size="small"
               onChange={(input) => {
                 setGraphType(input.target.value);
               }}
