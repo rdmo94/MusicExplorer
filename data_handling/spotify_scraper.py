@@ -303,7 +303,7 @@ def scrape_tracks_from_playlists(spotify:Spotify) -> list[str]:
                     json.dump({genre_name: track_ids}, outFile)
             
 
-def nomralize_genre_playlists_and_save_to_json():
+def normalize_genre_playlists_and_save_to_json():
     genre_playlist_dir = os.path.join(os.path.dirname(__file__), "data/genre_playlist_tracks")
     genre_playlist_dict = {}
     for filename in os.listdir(genre_playlist_dir):
@@ -346,7 +346,7 @@ def genre_formatter(genre: str) -> str:
     genre = genre.replace("0", "qqqorezqqq")
     return genre
 
-main()
-convert_artist_genres_files_to_one_file()
-scrape_all_artists_genres()
+# main()
+# convert_artist_genres_files_to_one_file()
+# scrape_all_artists_genres()
 #open_sqlite()

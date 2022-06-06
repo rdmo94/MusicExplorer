@@ -83,7 +83,8 @@ def furthest_or_closest_genres(user_genres: list[str], n_genres=2, furthest:bool
 
 def smooth_transition_find_path_from_familiar_to_unfamiliar_genre(source_genre, target_genre, n_genres=2):
     # Load NetworkX graph
-    G = load_gml_graph(os.path.join(os.path.dirname(__file__), "data", "networkx_graph.gml"))
+    # G = load_gml_graph(os.path.join(os.path.dirname(__file__), "data", "networkx_graph.gml"))
+    G = load_gml_graph(os.path.join(os.path.dirname(__file__), "data", "networkx_extended.pkl"))
     # Load word_2_vec model
     w2v_model = load_word2vec_model()
     # Find path from source to target genre

@@ -37,7 +37,8 @@ def save_graph_as_gml(G, filename):
     nx.write_gml(G, filename)
 
 def load_gml_graph(path) -> nx.Graph:
-    return nx.read_gml(path)
+    return nx.read_gpickle(path)
+    # return nx.read_gml(path)
 
 
 # def find_furthest_n_genres(genre, n_genres=5, n_songs_per_genre = 1):
