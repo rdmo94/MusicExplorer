@@ -62,7 +62,7 @@ def generate_matrix_old():
     dataframe = pd.DataFrame(data=matrix, columns=list(genre_labels.keys()), index=list(genre_labels.keys()))
     dataframe.to_json("./matrix.json")
 
-def get_matrix() -> pd.DataFrame:
-    matrix_dict = read_json_file(os.path.join(os.path.dirname(__file__), "data", "matrix.json"))
+def get_matrix(extended:str="") -> pd.DataFrame:
+    matrix_dict = read_json_file(os.path.join(os.path.dirname(__file__), "data", f"matrix{extended}.json"))
     df = pd.DataFrame.from_dict(matrix_dict, orient="index")
     return df

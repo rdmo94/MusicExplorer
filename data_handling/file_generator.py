@@ -29,13 +29,15 @@ def main():
     # print(bcolors.HEADER, "Generating similarity matrix as matrix.json...")
     # print(bcolors.OKBLUE)
     # similarity_matrix.generate_similarity_matrix(extended="_extended")
+    sim_matrix = similarity_matrix.get_matrix()
 
     # Train new Word2Vec model - tweak parameters here
     # print(bcolors.HEADER, "Training Word2Vec model...")
     # print(bcolors.OKBLUE)
     # word2vec = embeddings.create_Word2Vec_model(sg = 0)
-    # word2vec = load_word2vec_model("word_2_vec_model_extended")
-    # print(bcolors.HEADER, "Saving Word2Vec model...")
+    word2vec = load_word2vec_model("word_2_vec_model_extended")
+
+    print(bcolors.HEADER, "Saving Word2Vec model...")
     # print(bcolors.OKBLUE)
     # embeddings.save_word2vec_model(word2vec, filename="word_2_vec_model_extended")
     # embeddings.save_word2vec_model(word2vec, filename="word_2_vec_model_extended")
@@ -78,16 +80,16 @@ def main():
     # data_parser.generate_graph_data_3d(filename="graph_data_3d_extended.json", extended="_extended")
 
     # TWEAK N_EDGES HERE
-    OPTIMAL_N_EDGES = 6
-    print(bcolors.HEADER,"Generating NetworkX graph from vector space with ... ", OPTIMAL_N_EDGES, " from each genre...")
-    print(bcolors.OKBLUE)
+    # OPTIMAL_N_EDGES = 6
+    # print(bcolors.HEADER,"Generating NetworkX graph from vector space with ... ", OPTIMAL_N_EDGES, " from each genre...")
+    # print(bcolors.OKBLUE)
     # G = graph_util.generate_networkx_graph_from_vector_space(n_edges=OPTIMAL_N_EDGES)
-    G = graph_util.generate_networkx_graph_from_vector_space(extended="_extended",n_edges=OPTIMAL_N_EDGES)
+    # G = graph_util.generate_networkx_graph_from_vector_space(extended="_extended",n_edges=OPTIMAL_N_EDGES)
 
-    print(bcolors.HEADER,"Saving NetworkX graph to .gml file...")
-    print(bcolors.OKBLUE)
-    graph_util.save_graph_as_gml(G, extended="_extended")
-    print("g")
+    # print(bcolors.HEADER,"Saving NetworkX graph to .gml file...")
+    # print(bcolors.OKBLUE)
+    # graph_util.save_graph_as_gml(G, extended="_extended")
+    # print("g")
     # print(bcolors.HEADER,"Generating genre_tracks.json...")
     # print(bcolors.OKBLUE)
     # spotify_scraper.normalize_genre_playlists_and_save_to_json()
